@@ -638,42 +638,25 @@
     </div>
   </div>
 
-  <!-- INVITE PLAYER MODAL -->
-  <div id="modal-invite" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
-    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl relative space-y-4">
-      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-        <h3 class="text-lg font-black text-white flex items-center gap-2">
-          <i class="fa-solid fa-share-nodes text-yellow-400"></i> Invite Player to Joga Bonito FA
-        </h3>
-        <button onclick="closeModal('modal-invite')" class="text-slate-400 hover:text-white">
-          <i class="fa-solid fa-xmark text-lg"></i>
-        </button>
-      </div>
-
-      <p class="text-xs text-slate-300 leading-relaxed">
-        Share this unique invitation link with prospective players so they can join the roster and confirm match RSVPs instantly.
-      </p>
-
-      <div class="space-y-2">
-        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Shareable Invite Link</label>
-        <div class="flex items-center gap-2">
-          <input type="text" readonly id="invite-link-input" value="https://jogabonito.fa/join?team=joga-bonito-fa&invite=jb7v7-2026" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-xs text-slate-300 font-mono">
-          <button onclick="copyInviteLink()" class="bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-black text-xs px-4 py-2.5 rounded-xl shrink-0 shadow">
-            Copy
-          </button>
-        </div>
-      </div>
-
-      <div class="bg-slate-950 border border-slate-800 p-3 rounded-xl space-y-1.5 text-xs text-slate-400">
-        <p class="font-bold text-yellow-400"><i class="fa-solid fa-circle-check"></i> Self-Registration Active</p>
-        <p>Invited players will be added with the <span class="text-white font-bold">Player</span> role and can immediately submit their game RSVPs.</p>
-      </div>
-
-      <div class="flex justify-end pt-2 border-t border-slate-800">
-        <button onclick="closeModal('modal-invite')" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold rounded-xl">Close</button>
-      </div>
+<!-- INVITE PLAYER MODAL -->
+<div id="modal-invite" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+  <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
+    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+      <h3 class="text-lg font-black text-white flex items-center gap-2">
+        <i class="fa-solid fa-share-nodes text-yellow-400"></i> Invite Players
+      </h3>
+      <button onclick="closeModal('modal-invite')" class="text-slate-400 hover:text-white">
+        <i class="fa-solid fa-xmark text-lg"></i>
+      </button>
+    </div>
+    <p class="text-xs text-slate-300 leading-relaxed">
+      Every player gets a personal invite link. The coach logs in, opens <span class="text-white font-bold">Squad Roster</span>, and taps <span class="text-white font-bold">Invite link</span> on that player's card, then sends it to them. Each link only works for that one player.
+    </p>
+    <div class="flex justify-end pt-2 border-t border-slate-800">
+      <button onclick="closeModal('modal-invite')" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold rounded-xl">Close</button>
     </div>
   </div>
+</div>
 
   <!-- MATCH STATS MODAL -->
   <div id="modal-match-stats" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
@@ -703,26 +686,28 @@
     </div>
   </div>
 
-    <!-- CLAIM PLAYER MODAL -->
-  <div id="modal-claim" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
-    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
-      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-        <h3 class="text-lg font-black text-white flex items-center gap-2">
-          <i class="fa-solid fa-user-check text-yellow-400"></i> Who are you?
-        </h3>
-        <button onclick="closeModal('modal-claim')" class="text-slate-400 hover:text-white">
-          <i class="fa-solid fa-xmark text-lg"></i>
-        </button>
-      </div>
-      <p class="text-xs text-slate-300 leading-relaxed">
-        Pick your name once. Your RSVPs will be tied to this device, and only you will be able to change them.
-      </p>
-      <div id="claim-players-list" class="max-h-72 overflow-y-auto space-y-2 pr-1"></div>
-      <div class="flex justify-end pt-2 border-t border-slate-800">
-        <button onclick="closeModal('modal-claim')" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold rounded-xl">Just viewing</button>
-      </div>
+  <!-- CLAIM PLAYER MODAL -->
+<div id="modal-claim" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+  <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
+    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+      <h3 class="text-lg font-black text-white flex items-center gap-2">
+        <i class="fa-solid fa-user-check text-yellow-400"></i> Link your player
+      </h3>
+      <button onclick="closeModal('modal-claim')" class="text-slate-400 hover:text-white">
+        <i class="fa-solid fa-xmark text-lg"></i>
+      </button>
+    </div>
+    <p class="text-xs text-slate-300 leading-relaxed">
+      Use the personal invite link your coach sent you, or enter your name and code below. Your RSVPs will be tied to this device.
+    </p>
+    <select id="claim-player-select" class="w-full bg-slate-950 border border-slate-700 text-sm text-white font-semibold rounded-xl p-2.5"></select>
+    <input type="text" id="claim-code-input" maxlength="12" placeholder="Invite code" class="w-full bg-slate-950 border border-slate-700 text-sm text-white font-mono tracking-widest uppercase rounded-xl p-2.5">
+    <div class="flex justify-end gap-2 pt-2 border-t border-slate-800">
+      <button onclick="closeModal('modal-claim')" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold rounded-xl">Just viewing</button>
+      <button onclick="claimPlayer()" class="px-4 py-2 bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-black text-xs rounded-xl shadow">Link me</button>
     </div>
   </div>
+</div>
 
   <!-- TOAST NOTIFICATION -->
   <div id="toast" class="fixed bottom-5 right-5 bg-emerald-600 text-white text-xs font-bold px-4 py-3 rounded-xl shadow-2xl transform translate-y-20 opacity-0 transition-all duration-300 z-50 flex items-center gap-2">
@@ -776,6 +761,9 @@
     let activeTab = 'dashboard';
     let isAdminAuthenticated = false;
     let playerClaims = {};
+    let inviteCodes = {};
+    let inviteCodesLoaded = false;
+    let inviteListenerStarted = false;
     let claimsLoaded = false;
     let claimPromptShown = false;
 
@@ -1114,7 +1102,14 @@
     renderSchedule();
     renderRoster();
     maybeShowClaimModal();
-  };
+    if (isCoach && !inviteListenerStarted) {
+      inviteListenerStarted = true;
+      window.firebaseOnValue(window.firebaseRef(window.dbRef, 'jogaBonitoFA/inviteCodes'), (snap) => {
+      inviteCodes = snap.val() || {};
+      inviteCodesLoaded = true;
+    });
+    }
+    };
 
 async function verifyPinCode() {
   const email = document.getElementById('admin-email-input').value.trim();
@@ -1236,55 +1231,83 @@ async function verifyPinCode() {
         : `Viewing as: Guest • <button onclick="openClaimModal()" class="underline text-yellow-400 font-bold">pick your player</button>`;
     }
     
-    function openClaimModal() {
-      const taken = Object.keys(playerClaims).filter(k => playerClaims[k]);
-      const free = players.filter(p => !taken.includes(String(p.id)));
-      const list = document.getElementById('claim-players-list');
-      list.innerHTML = free.length
-        ? free.map(p => `
-            <button onclick="claimPlayer('${p.id}')" class="w-full flex items-center gap-3 bg-slate-950 hover:bg-slate-800 border border-slate-800 rounded-xl p-3 text-left transition-all">
-              <span class="w-8 h-8 rounded-full bg-yellow-500/20 text-yellow-400 font-extrabold text-xs flex items-center justify-center">#${p.number}</span>
-              <span class="text-sm font-bold text-white">${p.name}</span>
-              <span class="ml-auto text-[10px] text-slate-400 uppercase">${p.position}</span>
-            </button>`).join('')
-        : '<p class="text-xs text-slate-400">All players are already claimed. Ask the coach to release yours.</p>';
-      openModal('modal-claim');
-    }
-    
-    function maybeShowClaimModal() {
-      if (!claimsLoaded || claimPromptShown || isAdminAuthenticated || !window.currentUid) return;
-      if (myPlayerId() !== null) return;
-      claimPromptShown = true;
-      openClaimModal();
-    }
-    
-    async function claimPlayer(playerId) {
-      const uid = window.currentUid;
-      if (!uid) { showToast('Connecting... try again in a moment.'); return; }
-      try {
-        await window.firebaseUpdate(window.firebaseRef(window.dbRef, 'jogaBonitoFA'), {
-          ['playerClaims/' + playerId]: uid,
-          ['claimedBy/' + uid]: String(playerId)
-        });
-        closeModal('modal-claim');
-        showToast('You are now linked to this player.');
-      } catch (e) {
-        showToast('Could not claim: already taken, or this device already has a player.');
-      }
-    }
-    
-    async function releasePlayerClaim(playerId) {
-      if (!isAdminAuthenticated) return;
-      const uid = playerClaims[playerId];
-      const updates = { ['playerClaims/' + playerId]: null };
-      if (uid) updates['claimedBy/' + uid] = null;
-      try {
-        await window.firebaseUpdate(window.firebaseRef(window.dbRef, 'jogaBonitoFA'), updates);
-        showToast('Device released. The player can pick again.');
-      } catch (e) {
-        showToast('Could not release this player.');
-      }
-    }
+  function openClaimModal() {
+  const taken = Object.keys(playerClaims).filter(k => playerClaims[k]);
+  const free = players.filter(p => !taken.includes(String(p.id)));
+
+  // Prefill from a personal link: ?join=PLAYERID-CODE
+  const join = new URLSearchParams(location.search).get('join') || '';
+  const dash = join.indexOf('-');
+  const urlPid = dash > 0 ? join.slice(0, dash) : '';
+  const urlCode = dash > 0 ? join.slice(dash + 1) : '';
+
+  const sel = document.getElementById('claim-player-select');
+  sel.innerHTML = free.map(p =>
+    `<option value="${p.id}" ${String(p.id) === urlPid ? 'selected' : ''}>#${p.number} ${p.name}</option>`
+  ).join('');
+  document.getElementById('claim-code-input').value = urlCode;
+  openModal('modal-claim');
+}
+
+async function claimPlayer() {
+  const uid = window.currentUid;
+  const pid = document.getElementById('claim-player-select').value;
+  const code = document.getElementById('claim-code-input').value.trim().toUpperCase();
+  if (!uid) { showToast('Connecting... try again in a moment.'); return; }
+  if (!pid || !code) { showToast('Pick your name and enter your code.'); return; }
+  try {
+    await window.firebaseSet(window.firebaseRef(window.dbRef, 'jogaBonitoFA/claimAttempts/' + uid), code);
+    await window.firebaseUpdate(window.firebaseRef(window.dbRef, 'jogaBonitoFA'), {
+      ['playerClaims/' + pid]: uid,
+      ['claimedBy/' + uid]: String(pid)
+    });
+    closeModal('modal-claim');
+    showToast('You are now linked to your player.');
+  } catch (e) {
+    showToast('Wrong code, name already taken, or this device already has a player.');
+  }
+}
+
+// --- Coach: invite codes ---
+function genCode() {
+  const chars = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+  const arr = new Uint32Array(6);
+  crypto.getRandomValues(arr);
+  return Array.from(arr, n => chars[n % chars.length]).join('');
+}
+
+async function copyPlayerInvite(pid) {
+  if (!isAdminAuthenticated) return;
+  if (!inviteCodesLoaded) { showToast('Loading codes... try again in a second.'); return; }
+  let code = inviteCodes[pid];
+  if (!code) {
+    code = genCode();
+    await window.firebaseSet(window.firebaseRef(window.dbRef, 'jogaBonitoFA/inviteCodes/' + pid), code);
+  }
+  const link = location.origin + location.pathname + '?join=' + pid + '-' + code;
+  try {
+    await navigator.clipboard.writeText(link);
+    showToast('Personal invite link copied!');
+  } catch (e) {
+    prompt('Copy this personal invite link:', link);
+  }
+}
+
+async function releasePlayerClaim(playerId) {
+  if (!isAdminAuthenticated) return;
+  const uid = playerClaims[playerId];
+  const updates = {
+    ['playerClaims/' + playerId]: null,
+    ['inviteCodes/' + playerId]: genCode()   // old code stops working
+  };
+  if (uid) updates['claimedBy/' + uid] = null;
+  try {
+    await window.firebaseUpdate(window.firebaseRef(window.dbRef, 'jogaBonitoFA'), updates);
+    showToast('Device released. Send the player their new invite link.');
+  } catch (e) {
+    showToast('Could not release this player.');
+  }
+}
     // --- Roster & Stats ---
     function recalculatePlayerOverallTotals() {
       players.forEach(p => {
@@ -1344,7 +1367,10 @@ async function verifyPinCode() {
             </div>
           </div>
           ${isAdminAuthenticated ? `
-            <div class="flex justify-end space-x-2 pt-1">
+            <div class="flex flex-wrap justify-end gap-2 pt-1">
+              <button onclick="copyPlayerInvite('${p.id}')" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-xs text-white font-bold rounded-lg transition-colors flex items-center gap-1">
+                <i class="fa-solid fa-link"></i> Invite link
+              </button>
               ${playerClaims[p.id] ? `
                 <button onclick="releasePlayerClaim('${p.id}')" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-xs text-rose-400 font-bold rounded-lg transition-colors flex items-center gap-1">
                   <i class="fa-solid fa-link-slash"></i> Release device
@@ -1353,7 +1379,7 @@ async function verifyPinCode() {
                 <i class="fa-solid fa-pen-to-square"></i> Edit
               </button>
             </div>
-          ` : ''}
+      ` : ''}
 
     function editPlayer(id) {
       verifyAdminAction(() => {

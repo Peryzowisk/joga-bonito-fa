@@ -703,6 +703,27 @@
     </div>
   </div>
 
+    <!-- CLAIM PLAYER MODAL -->
+  <div id="modal-claim" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 class="text-lg font-black text-white flex items-center gap-2">
+          <i class="fa-solid fa-user-check text-yellow-400"></i> Who are you?
+        </h3>
+        <button onclick="closeModal('modal-claim')" class="text-slate-400 hover:text-white">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+      <p class="text-xs text-slate-300 leading-relaxed">
+        Pick your name once. Your RSVPs will be tied to this device, and only you will be able to change them.
+      </p>
+      <div id="claim-players-list" class="max-h-72 overflow-y-auto space-y-2 pr-1"></div>
+      <div class="flex justify-end pt-2 border-t border-slate-800">
+        <button onclick="closeModal('modal-claim')" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold rounded-xl">Just viewing</button>
+      </div>
+    </div>
+  </div>
+
   <!-- TOAST NOTIFICATION -->
   <div id="toast" class="fixed bottom-5 right-5 bg-emerald-600 text-white text-xs font-bold px-4 py-3 rounded-xl shadow-2xl transform translate-y-20 opacity-0 transition-all duration-300 z-50 flex items-center gap-2">
     <i class="fa-solid fa-circle-check text-sm"></i>
@@ -712,8 +733,8 @@
   <!-- FIREBASE REALTIME DATABASE & APP LOGIC -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
-    import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getDatabase, ref, set, update, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+    import { getAuth, signInWithEmailAndPassword, signInAnonymously, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
     const COACH_UID = "PASTE_COACH_UID_HERE";
 
@@ -734,13 +755,16 @@
     window.dbRef = db;
     window.firebaseRef = ref;
     window.firebaseSet = set;
+    window.firebaseUpdate = update;
     window.firebaseOnValue = onValue;
     window.coachLogin = (email, pw) => signInWithEmailAndPassword(auth, email, pw);
     window.coachLogout = () => signOut(auth);
 
     onAuthStateChanged(auth, (user) => {
-      if (user && user.uid !== COACH_UID) { signOut(auth); return; }
-      window.setCoachState(!!user);
+      if (!user) { signInAnonymously(auth); return; }          // every visitor gets an identity
+      if (!user.isAnonymous && user.uid !== COACH_UID) { signOut(auth); return; }
+      window.currentUid = user.uid;
+      window.setCoachState(user.uid === COACH_UID);
     });
 
     initRealtimeSync();
@@ -751,6 +775,9 @@
     // --- Data Store & State ---
     let activeTab = 'dashboard';
     let isAdminAuthenticated = false;
+    let playerClaims = {};
+    let claimsLoaded = false;
+    let claimPromptShown = false;
 
     let players = [
       { id: 1, name: "Marcus Silva", position: "GK", number: "1", status: "Active", goals: 0, assists: 0, photo: "https://placehold.co/150x150/1e293b/ffffff?text=MS" },
@@ -1037,6 +1064,12 @@
           players = val;
           recalculatePlayerOverallTotals();
         }
+      window.firebaseOnValue(window.firebaseRef(window.dbRef, 'jogaBonitoFA/playerClaims'), (snapshot) => {
+      playerClaims = snapshot.val() || {};
+      claimsLoaded = true;
+      updateIdentityUI();
+      maybeShowClaimModal();
+      if (activeTab === 'roster') renderRoster();
       });
 
       window.firebaseOnValue(window.firebaseRef(window.dbRef, 'jogaBonitoFA/matchPlayerStats'), (snapshot) => {
@@ -1063,25 +1096,25 @@
   }
 }
 
-window.setCoachState = function (isCoach) {
-  isAdminAuthenticated = isCoach;
-  const roleEl = document.getElementById('user-role-indicator');
-  const btn = document.getElementById('admin-auth-btn');
-  const addBtn = document.getElementById('add-player-btn');
-  if (isCoach) {
-    roleEl.innerText = "Viewing as: COACH (Full Access)";
-    roleEl.className = "text-[11px] text-yellow-400 font-bold";
-    btn.innerHTML = '<i class="fa-solid fa-unlock text-[11px]"></i><span>Coach Logout</span>';
-    addBtn.classList.remove('hidden');
-  } else {
-    roleEl.innerText = "Viewing as: Player (RSVP enabled)";
-    roleEl.className = "text-[11px] text-emerald-400 font-medium";
-    btn.innerHTML = '<i class="fa-solid fa-lock text-[11px]"></i><span>Coach Login</span>';
-    addBtn.classList.add('hidden');
-  }
-  renderSchedule();
-  renderRoster();
-};
+  window.setCoachState = function (isCoach) {
+    isAdminAuthenticated = isCoach;
+    const roleEl = document.getElementById('user-role-indicator');
+    const btn = document.getElementById('admin-auth-btn');
+    const addBtn = document.getElementById('add-player-btn');
+    if (isCoach) {
+      roleEl.innerText = "Viewing as: COACH (Full Access)";
+      roleEl.className = "text-[11px] text-yellow-400 font-bold";
+      btn.innerHTML = '<i class="fa-solid fa-unlock text-[11px]"></i><span>Coach Logout</span>';
+      addBtn.classList.remove('hidden');
+    } else {
+      btn.innerHTML = '<i class="fa-solid fa-lock text-[11px]"></i><span>Coach Login</span>';
+      addBtn.classList.add('hidden');
+      updateIdentityUI();
+    }
+    renderSchedule();
+    renderRoster();
+    maybeShowClaimModal();
+  };
 
 async function verifyPinCode() {
   const email = document.getElementById('admin-email-input').value.trim();
@@ -1180,7 +1213,78 @@ async function verifyPinCode() {
       showToast('Invite link copied to clipboard!');
       closeModal('modal-invite');
     }
-
+    // --- Player identity (who is this device?) ---
+    function myPlayerId() {
+      const uid = window.currentUid;
+      if (!uid) return null;
+      const key = Object.keys(playerClaims).find(k => playerClaims[k] === uid);
+      return key !== undefined ? key : null;
+    }
+    
+    function canEditRSVP(playerId) {
+      return isAdminAuthenticated || String(myPlayerId()) === String(playerId);
+    }
+    
+    function updateIdentityUI() {
+      const roleEl = document.getElementById('user-role-indicator');
+      if (!roleEl || isAdminAuthenticated) return;
+      const pid = myPlayerId();
+      const p = pid !== null ? players.find(x => String(x.id) === String(pid)) : null;
+      roleEl.className = "text-[11px] text-emerald-400 font-medium";
+      roleEl.innerHTML = p
+        ? `Viewing as: ${p.name} (RSVP enabled)`
+        : `Viewing as: Guest • <button onclick="openClaimModal()" class="underline text-yellow-400 font-bold">pick your player</button>`;
+    }
+    
+    function openClaimModal() {
+      const taken = Object.keys(playerClaims).filter(k => playerClaims[k]);
+      const free = players.filter(p => !taken.includes(String(p.id)));
+      const list = document.getElementById('claim-players-list');
+      list.innerHTML = free.length
+        ? free.map(p => `
+            <button onclick="claimPlayer('${p.id}')" class="w-full flex items-center gap-3 bg-slate-950 hover:bg-slate-800 border border-slate-800 rounded-xl p-3 text-left transition-all">
+              <span class="w-8 h-8 rounded-full bg-yellow-500/20 text-yellow-400 font-extrabold text-xs flex items-center justify-center">#${p.number}</span>
+              <span class="text-sm font-bold text-white">${p.name}</span>
+              <span class="ml-auto text-[10px] text-slate-400 uppercase">${p.position}</span>
+            </button>`).join('')
+        : '<p class="text-xs text-slate-400">All players are already claimed. Ask the coach to release yours.</p>';
+      openModal('modal-claim');
+    }
+    
+    function maybeShowClaimModal() {
+      if (!claimsLoaded || claimPromptShown || isAdminAuthenticated || !window.currentUid) return;
+      if (myPlayerId() !== null) return;
+      claimPromptShown = true;
+      openClaimModal();
+    }
+    
+    async function claimPlayer(playerId) {
+      const uid = window.currentUid;
+      if (!uid) { showToast('Connecting... try again in a moment.'); return; }
+      try {
+        await window.firebaseUpdate(window.firebaseRef(window.dbRef, 'jogaBonitoFA'), {
+          ['playerClaims/' + playerId]: uid,
+          ['claimedBy/' + uid]: String(playerId)
+        });
+        closeModal('modal-claim');
+        showToast('You are now linked to this player.');
+      } catch (e) {
+        showToast('Could not claim: already taken, or this device already has a player.');
+      }
+    }
+    
+    async function releasePlayerClaim(playerId) {
+      if (!isAdminAuthenticated) return;
+      const uid = playerClaims[playerId];
+      const updates = { ['playerClaims/' + playerId]: null };
+      if (uid) updates['claimedBy/' + uid] = null;
+      try {
+        await window.firebaseUpdate(window.firebaseRef(window.dbRef, 'jogaBonitoFA'), updates);
+        showToast('Device released. The player can pick again.');
+      } catch (e) {
+        showToast('Could not release this player.');
+      }
+    }
     // --- Roster & Stats ---
     function recalculatePlayerOverallTotals() {
       players.forEach(p => {
@@ -1212,6 +1316,7 @@ async function verifyPinCode() {
     }
 
     function renderRoster() {
+      updateIdentityUI();
       const grid = document.getElementById('roster-grid');
       if (!grid) return;
 
@@ -1238,17 +1343,17 @@ async function verifyPinCode() {
               <span class="text-lg font-black text-white">${p.assists || 0}</span>
             </div>
           </div>
-
           ${isAdminAuthenticated ? `
             <div class="flex justify-end space-x-2 pt-1">
+              ${playerClaims[p.id] ? `
+                <button onclick="releasePlayerClaim('${p.id}')" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-xs text-rose-400 font-bold rounded-lg transition-colors flex items-center gap-1">
+                  <i class="fa-solid fa-link-slash"></i> Release device
+                </button>` : ''}
               <button onclick="editPlayer(${p.id})" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-xs text-yellow-400 font-bold rounded-lg transition-colors flex items-center gap-1">
                 <i class="fa-solid fa-pen-to-square"></i> Edit
               </button>
             </div>
           ` : ''}
-        </div>
-      `).join('');
-    }
 
     function editPlayer(id) {
       verifyAdminAction(() => {
@@ -1350,14 +1455,23 @@ async function verifyPinCode() {
 
     // --- RSVPs (Open to All Users with Real-Time Sync) ---
     function setPlayerRSVP(week, playerId, status) {
-      if (!matchRSVPs[week]) matchRSVPs[week] = {};
-      matchRSVPs[week][playerId] = status;
-      syncToFirebase('rsvps/' + week + '/' + playerId, status);
-      renderDashboardRSVPTracker();
-      renderHubFixtures();
-      if (activeTab === 'tactics') renderTacticsBoardForMatch();
-      showToast(`RSVP updated for Week ${week}`);
+  if (!canEditRSVP(playerId)) {
+    if (myPlayerId() === null) {
+      showToast('Pick your player first to set an RSVP.');
+      openClaimModal();
+    } else {
+      showToast('You can only change your own RSVP.');
     }
+    return;
+  }
+  if (!matchRSVPs[week]) matchRSVPs[week] = {};
+  matchRSVPs[week][playerId] = status;
+  syncToFirebase('rsvps/' + week + '/' + playerId, status);
+  renderDashboardRSVPTracker();
+  renderHubFixtures();
+  if (activeTab === 'tactics') renderTacticsBoardForMatch();
+  showToast(`RSVP updated for Week ${week}`);
+}
 
     function renderDashboardRSVPTracker() {
       const container = document.getElementById('dashboard-rsvp-list');

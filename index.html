@@ -1435,9 +1435,9 @@
                       <span class="text-xs sm:text-sm font-bold text-white text-right w-36 truncate">${m.home}</span>
                       
                       <div class="flex items-center gap-1.5 shrink-0">
-                        <input type="number" min="0" value="${m.homeScore}" ${isAdminAuthenticated ? `onchange="updateMatchScore(${w.week}, ${m.slot}, this.value, document.getElementById('away-score-${w.week}-${m.slot}').value)"` : 'readonly'} id="home-score-${w.week}-${m.slot}" class="w-10 bg-slate-900 border border-slate-700 text-center text-xs font-black text-white rounded-lg py-1 ${isAdminAuthenticated ? '' : 'opacity-75 cursor-not-allowed'}">
+                        <input type="number" min="0" value="${m.homeScore ?? ''}" ${isAdminAuthenticated ? `onchange="updateMatchScore(${w.week}, ${m.slot}, this.value, document.getElementById('away-score-${w.week}-${m.slot}').value)"` : 'readonly'} id="home-score-${w.week}-${m.slot}" class="w-10 bg-slate-900 border border-slate-700 text-center text-xs font-black text-white rounded-lg py-1 ${isAdminAuthenticated ? '' : 'opacity-75 cursor-not-allowed'}">
                         <span class="text-slate-500 font-bold">:</span>
-                        <input type="number" min="0" value="${m.awayScore}" ${isAdminAuthenticated ? `onchange="updateMatchScore(${w.week}, ${m.slot}, document.getElementById('home-score-${w.week}-${m.slot}').value, this.value)"` : 'readonly'} id="away-score-${w.week}-${m.slot}" class="w-10 bg-slate-900 border border-slate-700 text-center text-xs font-black text-white rounded-lg py-1 ${isAdminAuthenticated ? '' : 'opacity-75 cursor-not-allowed'}">
+                        <input type="number" min="0" value="${m.awayScore ?? ''}" ${isAdminAuthenticated ? `onchange="updateMatchScore(${w.week}, ${m.slot}, document.getElementById('home-score-${w.week}-${m.slot}').value, this.value)"` : 'readonly'} id="away-score-${w.week}-${m.slot}" class="w-10 bg-slate-900 border border-slate-700 text-center text-xs font-black text-white rounded-lg py-1 ${isAdminAuthenticated ? '' : 'opacity-75 cursor-not-allowed'}">
                       </div>
 
                       <span class="text-xs sm:text-sm font-bold text-white text-left w-36 truncate">${m.away}</span>
@@ -1464,8 +1464,8 @@
         const matchObj = weekObj.matches.find(m => m.slot === slotNum);
         if (!matchObj) return;
 
-        matchObj.homeScore = parseInt(homeScoreVal) || 0;
-        matchObj.awayScore = parseInt(awayScoreVal) || 0;
+        matchObj.homeScore = (homeScoreVal === '' || homeScoreVal == null) ? null : (parseInt(homeScoreVal) || 0);
+        matchObj.awayScore = (awayScoreVal === '' || awayScoreVal == null) ? null : (parseInt(awayScoreVal) || 0);
 
         syncToFirebase('scheduleData', scheduleData);
         computeStandings();
@@ -1474,11 +1474,17 @@
     }
 
     // --- Standings ---
-    function computeTeamForm(teamName) {
+    // A match counts only when both scores are filled in
+function hasScore(m) {
+  return m.homeScore !== undefined && m.homeScore !== null && m.homeScore !== '' &&
+         m.awayScore !== undefined && m.awayScore !== null && m.awayScore !== '';
+}
+
+function computeTeamForm(teamName) {
       const matchResults = [];
       scheduleData.forEach(w => {
         w.matches.forEach(m => {
-          if (m.homeScore !== undefined && m.awayScore !== undefined) {
+          if (hasScore(m)) {
             if (m.home === teamName || m.away === teamName) {
               const isHome = m.home === teamName;
               const teamScore = isHome ? m.homeScore : m.awayScore;
@@ -1504,7 +1510,7 @@
 
       scheduleData.forEach(w => {
         w.matches.forEach(m => {
-          if (m.homeScore !== undefined && m.awayScore !== undefined) {
+          if (hasScore(m)) {
             if (statsMap[m.home]) { statsMap[m.home].gp++; statsMap[m.home].gf += m.homeScore; statsMap[m.home].ga += m.awayScore; }
             if (statsMap[m.away]) { statsMap[m.away].gp++; statsMap[m.away].gf += m.awayScore; statsMap[m.away].ga += m.homeScore; }
             if (m.homeScore > m.awayScore) { if (statsMap[m.home]) statsMap[m.home].w++; if (statsMap[m.away]) statsMap[m.away].l++; }
@@ -1520,35 +1526,71 @@
         s.form = computeTeamForm(s.team);
       });
 
-      const sortTeams = (list) => list.map(t => statsMap[t]).sort((a, b) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf);
-      renderStandingsTable('diva-standings-body', sortTeams(divisionAteams));
-      renderStandingsTable('divb-standings-body', sortTeams(divisionBteams));
+      const sortTeams = (list) => list
+  .map(t => statsMap[t])
+  .sort((a, b) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf);
+
+const sortedA = sortTeams(divisionAteams);
+const sortedB = sortTeams(divisionBteams);
+
+renderStandingsTable('diva-standings-body', sortedA);
+renderStandingsTable('divb-standings-body', sortedB);
+
+// Dashboard: Joga Bonito's live rank in Division B
+const jbRank = sortedB.findIndex(s => s.team === 'Joga Bonito') + 1;
+const rankEl = document.getElementById('dash-divb-rank');
+if (rankEl) rankEl.innerText = '#' + jbRank;
+
+// Playoff bracket: Div B quarterfinals from current seedings
+const setText = (id, text) => { const el = document.getElementById(id); if (el) el.innerText = text; };
+setText('qf1-home', `1. ${sortedB[0].team}`);
+setText('qf1-away', `4. ${sortedB[3].team}`);
+setText('qf2-home', `2. ${sortedB[1].team}`);
+setText('qf2-away', `3. ${sortedB[2].team}`);
     }
 
     function renderStandingsTable(tbodyId, sortedList) {
-      const tbody = document.getElementById(tbodyId);
-      if (!tbody) return;
-      tbody.innerHTML = sortedList.map((s, idx) => {
-        const rank = idx + 1;
-        const isTop4 = rank <= 4;
-        const isJB = s.team === 'Joga Bonito';
-        return `
-          <tr class="${isJB ? 'bg-yellow-500/10 font-bold text-yellow-300' : (isTop4 ? 'bg-slate-900/60' : '')} border-b border-slate-800/60">
-            <td class="p-3.5 text-center font-black ${isTop4 ? 'text-emerald-400' : 'text-slate-400'}">${rank}</td>
-            <td class="p-3.5 font-bold text-white">${s.team}</td>
-            <td class="p-3.5 text-center text-slate-300">${s.gp}</td>
-            <td class="p-3.5 text-center text-slate-300">${s.w}</td>
-            <td class="p-3.5 text-center text-slate-300">${s.d}</td>
-            <td class="p-3.5 text-center text-slate-300">${s.l}</td>
-            <td class="p-3.5 text-center text-slate-300">${s.gf}</td>
-            <td class="p-3.5 text-center text-slate-300">${s.ga}</td>
-            <td class="p-3.5 text-center font-bold ${s.gd > 0 ? 'text-emerald-400' : 'text-red-400'}">${s.gd > 0 ? '+' + s.gd : s.gd}</td>
-            <td class="p-3.5 text-center font-black text-white bg-slate-950/40">${s.pts}</td>
-            <td class="p-3.5 text-center">-</td>
-          </tr>
-        `;
-      }).join('');
-    }
+  const tbody = document.getElementById(tbodyId);
+  if (!tbody) return;
+
+  const formColors = {
+    W: 'bg-emerald-600 text-white',
+    D: 'bg-amber-500 text-slate-950',
+    L: 'bg-rose-600 text-white'
+  };
+
+  tbody.innerHTML = sortedList.map((s, idx) => {
+    const rank = idx + 1;
+    const isTop4 = rank <= 4;
+    const isJB = s.team === 'Joga Bonito';
+
+    const formHtml = s.form.length
+      ? `<div class="flex items-center justify-center gap-1">
+          ${s.form.map(f => `
+            <span title="Wk ${f.week}: ${f.teamScore}-${f.oppScore}"
+                  class="w-5 h-5 rounded inline-flex items-center justify-center text-[10px] font-black ${formColors[f.outcome]}">
+              ${f.outcome}
+            </span>`).join('')}
+        </div>`
+      : '-';
+
+    return `
+      <tr class="${isJB ? 'bg-yellow-500/10 font-bold text-yellow-300' : (isTop4 ? 'bg-slate-900/60' : '')} border-b border-slate-800/60">
+        <td class="p-3.5 text-center font-black ${isTop4 ? 'text-emerald-400' : 'text-slate-400'}">${rank}</td>
+        <td class="p-3.5 font-bold text-white">${s.team}</td>
+        <td class="p-3.5 text-center text-slate-300">${s.gp}</td>
+        <td class="p-3.5 text-center text-slate-300">${s.w}</td>
+        <td class="p-3.5 text-center text-slate-300">${s.d}</td>
+        <td class="p-3.5 text-center text-slate-300">${s.l}</td>
+        <td class="p-3.5 text-center text-slate-300">${s.gf}</td>
+        <td class="p-3.5 text-center text-slate-300">${s.ga}</td>
+        <td class="p-3.5 text-center font-bold ${s.gd > 0 ? 'text-emerald-400' : (s.gd < 0 ? 'text-red-400' : 'text-slate-400')}">${s.gd > 0 ? '+' + s.gd : s.gd}</td>
+        <td class="p-3.5 text-center font-black text-white bg-slate-950/40">${s.pts}</td>
+        <td class="p-3.5 text-center">${formHtml}</td>
+      </tr>
+    `;
+  }).join('');
+}
 
     // --- Tactics Board & Free Swapping Engine ---
     function populateTacticsMatchSelector() {

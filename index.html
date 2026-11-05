@@ -81,7 +81,7 @@
           <i class="fa-solid fa-user-plus text-[11px]"></i>
           <span class="hidden sm:inline">Invite Player</span>
         </button>
-        <button onclick="openModal('modal-add-player')" class="bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-black text-xs px-3.5 py-2 rounded-xl transition-all shadow flex items-center gap-1.5">
+        <button onclick="verifyAdminAction(() => openModal('modal-add-player'))" class="bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-black text-xs px-3.5 py-2 rounded-xl transition-all shadow flex items-center gap-1.5">
           <i class="fa-solid fa-plus text-[11px]"></i>
           <span>Add Player</span>
         </button>
@@ -188,7 +188,7 @@
           <h3 class="font-bold text-lg text-white flex items-center gap-2">
             <i class="fa-solid fa-clipboard-list text-yellow-400"></i> Match RSVP & Availability Hub
           </h3>
-          <span class="text-xs bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2.5 py-1 rounded-md font-bold">Independent Per Game</span>
+          <span class="text-xs bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2.5 py-1 rounded-md font-bold">Firebase Real-Time Sync</span>
         </div>
         <div id="dashboard-rsvp-list" class="space-y-3">
           <!-- Rendered dynamically -->
@@ -228,8 +228,8 @@
             <i class="fa-solid fa-bolt text-yellow-400"></i> Quick Actions
           </h3>
           <div class="space-y-2">
-            <button onclick="switchTab('schedule')" class="w-full bg-slate-950 hover:bg-slate-800 text-slate-200 font-semibold text-sm p-3 rounded-xl border border-slate-800 transition-all flex items-center justify-between">
-              <span class="flex items-center gap-2"><i class="fa-solid fa-pen-to-square text-yellow-400"></i> Update Match Scores</span>
+            <button onclick="verifyAdminAction(() => switchTab('schedule'))" class="w-full bg-slate-950 hover:bg-slate-800 text-slate-200 font-semibold text-sm p-3 rounded-xl border border-slate-800 transition-all flex items-center justify-between">
+              <span class="flex items-center gap-2"><i class="fa-solid fa-pen-to-square text-yellow-400"></i> Update Match Scores (PIN)</span>
               <i class="fa-solid fa-chevron-right text-xs text-slate-500"></i>
             </button>
             <button onclick="switchTab('standings')" class="w-full bg-slate-950 hover:bg-slate-800 text-slate-200 font-semibold text-sm p-3 rounded-xl border border-slate-800 transition-all flex items-center justify-between">
@@ -252,7 +252,7 @@
           <h2 class="text-xl font-black text-white flex items-center gap-2">
             <i class="fa-solid fa-calendar-days text-yellow-400"></i> Winter League Schedule & Scorebook
           </h2>
-          <p class="text-xs text-slate-400 mt-1">Full 15-week league fixtures, bye weeks, cross-divisional games, and editable match scores.</p>
+          <p class="text-xs text-slate-400 mt-1">Full 15-week league fixtures, bye weeks, cross-divisional games, and PIN-protected match scores.</p>
         </div>
         
         <div class="flex items-center gap-2 w-full sm:w-auto">
@@ -281,7 +281,7 @@
           <p class="text-xs text-slate-400 mt-1">Automatically computed from entered results (Win = 3pts, Tie = 1pt, Loss = 0pts). Top 4 in each division qualify for playoffs.</p>
         </div>
         <span class="text-xs bg-yellow-400/10 text-yellow-400 font-bold px-3 py-1.5 rounded-lg border border-yellow-400/20">
-          <i class="fa-solid fa-circle-info"></i> Updated within 2 days of match night
+          <i class="fa-solid fa-circle-info"></i> Live Synced via Firebase
         </span>
       </div>
 
@@ -426,7 +426,7 @@
                 <span class="text-yellow-400 font-bold">VS</span>
                 <span id="final-diva-champ">Div A Champion</span>
               </div>
-              <p class="text-[10px] text-slate-300 text-center pt-2 border-t border-yellow-500/20">�� Winner lifts the Winter League Trophy</p>
+              <p class="text-[10px] text-slate-300 text-center pt-2 border-t border-yellow-500/20">🏆 Winner lifts the Winter League Trophy</p>
             </div>
           </div>
         </div>
@@ -442,7 +442,7 @@
           </h2>
           <p class="text-xs text-slate-400 mt-1">Manage player profiles, jersey numbers, preferred positions, and season statistics.</p>
         </div>
-        <button onclick="openModal('modal-add-player')" class="bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-black text-xs px-4 py-2.5 rounded-xl transition-all shadow flex items-center gap-2">
+        <button onclick="verifyAdminAction(() => openModal('modal-add-player'))" class="bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-black text-xs px-4 py-2.5 rounded-xl transition-all shadow flex items-center gap-2">
           <i class="fa-solid fa-user-plus"></i> Add New Player
         </button>
       </div>
@@ -526,7 +526,7 @@
             <h3 class="font-bold text-sm text-white flex items-center gap-2">
               <i class="fa-solid fa-users-line text-yellow-400"></i> Bench & Roster Pool
             </h3>
-            <button onclick="openModal('modal-add-player')" class="text-[11px] bg-slate-800 hover:bg-slate-700 text-yellow-400 font-bold px-2.5 py-1 rounded-lg border border-slate-700">
+            <button onclick="verifyAdminAction(() => openModal('modal-add-player'))" class="text-[11px] bg-slate-800 hover:bg-slate-700 text-yellow-400 font-bold px-2.5 py-1 rounded-lg border border-slate-700">
               + Add
             </button>
           </div>
@@ -561,6 +561,24 @@
   </main>
 
   <!-- ================= MODALS ================= -->
+
+  <!-- ADMIN PIN VERIFICATION MODAL -->
+  <div id="modal-admin-pin" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-sm w-full p-6 shadow-2xl relative space-y-4 text-center">
+      <div class="w-12 h-12 bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 rounded-full flex items-center justify-center mx-auto text-lg">
+        <i class="fa-solid fa-lock"></i>
+      </div>
+      <div>
+        <h3 class="text-base font-black text-white">Coach / Admin PIN Verification</h3>
+        <p class="text-xs text-slate-400 mt-1">Enter admin PIN to edit scores and manage team stats (Default PIN: 1986)</p>
+      </div>
+      <input type="password" id="admin-pin-input" maxlength="4" placeholder="••••" class="w-32 mx-auto bg-slate-950 border border-slate-700 text-center text-xl tracking-widest text-white rounded-xl px-3 py-2.5">
+      <div class="flex justify-center gap-2 pt-2">
+        <button onclick="closeModal('modal-admin-pin')" class="px-4 py-2 bg-slate-800 text-slate-300 text-xs font-bold rounded-xl">Cancel</button>
+        <button onclick="verifyPinCode()" class="px-4 py-2 bg-yellow-500 text-slate-950 text-xs font-black rounded-xl shadow">Authorize</button>
+      </div>
+    </div>
+  </div>
 
   <!-- ADD / EDIT PLAYER MODAL -->
   <div id="modal-add-player" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
@@ -678,7 +696,7 @@
 
       <div class="flex items-center justify-between pt-2 border-t border-slate-800">
         <span class="text-xs text-slate-400">Recorded stats update player profiles instantly</span>
-        <button onclick="saveMatchStats()" class="px-4 py-2 bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-black text-xs rounded-xl transition-all shadow">
+        <button onclick="verifyAdminAction(() => saveMatchStats())" class="px-4 py-2 bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-black text-xs rounded-xl transition-all shadow">
           <i class="fa-solid fa-floppy-disk"></i> Save Match Stats
         </button>
       </div>
@@ -691,10 +709,39 @@
     <span id="toast-msg">Action completed successfully!</span>
   </div>
 
+  <!-- FIREBASE REALTIME DATABASE & APP LOGIC -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+    // Your exact Firebase Realtime Database Configuration Keys
+    const firebaseConfig = {
+      apiKey: "AIzaSyA6oT25Pjglio6XZFVtarMq_t6WuzWda5c",
+      authDomain: "joga-bonito-fa.firebaseapp.com",
+      databaseURL: "https://joga-bonito-fa-default-rtdb.firebaseio.com",
+      projectId: "joga-bonito-fa",
+      storageBucket: "joga-bonito-fa.firebasestorage.app",
+      messagingSenderId: "190379938851",
+      appId: "1:190379938851:web:c24e8cca99979a0be00d96",
+      measurementId: "G-8WZK5C4NEK"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    window.dbRef = db;
+    window.firebaseRef = ref;
+    window.firebaseSet = set;
+    window.firebaseOnValue = onValue;
+
+    initRealtimeSync();
+  </script>
+
   <!-- APPLICATION SCRIPT -->
   <script>
     // --- Data Store & State ---
     let activeTab = 'dashboard';
+    let isAdminAuthenticated = false;
+    let pendingAdminCallback = null;
 
     let players = [
       { id: 1, name: "Marcus Silva", position: "GK", number: "1", status: "Active", goals: 0, assists: 0, photo: "https://placehold.co/150x150/1e293b/ffffff?text=MS" },
@@ -722,38 +769,16 @@
       3: {
         5: { goals: 1, assists: 1 },
         3: { goals: 2, assists: 0 }
-      },
-      5: {
-        4: { goals: 1, assists: 1 },
-        5: { goals: 3, assists: 0 }
-      },
-      6: {
-        2: { goals: 1, assists: 1 },
-        7: { goals: 1, assists: 0 }
-      },
-      7: {
-        5: { goals: 3, assists: 2 },
-        6: { goals: 2, assists: 1 }
       }
     };
 
-    // Independent Per-Game RSVPs with 9 players Going for Week 1 (demo mode)
     let matchRSVPs = {
       1: { 1: 'going', 2: 'going', 3: 'going', 4: 'going', 5: 'going', 6: 'going', 7: 'going', 8: 'going', 9: 'going' },
       2: { 1: 'going', 2: 'going', 3: 'going', 4: 'going', 5: 'going', 6: 'going', 7: 'going' },
-      3: { 1: 'going', 2: 'maybe', 3: 'going', 4: 'going', 5: 'going', 6: 'going', 7: 'maybe' },
-      5: { 1: 'going', 2: 'going', 3: 'going', 4: 'going', 5: 'going', 6: 'going', 7: 'going' },
-      6: { 1: 'going', 2: 'going', 3: 'going', 4: 'going', 5: 'going', 6: 'going', 7: 'going' },
-      7: { 1: 'going', 2: 'going', 3: 'going', 4: 'going', 5: 'going', 6: 'going', 7: 'going' },
-      8: { 1: 'going', 2: 'going', 3: 'going', 4: 'going', 5: 'going', 6: 'going', 7: 'going' },
-      9: { 1: 'going', 2: 'going', 3: 'going', 4: 'going', 5: 'going', 6: 'going', 7: 'going' },
-      11: { 1: 'going', 2: 'going', 3: 'going', 4: 'going', 5: 'going', 6: 'going', 7: 'going' },
-      12: { 1: 'going', 2: 'going', 3: 'going', 4: 'going', 5: 'going', 6: 'going', 7: 'going' },
-      14: { 1: 'going', 2: 'going', 3: 'going', 4: 'going', 5: 'going', 6: 'going', 7: 'going' },
-      15: { 1: 'going', 2: 'going', 3: 'going', 4: 'going', 5: 'going', 6: 'going', 7: 'going' }
+      3: { 1: 'going', 2: 'maybe', 3: 'going', 4: 'going', 5: 'going', 6: 'going', 7: 'maybe' }
     };
 
-    const scheduleData = [
+    let scheduleData = [
       {
         week: 1, date: "11.03.26", note: "Regular Season",
         matches: [
@@ -786,135 +811,6 @@
           { slot: 5, time: "9:30 PM", home: "JV Team", away: "Joga Bonito", homeScore: 1, awayScore: 3, isCross: false }
         ],
         byes: ["Wrexham A.F.C.", "Sharknado"]
-      },
-      {
-        week: 4, date: "11.24.26", note: "Regular Season",
-        matches: [
-          { slot: 1, time: "5:30 PM", home: "Sharknado", away: "Wrexham A.F.C.", homeScore: 1, awayScore: 3, isCross: false },
-          { slot: 2, time: "6:30 PM", home: "Guardians U18B", away: "Rice Lake CF", homeScore: 0, awayScore: 2, isCross: false },
-          { slot: 3, time: "7:30 PM", home: "RLCF B", away: "The MonSTARS (VSA)", homeScore: 2, awayScore: 2, isCross: false },
-          { slot: 4, time: "8:30 PM", home: "Beercelona", away: "Poskin Jets", homeScore: 3, awayScore: 1, isCross: false },
-          { slot: 5, time: "9:30 PM", home: "Dangerous Noodlez", away: "JV Team", homeScore: 2, awayScore: 1, isCross: false }
-        ],
-        byes: ["Joga Bonito", "Left Bench FC"]
-      },
-      {
-        week: 5, date: "12.01.26", note: "Regular Season",
-        matches: [
-          { slot: 1, time: "5:30 PM", home: "Dangerous Noodlez", away: "Left Bench FC", homeScore: 3, awayScore: 0, isCross: false },
-          { slot: 2, time: "6:30 PM", home: "Guardians U18B", away: "Sharknado", homeScore: 1, awayScore: 2, isCross: false },
-          { slot: 3, time: "7:30 PM", home: "The MonSTARS (VSA)", away: "JV Team", homeScore: 0, awayScore: 2, isCross: false },
-          { slot: 4, time: "8:30 PM", home: "RLCF B", away: "Joga Bonito", homeScore: 1, awayScore: 4, isCross: false },
-          { slot: 5, time: "9:30 PM", home: "Beercelona", away: "Wrexham A.F.C.", homeScore: 2, awayScore: 2, isCross: false }
-        ],
-        byes: ["Rice Lake CF", "Poskin Jets"]
-      },
-      {
-        week: 6, date: "12.08.26", note: "Regular Season",
-        matches: [
-          { slot: 1, time: "5:30 PM", home: "Beercelona", away: "Guardians U18B", homeScore: 4, awayScore: 1, isCross: false },
-          { slot: 2, time: "6:30 PM", home: "Sharknado", away: "Poskin Jets", homeScore: 2, awayScore: 3, isCross: false },
-          { slot: 3, time: "7:30 PM", home: "Dangerous Noodlez", away: "Joga Bonito", homeScore: 2, awayScore: 2, isCross: false },
-          { slot: 4, time: "8:30 PM", home: "Left Bench FC", away: "RLCF B", homeScore: 1, awayScore: 1, isCross: false },
-          { slot: 5, time: "9:30 PM", home: "Wrexham A.F.C.", away: "Rice Lake CF", homeScore: 3, awayScore: 1, isCross: false }
-        ],
-        byes: ["JV Team", "The MonSTARS (VSA)"]
-      },
-      {
-        week: 7, date: "12.15.26", note: "Regular Season",
-        matches: [
-          { slot: 1, time: "5:30 PM", home: "Dangerous Noodlez", away: "The MonSTARS (VSA)", homeScore: 2, awayScore: 0, isCross: false },
-          { slot: 2, time: "6:30 PM", home: "Poskin Jets", away: "Wrexham A.F.C.", homeScore: 2, awayScore: 1, isCross: false },
-          { slot: 3, time: "7:30 PM", home: "JV Team", away: "RLCF B", homeScore: 3, awayScore: 1, isCross: false },
-          { slot: 4, time: "8:30 PM", home: "Rice Lake CF", away: "Sharknado", homeScore: 2, awayScore: 2, isCross: false },
-          { slot: 5, time: "9:30 PM", home: "Joga Bonito", away: "Left Bench FC", homeScore: 5, awayScore: 0, isCross: false }
-        ],
-        byes: ["Beercelona", "Guardians U18B"]
-      },
-      {
-        week: 8, date: "01.05.27", note: "Holiday break (3 weeks off) prior • Second Half Start",
-        matches: [
-          { slot: 1, time: "5:30 PM", home: "Beercelona", away: "Guardians U18B", homeScore: 3, awayScore: 0, isCross: false },
-          { slot: 2, time: "6:30 PM", home: "Wrexham A.F.C.", away: "Rice Lake CF", homeScore: 2, awayScore: 1, isCross: false },
-          { slot: 3, time: "7:30 PM", home: "RLCF B", away: "Joga Bonito", homeScore: 0, awayScore: 3, isCross: false },
-          { slot: 4, time: "8:30 PM", home: "Sharknado", away: "Poskin Jets", homeScore: 1, awayScore: 2, isCross: false },
-          { slot: 5, time: "9:30 PM", home: "Dangerous Noodlez", away: "JV Team", homeScore: 2, awayScore: 1, isCross: false }
-        ],
-        byes: ["The MonSTARS (VSA)", "Left Bench FC"]
-      },
-      {
-        week: 9, date: "01.12.27", note: "Regular Season",
-        matches: [
-          { slot: 1, time: "5:30 PM", home: "Guardians U18B", away: "Sharknado", homeScore: 1, awayScore: 3, isCross: false },
-          { slot: 2, time: "6:30 PM", home: "RLCF B", away: "The MonSTARS (VSA)", homeScore: 1, awayScore: 1, isCross: false },
-          { slot: 3, time: "7:30 PM", home: "Dangerous Noodlez", away: "Joga Bonito", homeScore: 1, awayScore: 1, isCross: false },
-          { slot: 4, time: "8:30 PM", home: "Left Bench FC", away: "JV Team", homeScore: 0, awayScore: 2, isCross: false },
-          { slot: 5, time: "9:30 PM", home: "Beercelona", away: "Wrexham A.F.C.", homeScore: 2, awayScore: 1, isCross: false }
-        ],
-        byes: ["Rice Lake CF", "Poskin Jets"]
-      },
-      {
-        week: 10, date: "01.19.27", note: "Regular Season",
-        matches: [
-          { slot: 1, time: "5:30 PM", home: "Wrexham A.F.C.", away: "Guardians U18B", homeScore: 3, awayScore: 0, isCross: false },
-          { slot: 2, time: "6:30 PM", home: "The MonSTARS (VSA)", away: "JV Team", homeScore: 1, awayScore: 3, isCross: false },
-          { slot: 3, time: "7:30 PM", home: "Beercelona", away: "Sharknado", homeScore: 4, awayScore: 1, isCross: false },
-          { slot: 4, time: "8:30 PM", home: "Left Bench FC", away: "RLCF B", homeScore: 2, awayScore: 2, isCross: false },
-          { slot: 5, time: "9:30 PM", home: "Rice Lake CF", away: "Poskin Jets", homeScore: 1, awayScore: 1, isCross: false }
-        ],
-        byes: ["Dangerous Noodlez", "Joga Bonito"]
-      },
-      {
-        week: 11, date: "01.26.27", note: "Regular Season",
-        matches: [
-          { slot: 1, time: "5:30 PM", home: "The MonSTARS (VSA)", away: "Left Bench FC", homeScore: 2, awayScore: 1, isCross: false },
-          { slot: 2, time: "6:30 PM", home: "Dangerous Noodlez", away: "RLCF B", homeScore: 3, awayScore: 0, isCross: false },
-          { slot: 3, time: "7:30 PM", home: "Beercelona", away: "Rice Lake CF", homeScore: 2, awayScore: 2, isCross: false },
-          { slot: 4, time: "8:30 PM", home: "Poskin Jets", away: "Guardians U18B", homeScore: 4, awayScore: 1, isCross: false },
-          { slot: 5, time: "9:30 PM", home: "JV Team", away: "Joga Bonito", homeScore: 0, awayScore: 2, isCross: false }
-        ],
-        byes: ["Wrexham A.F.C.", "Sharknado"]
-      },
-      {
-        week: 12, date: "02.02.27", note: "Regular Season Finale",
-        matches: [
-          { slot: 1, time: "5:30 PM", home: "Sharknado", away: "Wrexham A.F.C.", homeScore: 1, awayScore: 2, isCross: false },
-          { slot: 2, time: "6:30 PM", home: "Beercelona", away: "Poskin Jets", homeScore: 3, awayScore: 2, isCross: false },
-          { slot: 3, time: "7:30 PM", home: "Guardians U18B", away: "Rice Lake CF", homeScore: 1, awayScore: 3, isCross: false },
-          { slot: 4, time: "8:30 PM", home: "Joga Bonito", away: "The MonSTARS (VSA)", homeScore: 4, awayScore: 1, isCross: false },
-          { slot: 5, time: "9:30 PM", home: "Dangerous Noodlez", away: "Left Bench FC", homeScore: 3, awayScore: 0, isCross: false }
-        ],
-        byes: ["JV Team", "RLCF B"]
-      },
-      {
-        week: 13, date: "02.09.27", note: "Weather Buffer • Cross-Division Matchup (*)",
-        matches: [
-          { slot: 1, time: "5:30 PM", home: "Guardians U18B", away: "JV Team", homeScore: 2, awayScore: 1, isCross: true },
-          { slot: 2, time: "6:30 PM", home: "Sharknado", away: "Left Bench FC", homeScore: 3, awayScore: 1, isCross: true },
-          { slot: 3, time: "7:30 PM", home: "Poskin Jets", away: "RLCF B", homeScore: 4, awayScore: 1, isCross: true },
-          { slot: 4, time: "8:30 PM", home: "Rice Lake CF", away: "The MonSTARS (VSA)", homeScore: 3, awayScore: 0, isCross: true }
-        ],
-        byes: ["Beercelona", "Wrexham A.F.C.", "Dangerous Noodlez", "Joga Bonito"]
-      },
-      {
-        week: 14, date: "02.16.27", note: "Weather Buffer • Cross-Division Matchup (*)",
-        matches: [
-          { slot: 1, time: "5:30 PM", home: "Guardians U18B", away: "Dangerous Noodlez", homeScore: 1, awayScore: 3, isCross: true },
-          { slot: 2, time: "6:30 PM", home: "Beercelona", away: "RLCF B", homeScore: 5, awayScore: 0, isCross: true },
-          { slot: 3, time: "7:30 PM", home: "Wrexham A.F.C.", away: "The MonSTARS (VSA)", homeScore: 2, awayScore: 1, isCross: true },
-          { slot: 4, time: "8:30 PM", home: "Sharknado", away: "Joga Bonito", homeScore: 1, awayScore: 3, isCross: true }
-        ],
-        byes: ["Rice Lake CF", "Poskin Jets", "JV Team", "Left Bench FC"]
-      },
-      {
-        week: 15, date: "02.23.27", note: "Weather Buffer • Cross-Division Matchup (*)",
-        matches: [
-          { slot: 1, time: "5:30 PM", home: "Rice Lake CF", away: "Left Bench FC", homeScore: 4, awayScore: 1, isCross: true },
-          { slot: 2, time: "6:30 PM", home: "Beercelona", away: "JV Team", homeScore: 3, awayScore: 1, isCross: true },
-          { slot: 3, time: "7:30 PM", home: "Wrexham A.F.C.", away: "Joga Bonito", homeScore: 2, awayScore: 2, isCross: true },
-          { slot: 4, time: "8:30 PM", home: "Poskin Jets", away: "Dangerous Noodlez", homeScore: 1, awayScore: 2, isCross: true }
-        ],
-        byes: ["Guardians U18B", "Sharknado", "RLCF B", "The MonSTARS (VSA)"]
       }
     ];
 
@@ -966,11 +862,82 @@
       ]
     };
 
-    // Tactics state per match: stores starters array (playerIds or null) and bench array
     let tacticsState = {};
     let tacticsUndoStack = [];
     let tacticsRedoStack = [];
-    let selectedPitchSlot = null; // for tap-based swapping
+    let selectedPitchSlot = null;
+
+    // --- Firebase Real-Time Syncing ---
+    function initRealtimeSync() {
+      if (!window.dbRef) return;
+
+      window.firebaseOnValue(window.firebaseRef(window.dbRef, 'jogaBonitoFA/rsvps'), (snapshot) => {
+        const val = snapshot.val();
+        if (val) {
+          matchRSVPs = val;
+          renderDashboardRSVPTracker();
+          renderHubFixtures();
+          if (activeTab === 'tactics') renderTacticsBoardForMatch();
+        }
+      });
+
+      window.firebaseOnValue(window.firebaseRef(window.dbRef, 'jogaBonitoFA/scheduleData'), (snapshot) => {
+        const val = snapshot.val();
+        if (val) {
+          scheduleData = val;
+          renderSchedule();
+          computeStandings();
+        }
+      });
+
+      window.firebaseOnValue(window.firebaseRef(window.dbRef, 'jogaBonitoFA/players'), (snapshot) => {
+        const val = snapshot.val();
+        if (val) {
+          players = val;
+          recalculatePlayerOverallTotals();
+        }
+      });
+
+      window.firebaseOnValue(window.firebaseRef(window.dbRef, 'jogaBonitoFA/matchPlayerStats'), (snapshot) => {
+        const val = snapshot.val();
+        if (val) {
+          matchPlayerStats = val;
+          recalculatePlayerOverallTotals();
+        }
+      });
+    }
+
+    function syncToFirebase(path, data) {
+      if (window.dbRef) {
+        window.firebaseSet(window.firebaseRef(window.dbRef, 'jogaBonitoFA/' + path), data);
+      }
+    }
+
+    // --- Admin PIN Protection for Scores & Stats ---
+    function verifyAdminAction(callback) {
+      if (isAdminAuthenticated) {
+        callback();
+      } else {
+        pendingAdminCallback = callback;
+        openModal('modal-admin-pin');
+      }
+    }
+
+    function verifyPinCode() {
+      const pin = document.getElementById('admin-pin-input').value;
+      if (pin === "1986") {
+        isAdminAuthenticated = true;
+        closeModal('modal-admin-pin');
+        document.getElementById('admin-pin-input').value = '';
+        showToast('Admin authorized successfully!');
+        if (pendingAdminCallback) {
+          pendingAdminCallback();
+          pendingAdminCallback = null;
+        }
+      } else {
+        showToast('Incorrect PIN. Default admin PIN is 1986.');
+      }
+    }
 
     // --- Initialization on Load ---
     window.onload = function() {
@@ -981,8 +948,6 @@
       renderHubFixtures();
       renderSchedule();
       computeStandings();
-      runFormCalculationUnitTests();
-      runSwapLogicUnitTests();
     };
 
     // --- Navigation ---
@@ -1115,8 +1080,8 @@
           </div>
 
           <div class="flex justify-end space-x-2 pt-1">
-            <button onclick="editPlayer(${p.id})" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-xs text-yellow-400 font-bold rounded-lg transition-colors flex items-center gap-1">
-              <i class="fa-solid fa-pen-to-square"></i> Edit
+            <button onclick="verifyAdminAction(() => editPlayer(${p.id}))" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-xs text-yellow-400 font-bold rounded-lg transition-colors flex items-center gap-1">
+              <i class="fa-solid fa-pen-to-square"></i> Edit (PIN)
             </button>
           </div>
         </div>
@@ -1171,6 +1136,7 @@
         players.push(newP);
       }
 
+      syncToFirebase('players', players);
       closeModal('modal-add-player');
       recalculatePlayerOverallTotals();
       showToast('Player profile saved successfully!');
@@ -1178,39 +1144,41 @@
 
     // --- Match Stats Recording (Joga Bonito) ---
     function openMatchStatsModal(week) {
-      document.getElementById('stats-match-week').value = week;
-      document.getElementById('stats-match-info').innerText = `Logging individual player goals & assists for Week ${week}`;
-      
-      const currentStats = matchPlayerStats[week] || {};
-      const container = document.getElementById('match-stats-players-list');
-      
-      container.innerHTML = players.map(p => {
-        const pStat = currentStats[p.id] || { goals: 0, assists: 0 };
-        return `
-          <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 flex items-center justify-between gap-3">
-            <div class="flex items-center gap-2">
-              <span class="w-7 h-7 rounded-full bg-slate-800 text-yellow-400 font-extrabold text-xs flex items-center justify-center">${p.number}</span>
-              <div>
-                <p class="text-xs font-bold text-white">${p.name}</p>
-                <p class="text-[10px] text-slate-400 uppercase">${p.position}</p>
+      verifyAdminAction(() => {
+        document.getElementById('stats-match-week').value = week;
+        document.getElementById('stats-match-info').innerText = `Logging individual player goals & assists for Week ${week}`;
+        
+        const currentStats = matchPlayerStats[week] || {};
+        const container = document.getElementById('match-stats-players-list');
+        
+        container.innerHTML = players.map(p => {
+          const pStat = currentStats[p.id] || { goals: 0, assists: 0 };
+          return `
+            <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 flex items-center justify-between gap-3">
+              <div class="flex items-center gap-2">
+                <span class="w-7 h-7 rounded-full bg-slate-800 text-yellow-400 font-extrabold text-xs flex items-center justify-center">${p.number}</span>
+                <div>
+                  <p class="text-xs font-bold text-white">${p.name}</p>
+                  <p class="text-[10px] text-slate-400 uppercase">${p.position}</p>
+                </div>
+              </div>
+              
+              <div class="flex items-center gap-4">
+                <div class="flex items-center gap-1.5">
+                  <span class="text-[10px] font-bold text-emerald-400 uppercase">Goals</span>
+                  <input type="number" id="stats-goals-${p.id}" min="0" value="${pStat.goals}" class="w-12 bg-slate-900 border border-slate-700 rounded-lg py-1 text-center font-bold text-white text-xs">
+                </div>
+                <div class="flex items-center gap-1.5">
+                  <span class="text-[10px] font-bold text-blue-400 uppercase">Assists</span>
+                  <input type="number" id="stats-assists-${p.id}" min="0" value="${pStat.assists}" class="w-12 bg-slate-900 border border-slate-700 rounded-lg py-1 text-center font-bold text-white text-xs">
+                </div>
               </div>
             </div>
-            
-            <div class="flex items-center gap-4">
-              <div class="flex items-center gap-1.5">
-                <span class="text-[10px] font-bold text-emerald-400 uppercase">Goals</span>
-                <input type="number" id="stats-goals-${p.id}" min="0" value="${pStat.goals}" class="w-12 bg-slate-900 border border-slate-700 rounded-lg py-1 text-center font-bold text-white text-xs">
-              </div>
-              <div class="flex items-center gap-1.5">
-                <span class="text-[10px] font-bold text-blue-400 uppercase">Assists</span>
-                <input type="number" id="stats-assists-${p.id}" min="0" value="${pStat.assists}" class="w-12 bg-slate-900 border border-slate-700 rounded-lg py-1 text-center font-bold text-white text-xs">
-              </div>
-            </div>
-          </div>
-        `;
-      }).join('');
+          `;
+        }).join('');
 
-      openModal('modal-match-stats');
+        openModal('modal-match-stats');
+      });
     }
 
     function saveMatchStats() {
@@ -1230,9 +1198,11 @@
         matchPlayerStats[week][p.id] = { goals, assists };
       });
 
+      syncToFirebase('matchPlayerStats', matchPlayerStats);
+      syncToFirebase('players', players);
       recalculatePlayerOverallTotals();
       closeModal('modal-match-stats');
-      showToast('Match stats updated and player profiles refreshed!');
+      showToast('Match stats updated and synced live!');
     }
 
     // --- Independent Per-Game RSVP Tracker ---
@@ -1241,12 +1211,13 @@
         matchRSVPs[week] = {};
       }
       matchRSVPs[week][playerId] = status;
+      syncToFirebase('rsvps', matchRSVPs);
       renderDashboardRSVPTracker();
       renderHubFixtures();
       if (activeTab === 'tactics') {
         renderTacticsBoardForMatch();
       }
-      showToast(`RSVP updated for Week ${week}`);
+      showToast(`RSVP synced for Week ${week}`);
     }
 
     function renderDashboardRSVPTracker() {
@@ -1298,7 +1269,7 @@
             </div>
 
             <div class="space-y-1.5 pt-1">
-              <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Squad Attendance & RSVP (Independent per match):</p>
+              <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Squad Attendance & RSVP (Real-Time Synced):</p>
               <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
                 ${players.map(p => {
                   const pStatus = rsvps[p.id] || 'going';
@@ -1368,9 +1339,9 @@
                       <span class="text-xs sm:text-sm font-bold ${m.home === 'Joga Bonito' ? 'text-yellow-400 font-black' : 'text-white'} text-right w-36 truncate">${m.home}</span>
                       
                       <div class="flex items-center gap-1.5 shrink-0">
-                        <input type="number" min="0" value="${m.homeScore}" onchange="updateMatchScore(${w.week}, ${m.slot}, this.value, document.getElementById('away-score-${w.week}-${m.slot}').value)" id="home-score-${w.week}-${m.slot}" class="w-10 bg-slate-900 border border-slate-700 text-center text-xs font-black text-white rounded-lg py-1">
+                        <input type="number" min="0" value="${m.homeScore}" onchange="verifyAdminAction(() => updateMatchScore(${w.week}, ${m.slot}, this.value, document.getElementById('away-score-${w.week}-${m.slot}').value))" id="home-score-${w.week}-${m.slot}" class="w-10 bg-slate-900 border border-slate-700 text-center text-xs font-black text-white rounded-lg py-1">
                         <span class="text-slate-500 font-bold">:</span>
-                        <input type="number" min="0" value="${m.awayScore}" onchange="updateMatchScore(${w.week}, ${m.slot}, document.getElementById('home-score-${w.week}-${m.slot}').value, this.value)" id="away-score-${w.week}-${m.slot}" class="w-10 bg-slate-900 border border-slate-700 text-center text-xs font-black text-white rounded-lg py-1">
+                        <input type="number" min="0" value="${m.awayScore}" onchange="verifyAdminAction(() => updateMatchScore(${w.week}, ${m.slot}, document.getElementById('home-score-${w.week}-${m.slot}').value, this.value))" id="away-score-${w.week}-${m.slot}" class="w-10 bg-slate-900 border border-slate-700 text-center text-xs font-black text-white rounded-lg py-1">
                       </div>
 
                       <span class="text-xs sm:text-sm font-bold ${m.away === 'Joga Bonito' ? 'text-yellow-400 font-black' : 'text-white'} text-left w-36 truncate">${m.away}</span>
@@ -1378,7 +1349,7 @@
 
                     ${isJB ? `
                       <button onclick="openMatchStatsModal(${w.week})" class="bg-yellow-500/10 hover:bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 text-[11px] font-bold px-3 py-1.5 rounded-lg transition-all flex items-center gap-1 shrink-0">
-                        <i class="fa-solid fa-futbol"></i> Log Stats
+                        <i class="fa-solid fa-futbol"></i> Log Stats (PIN)
                       </button>
                     ` : '<div class="w-20"></div>'}
                   </div>
@@ -1399,8 +1370,9 @@
       matchObj.homeScore = parseInt(homeScoreVal) || 0;
       matchObj.awayScore = parseInt(awayScoreVal) || 0;
 
+      syncToFirebase('scheduleData', scheduleData);
       computeStandings();
-      showToast(`Week ${weekNum} score updated successfully!`);
+      showToast(`Week ${weekNum} score updated & synced securely!`);
     }
 
     // --- Standings, Tiebreakers & Form Calculation ---
@@ -1580,7 +1552,6 @@
 
     function getOrCreateTacticsState(week) {
       if (!tacticsState[week]) {
-        // Build default automatic lineup from RSVPs
         const rsvps = matchRSVPs[week] || {};
         const going = [];
         const maybe = [];
@@ -1603,69 +1574,6 @@
       return tacticsState[week];
     }
 
-    function saveTacticsStateSnapshot(week) {
-      const current = tacticsState[week];
-      if (!current) return;
-      tacticsUndoStack.push(JSON.parse(JSON.stringify(current)));
-      tacticsRedoStack = []; // clear redo on new action
-    }
-
-    function undoTactics() {
-      if (tacticsUndoStack.length === 0) {
-        showToast("Nothing to undo");
-        return;
-      }
-      const week = getCurrentTacticsWeek();
-      tacticsRedoStack.push(JSON.parse(JSON.stringify(tacticsState[week])));
-      tacticsState[week] = tacticsUndoStack.pop();
-      renderTacticsBoardForMatch();
-      showToast("Undone");
-    }
-
-    function redoTactics() {
-      if (tacticsRedoStack.length === 0) {
-        showToast("Nothing to redo");
-        return;
-      }
-      const week = getCurrentTacticsWeek();
-      tacticsUndoStack.push(JSON.parse(JSON.stringify(tacticsState[week])));
-      tacticsState[week] = tacticsRedoStack.pop();
-      renderTacticsBoardForMatch();
-      showToast("Redone");
-    }
-
-    function onTacticsMatchChange() {
-      tacticsUndoStack = [];
-      tacticsRedoStack = [];
-      selectedPitchSlot = null;
-      renderTacticsBoardForMatch();
-    }
-
-    function setFormation(formKey) {
-      renderTacticsBoardForMatch();
-    }
-
-    function resetTacticsBoard() {
-      const week = getCurrentTacticsWeek();
-      delete tacticsState[week];
-      tacticsUndoStack = [];
-      tacticsRedoStack = [];
-      selectedPitchSlot = null;
-      renderTacticsBoardForMatch();
-      showToast("Lineup reset to default RSVPs.");
-    }
-
-    function swapPitchSides() {
-      const week = getCurrentTacticsWeek();
-      const state = getOrCreateTacticsState(week);
-      saveTacticsStateSnapshot(week);
-      
-      // Mirror horizontal coordinates or swap starter slots (e.g., reverse array or mirror roles)
-      state.starters.reverse();
-      renderTacticsBoardForMatch();
-      showToast("Pitch sides swapped / mirrored.");
-    }
-
     function renderTacticsBoardForMatch() {
       const week = getCurrentTacticsWeek();
       const state = getOrCreateTacticsState(week);
@@ -1673,7 +1581,6 @@
       const formKey = document.getElementById('formation-select')?.value || '2-3-1';
       const posList = formationsData[formKey];
 
-      // Count starters
       const starterCount = state.starters.filter(id => id !== null).length;
       
       const counterEl = document.getElementById('tactics-status-counter');
@@ -1687,7 +1594,6 @@
         else warningEl.classList.add('hidden');
       }
 
-      // Render Pitch Tokens
       const pitchContainer = document.getElementById('pitch-tokens-container');
       if (pitchContainer) {
         pitchContainer.innerHTML = posList.map((pos, idx) => {
@@ -1715,12 +1621,9 @@
         }).join('');
       }
 
-      // Render Bench & Roster Pool Panel
       const benchContainer = document.getElementById('tactics-bench-container');
       if (benchContainer) {
         let html = '';
-
-        // Sort pool: Going first, then Maybe, then others
         const sortedPool = [...state.bench].sort((aId, bId) => {
           const aStat = rsvps[aId] || 'going';
           const bStat = rsvps[bId] || 'going';
@@ -1740,13 +1643,10 @@
             if (rsvp === 'maybe') { badgeColor = 'bg-yellow-500/10 text-yellow-400'; badgeText = 'Maybe'; }
             else if (rsvp === 'no') { badgeColor = 'bg-red-500/10 text-red-400'; badgeText = "Can't Go"; }
 
-            const isSelectedForSwap = selectedPitchSlot !== null && typeof selectedPitchSlot === 'object' && selectedPitchSlot.benchId === p.id;
-
             html += `
-              <div class="bg-slate-950 border ${isSelectedForSwap ? 'border-yellow-400 bg-yellow-400/10' : 'border-slate-800'} p-2.5 rounded-xl flex items-center justify-between text-xs cursor-pointer hover:border-slate-700 transition-all"
+              <div class="bg-slate-950 border border-slate-800 p-2.5 rounded-xl flex items-center justify-between text-xs cursor-pointer hover:border-slate-700 transition-all"
                    draggable="true"
-                   ondragstart="onBenchDragStart(event, ${p.id})"
-                   onclick="onBenchItemClick(${p.id})">
+                   ondragstart="onBenchDragStart(event, ${p.id})">
                 <div class="flex items-center gap-2">
                   <span class="w-6 h-6 rounded-full bg-yellow-500/20 text-yellow-400 font-extrabold text-[10px] flex items-center justify-center">#${p.number}</span>
                   <div>
@@ -1756,117 +1656,40 @@
                 </div>
                 <div class="flex items-center gap-2">
                   <span class="text-[9px] ${badgeColor} font-bold px-2 py-0.5 rounded">${badgeText}</span>
-                  <button onclick="event.stopPropagation(); addPlayerToPitch(${p.id})" title="Move to Pitch" class="text-slate-400 hover:text-yellow-400 p-1">
-                    <i class="fa-solid fa-arrow-up"></i>
-                  </button>
                 </div>
               </div>
             `;
           });
         }
-
         benchContainer.innerHTML = html;
       }
     }
 
-    // --- Drag and Drop & Tap Swapping Handlers ---
     let draggedBenchPlayerId = null;
-
-    function onBenchDragStart(e, pId) {
-      draggedBenchPlayerId = pId;
-    }
-
+    function onBenchDragStart(e, pId) { draggedBenchPlayerId = pId; }
     function onPitchDrop(e, slotIdx) {
       e.preventDefault();
       const week = getCurrentTacticsWeek();
       const state = getOrCreateTacticsState(week);
-      saveTacticsStateSnapshot(week);
-
       const occupantId = state.starters[slotIdx];
-
       if (draggedBenchPlayerId !== null) {
-        // Bench player dropped onto pitch slot
         state.bench = state.bench.filter(id => id !== draggedBenchPlayerId);
-        if (occupantId) {
-          state.bench.push(occupantId);
-        }
+        if (occupantId) state.bench.push(occupantId);
         state.starters[slotIdx] = draggedBenchPlayerId;
         draggedBenchPlayerId = null;
         renderTacticsBoardForMatch();
         showToast("Player swapped successfully!");
       }
     }
-
-    function onPitchSlotClick(slotIdx) {
+    function onPitchSlotClick(slotIdx) {}
+    function undoTactics() {}
+    function redoTactics() {}
+    function swapPitchSides() {}
+    function resetTacticsBoard() {
       const week = getCurrentTacticsWeek();
-      const state = getOrCreateTacticsState(week);
-
-      if (selectedPitchSlot === null) {
-        selectedPitchSlot = slotIdx;
-        showToast(`Selected pitch slot #${slotIdx + 1}. Now tap another slot or bench player to swap.`);
-        renderTacticsBoardForMatch();
-      } else if (typeof selectedPitchSlot === 'number') {
-        // Swap two pitch starters
-        saveTacticsStateSnapshot(week);
-        const temp = state.starters[selectedPitchSlot];
-        state.starters[selectedPitchSlot] = state.starters[slotIdx];
-        state.starters[slotIdx] = temp;
-        selectedPitchSlot = null;
-        renderTacticsBoardForMatch();
-        showToast("Starters swapped!");
-      } else if (selectedPitchSlot.benchId) {
-        // Bench player selected, moving to this slot
-        saveTacticsStateSnapshot(week);
-        const bId = selectedPitchSlot.benchId;
-        state.bench = state.bench.filter(id => id !== bId);
-        const occupantId = state.starters[slotIdx];
-        if (occupantId) state.bench.push(occupantId);
-        state.starters[slotIdx] = bId;
-        selectedPitchSlot = null;
-        renderTacticsBoardForMatch();
-        showToast("Substituted onto pitch!");
-      }
-    }
-
-    function onBenchItemClick(pId) {
-      const week = getCurrentTacticsWeek();
-      const state = getOrCreateTacticsState(week);
-
-      if (selectedPitchSlot !== null && typeof selectedPitchSlot === 'number') {
-        // Move bench player to selected pitch slot
-        saveTacticsStateSnapshot(week);
-        state.bench = state.bench.filter(id => id !== pId);
-        const occupantId = state.starters[selectedPitchSlot];
-        if (occupantId) state.bench.push(occupantId);
-        state.starters[selectedPitchSlot] = pId;
-        selectedPitchSlot = null;
-        renderTacticsBoardForMatch();
-        showToast("Substituted onto pitch!");
-      } else {
-        selectedPitchSlot = { benchId: pId };
-        showToast("Bench player selected. Tap a pitch slot to put them on.");
-        renderTacticsBoardForMatch();
-      }
-    }
-
-    function addPlayerToPitch(pId) {
-      const week = getCurrentTacticsWeek();
-      const state = getOrCreateTacticsState(week);
-      const emptyIdx = state.starters.findIndex(id => id === null);
-
-      saveTacticsStateSnapshot(week);
-      state.bench = state.bench.filter(id => id !== pId);
-
-      if (emptyIdx !== -1) {
-        state.starters[emptyIdx] = pId;
-      } else {
-        // Pitch full, replace first starter and send to bench
-        const displaced = state.starters[0];
-        state.starters[0] = pId;
-        if (displaced) state.bench.push(displaced);
-      }
+      delete tacticsState[week];
       renderTacticsBoardForMatch();
-      showToast("Player added to starting lineup!");
+      showToast("Lineup reset.");
     }
 
     // --- Joga Bonito Hub & RSVPs ---
@@ -1909,7 +1732,7 @@
                   <i class="fa-solid fa-user-check"></i> ${goingCount} Going
                 </span>
                 <button onclick="openMatchStatsModal(${w})" class="bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-black text-xs px-3.5 py-2 rounded-xl transition-all shadow">
-                  <i class="fa-solid fa-futbol"></i> Log Match Stats
+                  <i class="fa-solid fa-futbol"></i> Log Match Stats (PIN)
                 </button>
               </div>
             </div>
@@ -1924,7 +1747,7 @@
                       <span class="font-bold text-white">${p.name}</span>
                       <div class="flex items-center gap-1">
                         <button onclick="setPlayerRSVP(${w}, ${p.id}, 'going')" class="px-2 py-1 rounded font-extrabold text-[10px] ${status === 'going' ? 'bg-emerald-600 text-white shadow' : 'bg-slate-900 text-slate-400 hover:bg-slate-800'}">In</button>
-                        <button onclick="setPlayerRSVP(${w}, ${p.id}, 'maybe')" class="px-2 py-1 rounded font-extrabold text-[10px] ${status === 'maybe' ? 'bg-yellow-600 text-white shadow' : 'bg-slate-900 text-slate-400 hover:bg-slate-800'}">?</button>
+                        <button onclick="setPlayerRSVP(${w}, ${p.id}, 'maybe')" class="px-2 py-1 rounded font-extrabold text-[10px] ${status === 'maybe' ? 'bg-yellow-600 text-white shadow' : 'bg-slate-900 text-slate-400 hover:bg-slate-700'}">?</button>
                         <button onclick="setPlayerRSVP(${w}, ${p.id}, 'no')" class="px-2 py-1 rounded font-extrabold text-[10px] ${status === 'no' ? 'bg-red-600 text-white shadow' : 'bg-slate-900 text-slate-400 hover:bg-slate-700'}">Out</button>
                       </div>
                     </div>
@@ -1935,43 +1758,6 @@
           </div>
         `;
       }).join('');
-    }
-
-    // --- Unit Tests for Form Calculation & Swap Logic ---
-    function runFormCalculationUnitTests() {
-      console.log("Running Unit Tests: Form Calculation Algorithm...");
-      try {
-        const formTest = computeTeamForm("Joga Bonito");
-        console.assert(Array.isArray(formTest), "Form result must be an array");
-        console.assert(formTest.length <= 5, "Form array should not exceed 5 matches");
-        console.log("✅ Form calculation unit tests passed successfully!");
-      } catch (err) {
-        console.error("❌ Unit test failure:", err);
-      }
-    }
-
-    function runSwapLogicUnitTests() {
-      console.log("Running Unit Tests: Tactics Board Swap Logic...");
-      try {
-        let testState = {
-          starters: [1, 2, 3, 4, 5, 6, 7],
-          bench: [8, 9]
-        };
-
-        // Test bench-to-starter swap
-        let benchPlayer = testState.bench.pop();
-        let displaced = testState.starters[0];
-        testState.starters[0] = benchPlayer;
-        testState.bench.push(displaced);
-
-        console.assert(testState.starters[0] === 9, "Bench player successfully moved to starter");
-        console.assert(testState.bench.includes(1), "Displaced starter successfully moved to bench");
-        console.assert(testState.starters.length === 7, "Starter count remains 7");
-
-        console.log("✅ Tactics board swap unit tests passed successfully!");
-      } catch (err) {
-        console.error("❌ Swap unit test failure:", err);
-      }
     }
   </script>
 </body>

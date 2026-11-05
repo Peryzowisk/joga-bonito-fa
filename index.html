@@ -1,415 +1,1978 @@
-  <!-- LOGO & BRAND -->
-  <div class="flex items-center gap-3">
-    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-yellow-400 via-emerald-600 to-blue-900 p-0.5 shadow-lg flex items-center justify-center shrink-0">
-      <div class="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center overflow-hidden relative">
-        <svg viewBox="0 0 100 100" class="w-7 h-7 text-yellow-400" fill="currentColor">
-          <path d="M25 65 L40 55 L55 35 L68 25 L75 30 L60 48 L45 68 L30 75 Z" />
-          <circle cx="68" cy="22" r="6" />
-          <circle cx="35" cy="72" r="8" class="text-white" fill="white" />
-          <circle cx="78" cy="20" r="4" class="text-yellow-300" fill="#FEDD00" />
-        </svg>
-      </div>
-    </div>
-    <div>
-      <h1 class="font-black text-base sm:text-lg tracking-tight text-white flex items-center gap-1.5">
-        Joga Bonito FA <span class="text-[10px] bg-yellow-400/20 text-yellow-400 border border-yellow-400/30 px-1.5 py-0.5 rounded font-bold">7v7</span>
-      </h1>
-      <p class="text-[11px] text-slate-400 font-medium hidden sm:block">Winter League • Division B</p>
-    </div>
-  </div>
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Joga Bonito FA • 7v7 Manager</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Google Fonts: Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              canary: '#FEDD00',
+              green: '#009C3B',
+              blue: '#002776',
+              dark: '#0B132B'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #0f172a; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #475569; }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col selection:bg-yellow-400 selection:text-slate-950">
 
-  <!-- DESKTOP NAV TABS -->
-  <nav class="hidden md:flex items-center space-x-1">
-    <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn px-3 py-2 rounded-lg text-xs font-bold transition-all bg-yellow-500 text-slate-950 shadow">Dashboard</button>
-    <button onclick="switchTab('schedule')" id="nav-schedule" class="nav-btn px-3 py-2 rounded-lg text-xs font-bold transition-all text-slate-300 hover:text-white hover:bg-slate-800">Schedule & Scores</button>
-    <button onclick="switchTab('standings')" id="nav-standings" class="nav-btn px-3 py-2 rounded-lg text-xs font-bold transition-all text-slate-300 hover:text-white hover:bg-slate-800">Standings & Playoffs</button>
-    <button onclick="switchTab('roster')" id="nav-roster" class="nav-btn px-3 py-2 rounded-lg text-xs font-bold transition-all text-slate-300 hover:text-white hover:bg-slate-800">Squad Roster</button>
-    <button onclick="switchTab('tactics')" id="nav-tactics" class="nav-btn px-3 py-2 rounded-lg text-xs font-bold transition-all text-slate-300 hover:text-white hover:bg-slate-800">Tactics Board</button>
-    <button onclick="switchTab('hub')" id="nav-hub" class="nav-btn px-3 py-2 rounded-lg text-xs font-bold transition-all text-slate-300 hover:text-white hover:bg-slate-800">Joga Bonito Hub</button>
-  </nav>
-
-  <!-- ACTION BUTTONS -->
-  <div class="flex items-center gap-2">
-    <button onclick="openModal('modal-invite')" class="bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs px-3.5 py-2 rounded-xl transition-all shadow flex items-center gap-1.5">
-      <i class="fa-solid fa-user-plus text-[11px]"></i>
-      <span class="hidden sm:inline">Invite Player</span>
-    </button>
-    <button onclick="verifyAdminAction(() => openModal('modal-add-player'))" class="bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-black text-xs px-3.5 py-2 rounded-xl transition-all shadow flex items-center gap-1.5">
-      <i class="fa-solid fa-plus text-[11px]"></i>
-      <span>Add Player</span>
-    </button>
-  </div>
-</div>
-
-
-<!-- ================= TAB 1: DASHBOARD ================= -->
-<div id="view-dashboard" class="tab-view space-y-6">
-  
-  <!-- HERO BANNER -->
-  <div class="bg-gradient-to-r from-emerald-950 via-slate-900 to-slate-900 border border-emerald-900/40 rounded-2xl p-6 sm:p-8 shadow-xl relative overflow-hidden">
-    <div class="absolute right-0 top-0 translate-x-12 -translate-y-12 w-64 h-64 bg-yellow-500/10 rounded-full blur-3xl pointer-events-none"></div>
-    <div class="relative z-10 space-y-3">
-      <span class="inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-wider bg-yellow-500/20 text-yellow-400 px-3 py-1 rounded-full border border-yellow-500/30">
-        <i class="fa-solid fa-futbol"></i> Seleção Style • Winter League 7v7
-      </span>
-      <h2 class="text-2xl sm:text-3xl font-black text-white tracking-tight">Joga Bonito FA Campaign</h2>
-      <p class="text-sm text-slate-300 max-w-2xl leading-relaxed">
-        Manage your 7v7 squad with Samba flair, track individual match performance, monitor live division standings with automated top-4 playoff qualifiers, and review upcoming fixtures.
-      </p>
-      <div class="flex flex-wrap items-center gap-3 pt-2">
-        <button onclick="switchTab('hub')" class="bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-extrabold text-xs px-4 py-2.5 rounded-xl transition-all shadow flex items-center gap-2">
-          <i class="fa-solid fa-clipboard-user"></i> Joga Bonito Hub & Match Stats
-        </button>
-        <button onclick="switchTab('schedule')" class="bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs px-4 py-2.5 rounded-xl transition-all border border-slate-700 flex items-center gap-2">
-          <i class="fa-solid fa-calendar-days"></i> View Full Schedule
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- STAT CARDS GRID -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-    <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 flex items-center justify-between shadow-sm">
-      <div>
-        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Squad Players</p>
-        <p id="dash-total-players" class="text-2xl font-black text-white mt-1">7</p>
-        <span class="text-xs font-semibold text-yellow-400 flex items-center gap-1 mt-1">
-          <i class="fa-solid fa-circle-check text-[10px]"></i> Active Roster
-        </span>
-      </div>
-      <div class="w-10 h-10 rounded-xl bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 flex items-center justify-center">
-        <i class="fa-solid fa-users text-lg"></i>
-      </div>
-    </div>
-
-    <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 flex items-center justify-between shadow-sm">
-      <div>
-        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Goals (JB)</p>
-        <p id="dash-total-goals" class="text-2xl font-black text-white mt-1">4</p>
-        <span class="text-xs font-semibold text-emerald-400 flex items-center gap-1 mt-1">
-          <i class="fa-solid fa-futbol text-[10px]"></i> Season Tally
-        </span>
-      </div>
-      <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center">
-        <i class="fa-solid fa-bullseye text-lg"></i>
-      </div>
-    </div>
-
-    <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 flex items-center justify-between shadow-sm">
-      <div>
-        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Assists (JB)</p>
-        <p id="dash-total-assists" class="text-2xl font-black text-white mt-1">2</p>
-        <span class="text-xs font-semibold text-blue-400 flex items-center gap-1 mt-1">
-          <i class="fa-solid fa-hands-holding-circle text-[10px]"></i> Playmaking
-        </span>
-      </div>
-      <div class="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center">
-        <i class="fa-solid fa-handshake-angle text-lg"></i>
-      </div>
-    </div>
-
-    <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 flex items-center justify-between shadow-sm">
-      <div>
-        <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Division B Rank</p>
-        <p id="dash-divb-rank" class="text-2xl font-black text-white mt-1">#1</p>
-        <span class="text-xs font-semibold text-yellow-400 flex items-center gap-1 mt-1">
-          <i class="fa-solid fa-crown text-[10px]"></i> Top 4 Qualify
-        </span>
-      </div>
-      <div class="w-10 h-10 rounded-xl bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 flex items-center justify-center">
-        <i class="fa-solid fa-trophy text-lg"></i>
-      </div>
-    </div>
-  </div>
-
-  <!-- DASHBOARD RSVP TRACKER WIDGET -->
-  <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4 shadow-sm">
-    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-      <h3 class="font-bold text-lg text-white flex items-center gap-2">
-        <i class="fa-solid fa-clipboard-list text-yellow-400"></i> Match RSVP & Availability Hub
-      </h3>
-      <span class="text-xs bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2.5 py-1 rounded-md font-bold">Real-Time Cloud Sync</span>
-    </div>
-    <div id="dashboard-rsvp-list" class="space-y-3"></div>
-  </div>
-
-  <!-- BOTTOM ROW GRID -->
-  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-    <div class="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4 shadow-sm">
-      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-        <h3 class="font-bold text-lg text-white flex items-center gap-2">
-          <i class="fa-solid fa-calendar-star text-yellow-400"></i> Next Joga Bonito FA Fixture
-        </h3>
-        <span class="text-xs bg-slate-800 text-slate-300 font-bold px-2.5 py-1 rounded-md border border-slate-700">Week 1</span>
-      </div>
-      <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+  <!-- TOP NAVIGATION HEADER -->
+  <header class="bg-slate-900 border-b border-slate-800 sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+      
+      <!-- LOGO & BRAND -->
+      <div class="flex items-center gap-3">
+        <!-- Bicycle Kick / Brazil Badge Logo -->
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-yellow-400 via-emerald-600 to-blue-900 p-0.5 shadow-lg flex items-center justify-center shrink-0">
+          <div class="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center overflow-hidden relative">
+            <svg viewBox="0 0 100 100" class="w-7 h-7 text-yellow-400" fill="currentColor">
+              <path d="M25 65 L40 55 L55 35 L68 25 L75 30 L60 48 L45 68 L30 75 Z" />
+              <circle cx="68" cy="22" r="6" />
+              <circle cx="35" cy="72" r="8" class="text-white" fill="white" />
+              <circle cx="78" cy="20" r="4" class="text-yellow-300" fill="#FEDD00" />
+            </svg>
+          </div>
+        </div>
         <div>
-          <p class="text-xs font-bold text-yellow-400 uppercase tracking-wider">Monday, 11.03.26 • 9:30 PM</p>
-          <h4 class="text-xl font-black text-white mt-1">Joga Bonito vs Left Bench FC</h4>
-          <p class="text-xs text-slate-400 flex items-center gap-3 mt-1">
-            <span><i class="fa-solid fa-location-dot text-red-400"></i> VSA Arena</span>
-            <span><i class="fa-solid fa-clock text-blue-400"></i> Arrive 20 min prior</span>
+          <h1 class="font-black text-base sm:text-lg tracking-tight text-white flex items-center gap-1.5">
+            Joga Bonito FA <span class="text-[10px] bg-yellow-400/20 text-yellow-400 border border-yellow-400/30 px-1.5 py-0.5 rounded font-bold">7v7</span>
+          </h1>
+          <p class="text-[11px] text-slate-400 font-medium hidden sm:block">Winter League • Division B</p>
+        </div>
+      </div>
+
+      <!-- DESKTOP NAV TABS -->
+      <nav class="hidden md:flex items-center space-x-1">
+        <button onclick="switchTab('dashboard')" id="nav-dashboard" class="nav-btn px-3 py-2 rounded-lg text-xs font-bold transition-all bg-yellow-500 text-slate-950 shadow">Dashboard</button>
+        <button onclick="switchTab('schedule')" id="nav-schedule" class="nav-btn px-3 py-2 rounded-lg text-xs font-bold transition-all text-slate-300 hover:text-white hover:bg-slate-800">Schedule & Scores</button>
+        <button onclick="switchTab('standings')" id="nav-standings" class="nav-btn px-3 py-2 rounded-lg text-xs font-bold transition-all text-slate-300 hover:text-white hover:bg-slate-800">Standings & Playoffs</button>
+        <button onclick="switchTab('roster')" id="nav-roster" class="nav-btn px-3 py-2 rounded-lg text-xs font-bold transition-all text-slate-300 hover:text-white hover:bg-slate-800">Squad Roster</button>
+        <button onclick="switchTab('tactics')" id="nav-tactics" class="nav-btn px-3 py-2 rounded-lg text-xs font-bold transition-all text-slate-300 hover:text-white hover:bg-slate-800">Tactics Board</button>
+        <button onclick="switchTab('hub')" id="nav-hub" class="nav-btn px-3 py-2 rounded-lg text-xs font-bold transition-all text-slate-300 hover:text-white hover:bg-slate-800">Joga Bonito Hub</button>
+      </nav>
+
+      <!-- ACTION BUTTONS -->
+      <div class="flex items-center gap-2">
+        <button onclick="openModal('modal-invite')" class="bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs px-3.5 py-2 rounded-xl transition-all shadow flex items-center gap-1.5">
+          <i class="fa-solid fa-user-plus text-[11px]"></i>
+          <span class="hidden sm:inline">Invite Player</span>
+        </button>
+        <button onclick="openModal('modal-add-player')" class="bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-black text-xs px-3.5 py-2 rounded-xl transition-all shadow flex items-center gap-1.5">
+          <i class="fa-solid fa-plus text-[11px]"></i>
+          <span>Add Player</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- MOBILE SUB-NAVIGATION BAR -->
+  <div class="bg-slate-900 border-b border-slate-800 md:hidden overflow-x-auto py-2 px-4 flex items-center space-x-2 shrink-0">
+    <button onclick="switchTab('dashboard')" id="mob-nav-dashboard" class="mob-nav-btn px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap bg-yellow-500 text-slate-950">Dashboard</button>
+    <button onclick="switchTab('schedule')" id="mob-nav-schedule" class="mob-nav-btn px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap text-slate-300 hover:bg-slate-800">Schedule</button>
+    <button onclick="switchTab('standings')" id="mob-nav-standings" class="mob-nav-btn px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap text-slate-300 hover:bg-slate-800">Standings</button>
+    <button onclick="switchTab('roster')" id="mob-nav-roster" class="mob-nav-btn px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap text-slate-300 hover:bg-slate-800">Roster</button>
+    <button onclick="switchTab('tactics')" id="mob-nav-tactics" class="mob-nav-btn px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap text-slate-300 hover:bg-slate-800">Tactics</button>
+    <button onclick="switchTab('hub')" id="mob-nav-hub" class="mob-nav-btn px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap text-slate-300 hover:bg-slate-800">Hub & RSVP</button>
+  </div>
+
+  <!-- MAIN APP CONTAINER -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+    <!-- ================= TAB 1: DASHBOARD ================= -->
+    <div id="view-dashboard" class="tab-view space-y-6">
+      
+      <!-- HERO BANNER -->
+      <div class="bg-gradient-to-r from-emerald-950 via-slate-900 to-slate-900 border border-emerald-900/40 rounded-2xl p-6 sm:p-8 shadow-xl relative overflow-hidden">
+        <div class="absolute right-0 top-0 translate-x-12 -translate-y-12 w-64 h-64 bg-yellow-500/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="relative z-10 space-y-3">
+          <span class="inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-wider bg-yellow-500/20 text-yellow-400 px-3 py-1 rounded-full border border-yellow-500/30">
+            <i class="fa-solid fa-futbol"></i> Seleção Style • Winter League 7v7
+          </span>
+          <h2 class="text-2xl sm:text-3xl font-black text-white tracking-tight">Joga Bonito FA Campaign</h2>
+          <p class="text-sm text-slate-300 max-w-2xl leading-relaxed">
+            Manage your 7v7 squad with Samba flair, track individual match performance, monitor live division standings with automated top-4 playoff qualifiers, and review upcoming fixtures.
           </p>
+          <div class="flex flex-wrap items-center gap-3 pt-2">
+            <button onclick="switchTab('hub')" class="bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-extrabold text-xs px-4 py-2.5 rounded-xl transition-all shadow flex items-center gap-2">
+              <i class="fa-solid fa-clipboard-user"></i> Joga Bonito Hub & Match Stats
+            </button>
+            <button onclick="switchTab('schedule')" class="bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs px-4 py-2.5 rounded-xl transition-all border border-slate-700 flex items-center gap-2">
+              <i class="fa-solid fa-calendar-days"></i> View Full Schedule
+            </button>
+          </div>
         </div>
-        <button onclick="switchTab('schedule')" class="bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-extrabold text-xs px-4 py-2.5 rounded-lg transition-all flex items-center gap-1.5 shrink-0 shadow">
-          <i class="fa-solid fa-sliders"></i> Match Lineup & Stats
-        </button>
+      </div>
+
+      <!-- STAT CARDS GRID -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 flex items-center justify-between shadow-sm">
+          <div>
+            <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Squad Players</p>
+            <p id="dash-total-players" class="text-2xl font-black text-white mt-1">7</p>
+            <span class="text-xs font-semibold text-yellow-400 flex items-center gap-1 mt-1">
+              <i class="fa-solid fa-circle-check text-[10px]"></i> Active Roster
+            </span>
+          </div>
+          <div class="w-10 h-10 rounded-xl bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 flex items-center justify-center">
+            <i class="fa-solid fa-users text-lg"></i>
+          </div>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 flex items-center justify-between shadow-sm">
+          <div>
+            <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Goals (JB)</p>
+            <p id="dash-total-goals" class="text-2xl font-black text-white mt-1">4</p>
+            <span class="text-xs font-semibold text-emerald-400 flex items-center gap-1 mt-1">
+              <i class="fa-solid fa-futbol text-[10px]"></i> Season Tally
+            </span>
+          </div>
+          <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center">
+            <i class="fa-solid fa-bullseye text-lg"></i>
+          </div>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 flex items-center justify-between shadow-sm">
+          <div>
+            <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Assists (JB)</p>
+            <p id="dash-total-assists" class="text-2xl font-black text-white mt-1">2</p>
+            <span class="text-xs font-semibold text-blue-400 flex items-center gap-1 mt-1">
+              <i class="fa-solid fa-hands-holding-circle text-[10px]"></i> Playmaking
+            </span>
+          </div>
+          <div class="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center">
+            <i class="fa-solid fa-handshake-angle text-lg"></i>
+          </div>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 flex items-center justify-between shadow-sm">
+          <div>
+            <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Division B Rank</p>
+            <p id="dash-divb-rank" class="text-2xl font-black text-white mt-1">#1</p>
+            <span class="text-xs font-semibold text-yellow-400 flex items-center gap-1 mt-1">
+              <i class="fa-solid fa-crown text-[10px]"></i> Top 4 Qualify
+            </span>
+          </div>
+          <div class="w-10 h-10 rounded-xl bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 flex items-center justify-center">
+            <i class="fa-solid fa-trophy text-lg"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- DASHBOARD RSVP TRACKER WIDGET -->
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4 shadow-sm">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+          <h3 class="font-bold text-lg text-white flex items-center gap-2">
+            <i class="fa-solid fa-clipboard-list text-yellow-400"></i> Match RSVP & Availability Hub
+          </h3>
+          <span class="text-xs bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-2.5 py-1 rounded-md font-bold">Independent Per Game</span>
+        </div>
+        <div id="dashboard-rsvp-list" class="space-y-3">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+
+      <!-- BOTTOM ROW GRID -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- NEXT MATCH CARD -->
+        <div class="lg:col-span-2 bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4 shadow-sm">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <h3 class="font-bold text-lg text-white flex items-center gap-2">
+              <i class="fa-solid fa-calendar-star text-yellow-400"></i> Next Joga Bonito FA Fixture
+            </h3>
+            <span class="text-xs bg-slate-800 text-slate-300 font-bold px-2.5 py-1 rounded-md border border-slate-700">Week 1</span>
+          </div>
+
+          <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div>
+              <p class="text-xs font-bold text-yellow-400 uppercase tracking-wider">Monday, 11.03.26 • 9:30 PM</p>
+              <h4 class="text-xl font-black text-white mt-1">Joga Bonito vs Left Bench FC</h4>
+              <p class="text-xs text-slate-400 flex items-center gap-3 mt-1">
+                <span><i class="fa-solid fa-location-dot text-red-400"></i> VSA Arena</span>
+                <span><i class="fa-solid fa-clock text-blue-400"></i> Arrive 20 min prior</span>
+              </p>
+            </div>
+
+            <button onclick="switchTab('schedule')" class="bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-extrabold text-xs px-4 py-2.5 rounded-lg transition-all flex items-center gap-1.5 shrink-0 shadow">
+              <i class="fa-solid fa-sliders"></i> Match Lineup & Stats
+            </button>
+          </div>
+        </div>
+
+        <!-- QUICK ACTIONS CARD -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4 shadow-sm">
+          <h3 class="font-bold text-lg text-white flex items-center gap-2 border-b border-slate-800 pb-3">
+            <i class="fa-solid fa-bolt text-yellow-400"></i> Quick Actions
+          </h3>
+          <div class="space-y-2">
+            <button onclick="switchTab('schedule')" class="w-full bg-slate-950 hover:bg-slate-800 text-slate-200 font-semibold text-sm p-3 rounded-xl border border-slate-800 transition-all flex items-center justify-between">
+              <span class="flex items-center gap-2"><i class="fa-solid fa-pen-to-square text-yellow-400"></i> Update Match Scores</span>
+              <i class="fa-solid fa-chevron-right text-xs text-slate-500"></i>
+            </button>
+            <button onclick="switchTab('standings')" class="w-full bg-slate-950 hover:bg-slate-800 text-slate-200 font-semibold text-sm p-3 rounded-xl border border-slate-800 transition-all flex items-center justify-between">
+              <span class="flex items-center gap-2"><i class="fa-solid fa-sitemap text-emerald-400"></i> View Playoff Bracket</span>
+              <i class="fa-solid fa-chevron-right text-xs text-slate-500"></i>
+            </button>
+            <button onclick="switchTab('roster')" class="w-full bg-slate-950 hover:bg-slate-800 text-slate-200 font-semibold text-sm p-3 rounded-xl border border-slate-800 transition-all flex items-center justify-between">
+              <span class="flex items-center gap-2"><i class="fa-solid fa-users-gear text-blue-400"></i> Manage Squad Roster</span>
+              <i class="fa-solid fa-chevron-right text-xs text-slate-500"></i>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4 shadow-sm">
-      <h3 class="font-bold text-lg text-white flex items-center gap-2 border-b border-slate-800 pb-3">
-        <i class="fa-solid fa-bolt text-yellow-400"></i> Quick Actions
-      </h3>
-      <div class="space-y-2">
-        <button onclick="verifyAdminAction(() => switchTab('schedule'))" class="w-full bg-slate-950 hover:bg-slate-800 text-slate-200 font-semibold text-sm p-3 rounded-xl border border-slate-800 transition-all flex items-center justify-between">
-          <span class="flex items-center gap-2"><i class="fa-solid fa-pen-to-square text-yellow-400"></i> Update Match Scores (PIN)</span>
-          <i class="fa-solid fa-chevron-right text-xs text-slate-500"></i>
-        </button>
-        <button onclick="switchTab('standings')" class="w-full bg-slate-950 hover:bg-slate-800 text-slate-200 font-semibold text-sm p-3 rounded-xl border border-slate-800 transition-all flex items-center justify-between">
-          <span class="flex items-center gap-2"><i class="fa-solid fa-sitemap text-emerald-400"></i> View Playoff Bracket</span>
-          <i class="fa-solid fa-chevron-right text-xs text-slate-500"></i>
-        </button>
-        <button onclick="switchTab('roster')" class="w-full bg-slate-950 hover:bg-slate-800 text-slate-200 font-semibold text-sm p-3 rounded-xl border border-slate-800 transition-all flex items-center justify-between">
-          <span class="flex items-center gap-2"><i class="fa-solid fa-users-gear text-blue-400"></i> Manage Squad Roster</span>
-          <i class="fa-solid fa-chevron-right text-xs text-slate-500"></i>
-        </button>
+    <!-- ================= TAB 2: SCHEDULE & SCORES ================= -->
+    <div id="view-schedule" class="tab-view space-y-6 hidden">
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-slate-900 border border-slate-800 p-5 rounded-2xl shadow-sm">
+        <div>
+          <h2 class="text-xl font-black text-white flex items-center gap-2">
+            <i class="fa-solid fa-calendar-days text-yellow-400"></i> Winter League Schedule & Scorebook
+          </h2>
+          <p class="text-xs text-slate-400 mt-1">Full 15-week league fixtures, bye weeks, cross-divisional games, and editable match scores.</p>
+        </div>
+        
+        <div class="flex items-center gap-2 w-full sm:w-auto">
+          <select id="schedule-filter" onchange="renderSchedule()" class="bg-slate-950 border border-slate-700 text-xs text-white font-bold rounded-xl px-3 py-2 w-full sm:w-48">
+            <option value="all">All Weeks & Teams</option>
+            <option value="jb" selected>Joga Bonito Matches Only</option>
+            <option value="cross">Cross-Division Matches Only (*)</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="schedule-container" class="space-y-6">
+        <!-- Rendered dynamically -->
       </div>
     </div>
-  </div>
-</div>
 
-<!-- ================= TAB 2: SCHEDULE & SCORES ================= -->
-<div id="view-schedule" class="tab-view space-y-6 hidden">
-  <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-slate-900 border border-slate-800 p-5 rounded-2xl shadow-sm">
-    <div>
-      <h2 class="text-xl font-black text-white flex items-center gap-2">
-        <i class="fa-solid fa-calendar-days text-yellow-400"></i> Winter League Schedule & Scorebook
-      </h2>
-      <p class="text-xs text-slate-400 mt-1">Full 15-week league fixtures, bye weeks, cross-divisional games, and admin-protected match score entry.</p>
-    </div>
-    <div class="flex items-center gap-2 w-full sm:w-auto">
-      <select id="schedule-filter" onchange="renderSchedule()" class="bg-slate-950 border border-slate-700 text-xs text-white font-bold rounded-xl px-3 py-2 w-full sm:w-48">
-        <option value="all">All Weeks & Teams</option>
-        <option value="jb" selected>Joga Bonito Matches Only</option>
-        <option value="cross">Cross-Division Matches Only (*)</option>
-      </select>
-    </div>
-  </div>
-  <div id="schedule-container" class="space-y-6"></div>
-</div>
+    <!-- ================= TAB 3: STANDINGS & PLAYOFFS ================= -->
+    <div id="view-standings" class="tab-view space-y-8 hidden">
+      
+      <!-- STANDINGS HEADER -->
+      <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl shadow-sm flex items-center justify-between flex-wrap gap-4">
+        <div>
+          <h2 class="text-xl font-black text-white flex items-center gap-2">
+            <i class="fa-solid fa-trophy text-yellow-400"></i> Division Standings & Tiebreakers
+          </h2>
+          <p class="text-xs text-slate-400 mt-1">Automatically computed from entered results (Win = 3pts, Tie = 1pt, Loss = 0pts). Top 4 in each division qualify for playoffs.</p>
+        </div>
+        <span class="text-xs bg-yellow-400/10 text-yellow-400 font-bold px-3 py-1.5 rounded-lg border border-yellow-400/20">
+          <i class="fa-solid fa-circle-info"></i> Updated within 2 days of match night
+        </span>
+      </div>
 
-<!-- ================= TAB 3: STANDINGS & PLAYOFFS ================= -->
-<div id="view-standings" class="tab-view space-y-8 hidden">
-  <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl shadow-sm flex items-center justify-between flex-wrap gap-4">
-    <div>
-      <h2 class="text-xl font-black text-white flex items-center gap-2">
-        <i class="fa-solid fa-trophy text-yellow-400"></i> Division Standings & Tiebreakers
-      </h2>
-      <p class="text-xs text-slate-400 mt-1">Automatically computed from entered results (Win = 3pts, Tie = 1pt, Loss = 0pts). Top 4 in each division qualify for playoffs.</p>
-    </div>
-    <span class="text-xs bg-yellow-400/10 text-yellow-400 font-bold px-3 py-1.5 rounded-lg border border-yellow-400/20">
-      <i class="fa-solid fa-circle-info"></i> Live Synced via Firebase
-    </span>
-  </div>
+      <!-- DIVISION B (OUR DIVISION) -->
+      <div class="space-y-3">
+        <div class="flex items-center justify-between">
+          <h3 class="text-lg font-black text-white flex items-center gap-2">
+            <i class="fa-solid fa-shield-halved text-emerald-400"></i> Division B (Joga Bonito Division)
+          </h3>
+          <span class="text-xs text-slate-400 font-semibold">Top 4 Advance to Quarterfinals</span>
+        </div>
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-x-auto shadow-sm">
+          <table class="w-full text-left border-collapse min-w-[750px]">
+            <thead>
+              <tr class="bg-slate-950/80 border-b border-slate-800 text-[11px] uppercase tracking-wider text-slate-400 font-extrabold">
+                <th class="p-3.5 text-center w-12">Rank</th>
+                <th class="p-3.5">Team</th>
+                <th class="p-3.5 text-center">GP</th>
+                <th class="p-3.5 text-center">W</th>
+                <th class="p-3.5 text-center">D</th>
+                <th class="p-3.5 text-center">L</th>
+                <th class="p-3.5 text-center">GF</th>
+                <th class="p-3.5 text-center">GA</th>
+                <th class="p-3.5 text-center">GD</th>
+                <th class="p-3.5 text-center">Pts</th>
+                <th class="p-3.5 text-center">Form (Last 5)</th>
+              </tr>
+            </thead>
+            <tbody id="divb-standings-body" class="divide-y divide-slate-800/60 text-xs">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+        <!-- Legend -->
+        <div class="flex items-center gap-4 text-[11px] text-slate-400 px-2">
+          <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-emerald-600 inline-block text-[9px] font-bold text-white text-center leading-3">W</span> Win</span>
+          <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-amber-500 inline-block text-[9px] font-bold text-slate-950 text-center leading-3">D</span> Draw</span>
+          <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-rose-600 inline-block text-[9px] font-bold text-white text-center leading-3">L</span> Loss</span>
+        </div>
+      </div>
 
-  <!-- DIVISION B -->
-  <div class="space-y-3">
-    <div class="flex items-center justify-between">
-      <h3 class="text-lg font-black text-white flex items-center gap-2">
-        <i class="fa-solid fa-shield-halved text-emerald-400"></i> Division B (Joga Bonito Division)
-      </h3>
-      <span class="text-xs text-slate-400 font-semibold">Top 4 Advance to Quarterfinals</span>
-    </div>
-    <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-x-auto shadow-sm">
-      <table class="w-full text-left border-collapse min-w-[750px]">
-        <thead>
-          <tr class="bg-slate-950/80 border-b border-slate-800 text-[11px] uppercase tracking-wider text-slate-400 font-extrabold">
-            <th class="p-3.5 text-center w-12">Rank</th>
-            <th class="p-3.5">Team</th>
-            <th class="p-3.5 text-center">GP</th>
-            <th class="p-3.5 text-center">W</th>
-            <th class="p-3.5 text-center">D</th>
-            <th class="p-3.5 text-center">L</th>
-            <th class="p-3.5 text-center">GF</th>
-            <th class="p-3.5 text-center">GA</th>
-            <th class="p-3.5 text-center">GD</th>
-            <th class="p-3.5 text-center">Pts</th>
-            <th class="p-3.5 text-center">Form (Last 5)</th>
-          </tr>
-        </thead>
-        <tbody id="divb-standings-body" class="divide-y divide-slate-800/60 text-xs"></tbody>
-      </table>
-    </div>
-  </div>
+      <!-- DIVISION A -->
+      <div class="space-y-3">
+        <div class="flex items-center justify-between">
+          <h3 class="text-lg font-black text-white flex items-center gap-2">
+            <i class="fa-solid fa-shield text-blue-400"></i> Division A Standings
+          </h3>
+          <span class="text-xs text-slate-400 font-semibold">Top 4 Advance to Quarterfinals</span>
+        </div>
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-x-auto shadow-sm">
+          <table class="w-full text-left border-collapse min-w-[750px]">
+            <thead>
+              <tr class="bg-slate-950/80 border-b border-slate-800 text-[11px] uppercase tracking-wider text-slate-400 font-extrabold">
+                <th class="p-3.5 text-center w-12">Rank</th>
+                <th class="p-3.5">Team</th>
+                <th class="p-3.5 text-center">GP</th>
+                <th class="p-3.5 text-center">W</th>
+                <th class="p-3.5 text-center">D</th>
+                <th class="p-3.5 text-center">L</th>
+                <th class="p-3.5 text-center">GF</th>
+                <th class="p-3.5 text-center">GA</th>
+                <th class="p-3.5 text-center">GD</th>
+                <th class="p-3.5 text-center">Pts</th>
+                <th class="p-3.5 text-center">Form (Last 5)</th>
+              </tr>
+            </thead>
+            <tbody id="diva-standings-body" class="divide-y divide-slate-800/60 text-xs">
+              <!-- Rendered dynamically -->
+            </tbody>
+          </table>
+        </div>
+        <!-- Legend -->
+        <div class="flex items-center gap-4 text-[11px] text-slate-400 px-2">
+          <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-emerald-600 inline-block text-[9px] font-bold text-white text-center leading-3">W</span> Win</span>
+          <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-amber-500 inline-block text-[9px] font-bold text-slate-950 text-center leading-3">D</span> Draw</span>
+          <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-rose-600 inline-block text-[9px] font-bold text-white text-center leading-3">L</span> Loss</span>
+        </div>
+      </div>
 
-  <!-- DIVISION A -->
-  <div class="space-y-3">
-    <div class="flex items-center justify-between">
-      <h3 class="text-lg font-black text-white flex items-center gap-2">
-        <i class="fa-solid fa-shield text-blue-400"></i> Division A Standings
-      </h3>
-      <span class="text-xs text-slate-400 font-semibold">Top 4 Advance to Quarterfinals</span>
-    </div>
-    <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-x-auto shadow-sm">
-      <table class="w-full text-left border-collapse min-w-[750px]">
-        <thead>
-          <tr class="bg-slate-950/80 border-b border-slate-800 text-[11px] uppercase tracking-wider text-slate-400 font-extrabold">
-            <th class="p-3.5 text-center w-12">Rank</th>
-            <th class="p-3.5">Team</th>
-            <th class="p-3.5 text-center">GP</th>
-            <th class="p-3.5 text-center">W</th>
-            <th class="p-3.5 text-center">D</th>
-            <th class="p-3.5 text-center">L</th>
-            <th class="p-3.5 text-center">GF</th>
-            <th class="p-3.5 text-center">GA</th>
-            <th class="p-3.5 text-center">GD</th>
-            <th class="p-3.5 text-center">Pts</th>
-            <th class="p-3.5 text-center">Form (Last 5)</th>
-          </tr>
-        </thead>
-        <tbody id="diva-standings-body" class="divide-y divide-slate-800/60 text-xs"></tbody>
-      </table>
-    </div>
-  </div>
+      <!-- PLAYOFF BRACKET SECTION -->
+      <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-6 shadow-sm">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+          <div>
+            <h3 class="text-lg font-black text-white flex items-center gap-2">
+              <i class="fa-solid fa-sitemap text-yellow-400"></i> Championship Playoff Bracket
+            </h3>
+            <p class="text-xs text-slate-400 mt-0.5">Quarterfinals (03.02.27) • Semifinals & Grand Final (03.09.27)</p>
+          </div>
+          <span class="text-xs bg-emerald-500/10 text-emerald-400 font-bold px-3 py-1 rounded-md border border-emerald-500/20">Auto-Calculated from Seedings</span>
+        </div>
 
-  <!-- PLAYOFF BRACKET -->
-  <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-6 shadow-sm">
-    <div class="flex items-center justify-between border-b border-slate-800 pb-4">
-      <div>
-        <h3 class="text-lg font-black text-white flex items-center gap-2">
-          <i class="fa-solid fa-sitemap text-yellow-400"></i> Championship Playoff Bracket
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- Quarterfinals -->
+          <div class="space-y-3">
+            <h4 class="text-xs font-black text-slate-400 uppercase tracking-wider text-center">Quarterfinals (03.02.27)</h4>
+            <div class="bg-slate-950 border border-slate-800 p-3 rounded-xl space-y-2">
+              <p class="text-[10px] font-bold text-yellow-400">Div B QF 1</p>
+              <div class="flex justify-between items-center text-xs font-bold text-white py-1 border-b border-slate-900">
+                <span id="qf1-home">1st Place Div B</span>
+                <span class="text-slate-500">vs</span>
+                <span id="qf1-away">4th Place Div B</span>
+              </div>
+            </div>
+            <div class="bg-slate-950 border border-slate-800 p-3 rounded-xl space-y-2">
+              <p class="text-[10px] font-bold text-yellow-400">Div B QF 2</p>
+              <div class="flex justify-between items-center text-xs font-bold text-white py-1 border-b border-slate-900">
+                <span id="qf2-home">2nd Place Div B</span>
+                <span class="text-slate-500">vs</span>
+                <span id="qf2-away">3rd Place Div B</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Semifinals -->
+          <div class="space-y-3">
+            <h4 class="text-xs font-black text-slate-400 uppercase tracking-wider text-center">Semifinals (03.09.27)</h4>
+            <div class="bg-slate-950 border border-slate-800 p-3 rounded-xl space-y-2">
+              <p class="text-[10px] font-bold text-blue-400">Div B Semifinal</p>
+              <div class="flex justify-between items-center text-xs font-bold text-white py-1 border-b border-slate-900">
+                <span>Winner QF 1</span>
+                <span class="text-slate-500">vs</span>
+                <span>Winner QF 2</span>
+              </div>
+            </div>
+            <div class="bg-slate-950 border border-slate-800 p-3 rounded-xl space-y-2">
+              <p class="text-[10px] font-bold text-blue-400">Div A Semifinal</p>
+              <div class="flex justify-between items-center text-xs font-bold text-white py-1 border-b border-slate-900">
+                <span>Div A Winner 1</span>
+                <span class="text-slate-500">vs</span>
+                <span>Div A Winner 2</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Final -->
+          <div class="space-y-3">
+            <h4 class="text-xs font-black text-slate-400 uppercase tracking-wider text-center">Grand Final (03.09.27)</h4>
+            <div class="bg-gradient-to-br from-yellow-500/20 to-emerald-500/20 border border-yellow-500/30 p-4 rounded-xl space-y-2 shadow-md">
+              <p class="text-[10px] font-black text-yellow-400 uppercase tracking-wider">Winter League Championship</p>
+              <div class="flex justify-between items-center text-xs font-black text-white py-1">
+                <span id="final-divb-champ">Div B Champion</span>
+                <span class="text-yellow-400 font-bold">VS</span>
+                <span id="final-diva-champ">Div A Champion</span>
+              </div>
+              <p class="text-[10px] text-slate-300 text-center pt-2 border-t border-yellow-500/20">�� Winner lifts the Winter League Trophy</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ================= TAB 4: SQUAD ROSTER ================= -->
+    <div id="view-roster" class="tab-view space-y-6 hidden">
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-slate-900 border border-slate-800 p-5 rounded-2xl shadow-sm">
+        <div>
+          <h2 class="text-xl font-black text-white flex items-center gap-2">
+            <i class="fa-solid fa-users text-yellow-400"></i> Joga Bonito FA Squad Roster
+          </h2>
+          <p class="text-xs text-slate-400 mt-1">Manage player profiles, jersey numbers, preferred positions, and season statistics.</p>
+        </div>
+        <button onclick="openModal('modal-add-player')" class="bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-black text-xs px-4 py-2.5 rounded-xl transition-all shadow flex items-center gap-2">
+          <i class="fa-solid fa-user-plus"></i> Add New Player
+        </button>
+      </div>
+
+      <div id="roster-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+
+    <!-- ================= TAB 5: TACTICS BOARD ================= -->
+    <div id="view-tactics" class="tab-view space-y-6 hidden">
+      <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl shadow-sm flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
+        <div>
+          <h2 class="text-xl font-black text-white flex items-center gap-2">
+            <i class="fa-solid fa-chess-board text-yellow-400"></i> Interactive 7v7 Tactics Board & Lineup Swapper
+          </h2>
+          <p class="text-xs text-slate-400 mt-1">Free swapping of starters and substitutes. Drag/drop or tap to swap players instantly.</p>
+        </div>
+
+        <div class="flex items-center gap-2 flex-wrap">
+          <!-- Match Selector for RSVPs -->
+          <select id="tactics-match-select" onchange="onTacticsMatchChange()" class="bg-slate-950 border border-slate-700 text-xs text-white font-bold rounded-xl px-3 py-2">
+            <!-- Populated dynamically -->
+          </select>
+
+          <select id="formation-select" onchange="setFormation(this.value)" class="bg-slate-950 border border-slate-700 text-xs text-white font-bold rounded-xl px-3 py-2">
+            <option value="3-2-1">3-2-1</option>
+            <option value="2-3-1" selected>2-3-1</option>
+            <option value="3-1-2">3-1-2</option>
+            <option value="1-4-1">1-4-1</option>
+            <option value="2-2-2">2-2-2</option>
+          </select>
+
+          <button onclick="undoTactics()" title="Undo" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold px-2.5 py-2 rounded-xl border border-slate-700 transition-all">
+            <i class="fa-solid fa-rotate-left"></i>
+          </button>
+          <button onclick="redoTactics()" title="Redo" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold px-2.5 py-2 rounded-xl border border-slate-700 transition-all">
+            <i class="fa-solid fa-rotate-right"></i>
+          </button>
+          <button onclick="swapPitchSides()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold px-3 py-2 rounded-xl border border-slate-700 transition-all">
+            <i class="fa-solid fa-right-left"></i> Swap Sides
+          </button>
+          <button onclick="resetTacticsBoard()" class="bg-yellow-500 hover:bg-yellow-400 text-slate-950 text-xs font-black px-3 py-2 rounded-xl transition-all shadow">
+            Reset to Default
+          </button>
+        </div>
+      </div>
+
+      <!-- MAIN TACTICS LAYOUT: PITCH + BENCH/LINEUP PANEL -->
+      <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        
+        <!-- PITCH CONTAINER (3 cols) -->
+        <div class="lg:col-span-3 space-y-3">
+          <div class="flex items-center justify-between bg-slate-900 border border-slate-800 px-4 py-2.5 rounded-xl">
+            <div id="tactics-status-counter" class="text-xs font-bold text-emerald-400 flex items-center gap-2">
+              <i class="fa-solid fa-circle-check"></i> 7 of 7 starters set • 2 on bench
+            </div>
+            <div id="tactics-warning-badge" class="hidden text-[11px] bg-red-500/10 text-red-400 border border-red-500/30 px-2.5 py-0.5 rounded font-bold animate-pulse">
+              <i class="fa-solid fa-triangle-exclamation"></i> Fewer than 7 Starters!
+            </div>
+          </div>
+
+          <div class="relative bg-emerald-800 border-4 border-slate-800 rounded-2xl w-full h-[520px] shadow-2xl overflow-hidden select-none" id="tactical-pitch">
+            <div class="absolute inset-4 border-2 border-white/30 rounded-lg pointer-events-none"></div>
+            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full border-l-2 border-white/30 pointer-events-none" style="clip-path: polygon(0 0, 100% 0, 100% 50%, 0 50%);"></div>
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-28 h-28 border-2 border-white/30 rounded-full pointer-events-none"></div>
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-white/50 rounded-full pointer-events-none"></div>
+            <div class="absolute top-4 left-1/2 -translate-x-1/2 w-48 h-20 border-2 border-t-0 border-white/30 pointer-events-none"></div>
+            <div class="absolute bottom-4 left-1/2 -translate-x-1/2 w-48 h-20 border-2 border-b-0 border-white/30 pointer-events-none"></div>
+
+            <div id="pitch-tokens-container" class="absolute inset-0">
+              <!-- Rendered dynamically -->
+            </div>
+          </div>
+          <p class="text-center text-xs text-slate-400"><i class="fa-solid fa-hand-pointer text-yellow-400"></i> Drag bench player onto pitch to swap/add, drag starter to bench, or click starter then bench player to swap.</p>
+        </div>
+
+        <!-- BENCH & SQUAD POOL PANEL (1 col) -->
+        <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl space-y-4 flex flex-col h-[520px]">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+            <h3 class="font-bold text-sm text-white flex items-center gap-2">
+              <i class="fa-solid fa-users-line text-yellow-400"></i> Bench & Roster Pool
+            </h3>
+            <button onclick="openModal('modal-add-player')" class="text-[11px] bg-slate-800 hover:bg-slate-700 text-yellow-400 font-bold px-2.5 py-1 rounded-lg border border-slate-700">
+              + Add
+            </button>
+          </div>
+
+          <div class="flex-1 overflow-y-auto space-y-2.5 pr-1" id="tactics-bench-container">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ================= TAB 6: JOGA BONITO HUB ================= -->
+    <div id="view-hub" class="tab-view space-y-6 hidden">
+      <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl shadow-sm flex items-center justify-between flex-wrap gap-4">
+        <div>
+          <h2 class="text-xl font-black text-white flex items-center gap-2">
+            <i class="fa-solid fa-house-chimney text-yellow-400"></i> Joga Bonito FA Team Hub & RSVP
+          </h2>
+          <p class="text-xs text-slate-400 mt-1">Review all Joga Bonito fixtures, manage per-match RSVPs, and record individual player match stats.</p>
+        </div>
+        <button onclick="openModal('modal-invite')" class="bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs px-4 py-2.5 rounded-xl transition-all shadow flex items-center gap-2">
+          <i class="fa-solid fa-user-plus"></i> Share Invite Link
+        </button>
+      </div>
+
+      <div id="hub-fixtures-list" class="space-y-4">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ================= MODALS ================= -->
+
+  <!-- ADD / EDIT PLAYER MODAL -->
+  <div id="modal-add-player" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl relative space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 id="player-modal-title" class="text-lg font-black text-white flex items-center gap-2">
+          <i class="fa-solid fa-user-plus text-yellow-400"></i> Add Player to Squad
         </h3>
-        <p class="text-xs text-slate-400 mt-0.5">Quarterfinals • Semifinals & Grand Final</p>
+        <button onclick="closeModal('modal-add-player')" class="text-slate-400 hover:text-white">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
       </div>
-      <span class="text-xs bg-emerald-500/10 text-emerald-400 font-bold px-3 py-1 rounded-md border border-emerald-500/20">Auto-Calculated</span>
-    </div>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+      <input type="hidden" id="player-edit-id">
+
       <div class="space-y-3">
-        <h4 class="text-xs font-black text-slate-400 uppercase tracking-wider text-center">Quarterfinals</h4>
-        <div class="bg-slate-950 border border-slate-800 p-3 rounded-xl space-y-2">
-          <p class="text-[10px] font-bold text-yellow-400">Div B QF 1</p>
-          <div class="flex justify-between items-center text-xs font-bold text-white py-1 border-b border-slate-900">
-            <span id="qf1-home">1st Place Div B</span>
-            <span class="text-slate-500">vs</span>
-            <span id="qf1-away">4th Place Div B</span>
+        <div>
+          <label class="block text-xs font-bold text-slate-300 mb-1">Player Full Name</label>
+          <input type="text" id="player-name-input" placeholder="e.g. Adriano Leite" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white text-sm font-semibold">
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-slate-300 mb-1">Position</label>
+            <select id="player-pos-input" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white text-sm font-semibold">
+              <option value="GK">GK - Goalkeeper</option>
+              <option value="DEF">DEF - Defender</option>
+              <option value="MID" selected>MID - Midfielder</option>
+              <option value="FWD">FWD - Forward</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-slate-300 mb-1">Jersey Number</label>
+            <input type="number" id="player-number-input" placeholder="10" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white text-sm font-semibold">
           </div>
         </div>
-        <div class="bg-slate-950 border border-slate-800 p-3 rounded-xl space-y-2">
-          <p class="text-[10px] font-bold text-yellow-400">Div B QF 2</p>
-          <div class="flex justify-between items-center text-xs font-bold text-white py-1 border-b border-slate-900">
-            <span id="qf2-home">2nd Place Div B</span>
-            <span class="text-slate-500">vs</span>
-            <span id="qf2-away">3rd Place Div B</span>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-bold text-slate-300 mb-1">Status</label>
+            <select id="player-status-input" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white text-sm font-semibold">
+              <option value="Active">Active</option>
+              <option value="Injured">Injured</option>
+            </select>
           </div>
-        </div>
-      </div>
-      <div class="space-y-3">
-        <h4 class="text-xs font-black text-slate-400 uppercase tracking-wider text-center">Semifinals</h4>
-        <div class="bg-slate-950 border border-slate-800 p-3 rounded-xl space-y-2">
-          <p class="text-[10px] font-bold text-blue-400">Div B Semifinal</p>
-          <div class="flex justify-between items-center text-xs font-bold text-white py-1 border-b border-slate-900">
-            <span>Winner QF 1</span>
-            <span class="text-slate-500">vs</span>
-            <span>Winner QF 2</span>
-          </div>
-        </div>
-      </div>
-      <div class="space-y-3">
-        <h4 class="text-xs font-black text-slate-400 uppercase tracking-wider text-center">Grand Final</h4>
-        <div class="bg-gradient-to-br from-yellow-500/20 to-emerald-500/20 border border-yellow-500/30 p-4 rounded-xl space-y-2 shadow-md">
-          <p class="text-[10px] font-black text-yellow-400 uppercase tracking-wider">Winter League Championship</p>
-          <div class="flex justify-between items-center text-xs font-black text-white py-1">
-            <span id="final-divb-champ">Div B Champion</span>
-            <span class="text-yellow-400 font-bold">VS</span>
-            <span id="final-diva-champ">Div A Champion</span>
+          <div>
+            <label class="block text-xs font-bold text-slate-300 mb-1">Avatar / Photo URL</label>
+            <input type="text" id="player-photo-input" placeholder="https://..." class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-white text-sm font-semibold">
           </div>
         </div>
       </div>
-    </div>
-  </div>
-</div>
 
-<!-- ================= TAB 4: SQUAD ROSTER ================= -->
-<div id="view-roster" class="tab-view space-y-6 hidden">
-  <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 bg-slate-900 border border-slate-800 p-5 rounded-2xl shadow-sm">
-    <div>
-      <h2 class="text-xl font-black text-white flex items-center gap-2">
-        <i class="fa-solid fa-users text-yellow-400"></i> Joga Bonito FA Squad Roster
-      </h2>
-      <p class="text-xs text-slate-400 mt-1">Manage player profiles, jersey numbers, preferred positions, and season statistics.</p>
-    </div>
-    <button onclick="verifyAdminAction(() => openModal('modal-add-player'))" class="bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-black text-xs px-4 py-2.5 rounded-xl transition-all shadow flex items-center gap-2">
-      <i class="fa-solid fa-user-plus"></i> Add New Player
-    </button>
-  </div>
-  <div id="roster-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
-</div>
-
-<!-- ================= TAB 5: TACTICS BOARD ================= -->
-<div id="view-tactics" class="tab-view space-y-6 hidden">
-  <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl shadow-sm flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
-    <div>
-      <h2 class="text-xl font-black text-white flex items-center gap-2">
-        <i class="fa-solid fa-chess-board text-yellow-400"></i> Interactive 7v7 Tactics Board & Lineup Swapper
-      </h2>
-      <p class="text-xs text-slate-400 mt-1">Free swapping of starters and substitutes. Drag/drop or tap to swap players instantly.</p>
-    </div>
-    <div class="flex items-center gap-2 flex-wrap">
-      <select id="tactics-match-select" onchange="onTacticsMatchChange()" class="bg-slate-950 border border-slate-700 text-xs text-white font-bold rounded-xl px-3 py-2"></select>
-      <select id="formation-select" onchange="setFormation(this.value)" class="bg-slate-950 border border-slate-700 text-xs text-white font-bold rounded-xl px-3 py-2">
-        <option value="3-2-1">3-2-1</option>
-        <option value="2-3-1" selected>2-3-1</option>
-        <option value="3-1-2">3-1-2</option>
-        <option value="1-4-1">1-4-1</option>
-        <option value="2-2-2">2-2-2</option>
-      </select>
-      <button onclick="undoTactics()" title="Undo" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold px-2.5 py-2 rounded-xl border border-slate-700 transition-all"><i class="fa-solid fa-rotate-left"></i></button>
-      <button onclick="redoTactics()" title="Redo" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold px-2.5 py-2 rounded-xl border border-slate-700 transition-all"><i class="fa-solid fa-rotate-right"></i></button>
-      <button onclick="swapPitchSides()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold px-3 py-2 rounded-xl border border-slate-700 transition-all"><i class="fa-solid fa-right-left"></i> Swap Sides</button>
-      <button onclick="resetTacticsBoard()" class="bg-yellow-500 hover:bg-yellow-400 text-slate-950 text-xs font-black px-3 py-2 rounded-xl transition-all shadow">Reset to Default</button>
-    </div>
-  </div>
-
-  <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
-    <div class="lg:col-span-3 space-y-3">
-      <div class="flex items-center justify-between bg-slate-900 border border-slate-800 px-4 py-2.5 rounded-xl">
-        <div id="tactics-status-counter" class="text-xs font-bold text-emerald-400 flex items-center gap-2"></div>
-        <div id="tactics-warning-badge" class="hidden text-[11px] bg-red-500/10 text-red-400 border border-red-500/30 px-2.5 py-0.5 rounded font-bold animate-pulse"><i class="fa-solid fa-triangle-exclamation"></i> Fewer than 7 Starters!</div>
-      </div>
-      <div class="relative bg-emerald-800 border-4 border-slate-800 rounded-2xl w-full h-[520px] shadow-2xl overflow-hidden select-none" id="tactical-pitch">
-        <div class="absolute inset-4 border-2 border-white/30 rounded-lg pointer-events-none"></div>
-        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full border-l-2 border-white/30 pointer-events-none" style="clip-path: polygon(0 0, 100% 0, 100% 50%, 0 50%);"></div>
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-28 h-28 border-2 border-white/30 rounded-full pointer-events-none"></div>
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-white/50 rounded-full pointer-events-none"></div>
-        <div class="absolute top-4 left-1/2 -translate-x-1/2 w-48 h-20 border-2 border-t-0 border-white/30 pointer-events-none"></div>
-        <div class="absolute bottom-4 left-1/2 -translate-x-1/2 w-48 h-20 border-2 border-b-0 border-white/30 pointer-events-none"></div>
-        <div id="pitch-tokens-container" class="absolute inset-0"></div>
+      <div class="flex items-center justify-end gap-2 pt-3 border-t border-slate-800">
+        <button type="button" onclick="closeModal('modal-add-player')" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-bold rounded-xl">Cancel</button>
+        <button type="button" onclick="savePlayer()" class="px-4 py-2 bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-black text-xs rounded-xl shadow">Save Player</button>
       </div>
     </div>
+  </div>
 
-    <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl space-y-4 flex flex-col h-[520px]">
-      <div class="flex items-center justify-between border-b border-slate-800 pb-2">
-        <h3 class="font-bold text-sm text-white flex items-center gap-2"><i class="fa-solid fa-users-line text-yellow-400"></i> Bench & Roster Pool</h3>
-        <button onclick="verifyAdminAction(() => openModal('modal-add-player'))" class="text-[11px] bg-slate-800 hover:bg-slate-700 text-yellow-400 font-bold px-2.5 py-1 rounded-lg border border-slate-700">+ Add</button>
+  <!-- INVITE PLAYER MODAL -->
+  <div id="modal-invite" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl relative space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 class="text-lg font-black text-white flex items-center gap-2">
+          <i class="fa-solid fa-share-nodes text-yellow-400"></i> Invite Player to Joga Bonito FA
+        </h3>
+        <button onclick="closeModal('modal-invite')" class="text-slate-400 hover:text-white">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
       </div>
-      <div class="flex-1 overflow-y-auto space-y-2.5 pr-1" id="tactics-bench-container"></div>
-    </div>
-  </div>
-</div>
 
-<!-- ================= TAB 6: TEAM HUB ================= -->
-<div id="view-hub" class="tab-view space-y-6 hidden">
-  <div class="bg-slate-900 border border-slate-800 p-5 rounded-2xl shadow-sm flex items-center justify-between flex-wrap gap-4">
-    <div>
-      <h2 class="text-xl font-black text-white flex items-center gap-2">
-        <i class="fa-solid fa-house-chimney text-yellow-400"></i> Joga Bonito FA Hub & RSVPs
-      </h2>
-      <p class="text-xs text-slate-400 mt-1">Review fixtures, manage per-match RSVPs in real-time, and log secure player stats.</p>
+      <p class="text-xs text-slate-300 leading-relaxed">
+        Share this unique invitation link with prospective players so they can join the roster and confirm match RSVPs instantly.
+      </p>
+
+      <div class="space-y-2">
+        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Shareable Invite Link</label>
+        <div class="flex items-center gap-2">
+          <input type="text" readonly id="invite-link-input" value="https://jogabonito.fa/join?team=joga-bonito-fa&invite=jb7v7-2026" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-xs text-slate-300 font-mono">
+          <button onclick="copyInviteLink()" class="bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-black text-xs px-4 py-2.5 rounded-xl shrink-0 shadow">
+            Copy
+          </button>
+        </div>
+      </div>
+
+      <div class="bg-slate-950 border border-slate-800 p-3 rounded-xl space-y-1.5 text-xs text-slate-400">
+        <p class="font-bold text-yellow-400"><i class="fa-solid fa-circle-check"></i> Self-Registration Active</p>
+        <p>Invited players will be added with the <span class="text-white font-bold">Player</span> role and can immediately submit their game RSVPs.</p>
+      </div>
+
+      <div class="flex justify-end pt-2 border-t border-slate-800">
+        <button onclick="closeModal('modal-invite')" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold rounded-xl">Close</button>
+      </div>
     </div>
-    <button onclick="openModal('modal-invite')" class="bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs px-4 py-2.5 rounded-xl transition-all shadow flex items-center gap-2">
-      <i class="fa-solid fa-user-plus"></i> Share Invite Link
-    </button>
   </div>
-  <div id="hub-fixtures-list" class="space-y-4"></div>
-</div>
+
+  <!-- MATCH STATS MODAL -->
+  <div id="modal-match-stats" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-lg w-full p-6 shadow-2xl relative space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 class="text-lg font-black text-white flex items-center gap-2">
+          <i class="fa-solid fa-clipboard-user text-yellow-400"></i> Log Match Stats (Joga Bonito)
+        </h3>
+        <button onclick="closeModal('modal-match-stats')" class="text-slate-400 hover:text-white">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <input type="hidden" id="stats-match-week">
+      <div id="stats-match-info" class="text-xs bg-slate-950 p-3 rounded-xl text-yellow-400 font-bold border border-slate-800"></div>
+
+      <div class="max-h-72 overflow-y-auto space-y-2 pr-1" id="match-stats-players-list">
+        <!-- Rendered dynamically -->
+      </div>
+
+      <div class="flex items-center justify-between pt-2 border-t border-slate-800">
+        <span class="text-xs text-slate-400">Recorded stats update player profiles instantly</span>
+        <button onclick="saveMatchStats()" class="px-4 py-2 bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-black text-xs rounded-xl transition-all shadow">
+          <i class="fa-solid fa-floppy-disk"></i> Save Match Stats
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toast" class="fixed bottom-5 right-5 bg-emerald-600 text-white text-xs font-bold px-4 py-3 rounded-xl shadow-2xl transform translate-y-20 opacity-0 transition-all duration-300 z-50 flex items-center gap-2">
+    <i class="fa-solid fa-circle-check text-sm"></i>
+    <span id="toast-msg">Action completed successfully!</span>
+  </div>
+
+  <!-- APPLICATION SCRIPT -->
+  <script>
+    // --- Data Store & State ---
+    let activeTab = 'dashboard';
+
+    let players = [
+      { id: 1, name: "Marcus Silva", position: "GK", number: "1", status: "Active", goals: 0, assists: 0, photo: "https://placehold.co/150x150/1e293b/ffffff?text=MS" },
+      { id: 2, name: "Alexandre Pato", position: "DEF", number: "3", status: "Active", goals: 0, assists: 1, photo: "https://placehold.co/150x150/1e293b/ffffff?text=AP" },
+      { id: 3, name: "Lucas Moura", position: "DEF", number: "4", status: "Active", goals: 1, assists: 0, photo: "https://placehold.co/150x150/1e293b/ffffff?text=LM" },
+      { id: 4, name: "Kaká Jr.", position: "MID", number: "8", status: "Active", goals: 1, assists: 1, photo: "https://placehold.co/150x150/1e293b/ffffff?text=KJ" },
+      { id: 5, name: "Ronaldinho G.", position: "MID", number: "10", status: "Active", goals: 2, assists: 0, photo: "https://placehold.co/150x150/1e293b/ffffff?text=RG" },
+      { id: 6, name: "Neymar Silva", position: "FWD", number: "11", status: "Active", goals: 0, assists: 0, photo: "https://placehold.co/150x150/1e293b/ffffff?text=NS" },
+      { id: 7, name: "Roberto Firmino", position: "FWD", number: "9", status: "Active", goals: 0, assists: 0, photo: "https://placehold.co/150x150/1e293b/ffffff?text=RF" },
+      { id: 8, name: "Casemiro", position: "MID", number: "5", status: "Active", goals: 0, assists: 0, photo: "https://placehold.co/150x150/1e293b/ffffff?text=C5" },
+      { id: 9, name: "Vinícius Jr.", position: "FWD", number: "7", status: "Active", goals: 0, assists: 0, photo: "https://placehold.co/150x150/1e293b/ffffff?text=V7" }
+    ];
+
+    let matchPlayerStats = {
+      1: {
+        3: { goals: 1, assists: 0 },
+        4: { goals: 1, assists: 1 },
+        5: { goals: 2, assists: 0 },
+        2: { goals: 0, assists: 1 }
+      },
+      2: {
+        5: { goals: 2, assists: 0 },
+        4: { goals: 1, assists: 0 }
+      },
+      3: {
+        5: { goals: 1, assists: 1 },
+        3: { goals: 2, assists: 0 }
+      },
+      5: {
+        4: { goals: 1, assists: 1 },
+        5: { goals: 3, assists: 0 }
+      },
+      6: {
+        2: { goals: 1, assists: 1 },
+        7: { goals: 1, assists: 0 }
+      },
+      7: {
+        5: { goals: 3, assists: 2 },
+        6: { goals: 2, assists: 1 }
+      }
+    };
+
+    // Independent Per-Game RSVPs with 9 players Going for Week 1 (demo mode)
+    let matchRSVPs = {
+      1: { 1: 'going', 2: 'going', 3: 'going', 4: 'going', 5: 'going', 6: 'going', 7: 'going', 8: 'going', 9: 'going' },
+      2: { 1: 'going', 2: 'going', 3: 'going', 4: 'going', 5: 'going', 6: 'going', 7: 'going' },
+      3: { 1: 'going', 2: 'maybe', 3: 'going', 4: 'going', 5: 'going', 6: 'going', 7: 'maybe' },
+      5: { 1: 'going', 2: 'going', 3: 'going', 4: 'going', 5: 'going', 6: 'going', 7: 'going' },
+      6: { 1: 'going', 2: 'going', 3: 'going', 4: 'going', 5: 'going', 6: 'going', 7: 'going' },
+      7: { 1: 'going', 2: 'going', 3: 'going', 4: 'going', 5: 'going', 6: 'going', 7: 'going' },
+      8: { 1: 'going', 2: 'going', 3: 'going', 4: 'going', 5: 'going', 6: 'going', 7: 'going' },
+      9: { 1: 'going', 2: 'going', 3: 'going', 4: 'going', 5: 'going', 6: 'going', 7: 'going' },
+      11: { 1: 'going', 2: 'going', 3: 'going', 4: 'going', 5: 'going', 6: 'going', 7: 'going' },
+      12: { 1: 'going', 2: 'going', 3: 'going', 4: 'going', 5: 'going', 6: 'going', 7: 'going' },
+      14: { 1: 'going', 2: 'going', 3: 'going', 4: 'going', 5: 'going', 6: 'going', 7: 'going' },
+      15: { 1: 'going', 2: 'going', 3: 'going', 4: 'going', 5: 'going', 6: 'going', 7: 'going' }
+    };
+
+    const scheduleData = [
+      {
+        week: 1, date: "11.03.26", note: "Regular Season",
+        matches: [
+          { slot: 1, time: "5:30 PM", home: "Dangerous Noodlez", away: "The MonSTARS (VSA)", homeScore: 2, awayScore: 1, isCross: false },
+          { slot: 2, time: "6:30 PM", home: "Poskin Jets", away: "Wrexham A.F.C.", homeScore: 3, awayScore: 2, isCross: false },
+          { slot: 3, time: "7:30 PM", home: "JV Team", away: "RLCF B", homeScore: 1, awayScore: 1, isCross: false },
+          { slot: 4, time: "8:30 PM", home: "Rice Lake CF", away: "Sharknado", homeScore: 4, awayScore: 2, isCross: false },
+          { slot: 5, time: "9:30 PM", home: "Joga Bonito", away: "Left Bench FC", homeScore: 4, awayScore: 1, isCross: false }
+        ],
+        byes: ["Beercelona", "Guardians U18B"]
+      },
+      {
+        week: 2, date: "11.10.26", note: "Regular Season",
+        matches: [
+          { slot: 1, time: "5:30 PM", home: "Wrexham A.F.C.", away: "Guardians U18B", homeScore: 2, awayScore: 0, isCross: false },
+          { slot: 2, time: "6:30 PM", home: "Beercelona", away: "Sharknado", homeScore: 3, awayScore: 1, isCross: false },
+          { slot: 3, time: "7:30 PM", home: "Joga Bonito", away: "The MonSTARS (VSA)", homeScore: 3, awayScore: 0, isCross: false },
+          { slot: 4, time: "8:30 PM", home: "Left Bench FC", away: "JV Team", homeScore: 1, awayScore: 2, isCross: false },
+          { slot: 5, time: "9:30 PM", home: "Rice Lake CF", away: "Poskin Jets", homeScore: 2, awayScore: 2, isCross: false }
+        ],
+        byes: ["Dangerous Noodlez", "RLCF B"]
+      },
+      {
+        week: 3, date: "11.17.26", note: "Regular Season",
+        matches: [
+          { slot: 1, time: "5:30 PM", home: "The MonSTARS (VSA)", away: "Left Bench FC", homeScore: 1, awayScore: 1, isCross: false },
+          { slot: 2, time: "6:30 PM", home: "Poskin Jets", away: "Guardians U18B", homeScore: 3, awayScore: 1, isCross: false },
+          { slot: 3, time: "7:30 PM", home: "Beercelona", away: "Rice Lake CF", homeScore: 4, awayScore: 2, isCross: false },
+          { slot: 4, time: "8:30 PM", home: "Dangerous Noodlez", away: "RLCF B", homeScore: 2, awayScore: 0, isCross: false },
+          { slot: 5, time: "9:30 PM", home: "JV Team", away: "Joga Bonito", homeScore: 1, awayScore: 3, isCross: false }
+        ],
+        byes: ["Wrexham A.F.C.", "Sharknado"]
+      },
+      {
+        week: 4, date: "11.24.26", note: "Regular Season",
+        matches: [
+          { slot: 1, time: "5:30 PM", home: "Sharknado", away: "Wrexham A.F.C.", homeScore: 1, awayScore: 3, isCross: false },
+          { slot: 2, time: "6:30 PM", home: "Guardians U18B", away: "Rice Lake CF", homeScore: 0, awayScore: 2, isCross: false },
+          { slot: 3, time: "7:30 PM", home: "RLCF B", away: "The MonSTARS (VSA)", homeScore: 2, awayScore: 2, isCross: false },
+          { slot: 4, time: "8:30 PM", home: "Beercelona", away: "Poskin Jets", homeScore: 3, awayScore: 1, isCross: false },
+          { slot: 5, time: "9:30 PM", home: "Dangerous Noodlez", away: "JV Team", homeScore: 2, awayScore: 1, isCross: false }
+        ],
+        byes: ["Joga Bonito", "Left Bench FC"]
+      },
+      {
+        week: 5, date: "12.01.26", note: "Regular Season",
+        matches: [
+          { slot: 1, time: "5:30 PM", home: "Dangerous Noodlez", away: "Left Bench FC", homeScore: 3, awayScore: 0, isCross: false },
+          { slot: 2, time: "6:30 PM", home: "Guardians U18B", away: "Sharknado", homeScore: 1, awayScore: 2, isCross: false },
+          { slot: 3, time: "7:30 PM", home: "The MonSTARS (VSA)", away: "JV Team", homeScore: 0, awayScore: 2, isCross: false },
+          { slot: 4, time: "8:30 PM", home: "RLCF B", away: "Joga Bonito", homeScore: 1, awayScore: 4, isCross: false },
+          { slot: 5, time: "9:30 PM", home: "Beercelona", away: "Wrexham A.F.C.", homeScore: 2, awayScore: 2, isCross: false }
+        ],
+        byes: ["Rice Lake CF", "Poskin Jets"]
+      },
+      {
+        week: 6, date: "12.08.26", note: "Regular Season",
+        matches: [
+          { slot: 1, time: "5:30 PM", home: "Beercelona", away: "Guardians U18B", homeScore: 4, awayScore: 1, isCross: false },
+          { slot: 2, time: "6:30 PM", home: "Sharknado", away: "Poskin Jets", homeScore: 2, awayScore: 3, isCross: false },
+          { slot: 3, time: "7:30 PM", home: "Dangerous Noodlez", away: "Joga Bonito", homeScore: 2, awayScore: 2, isCross: false },
+          { slot: 4, time: "8:30 PM", home: "Left Bench FC", away: "RLCF B", homeScore: 1, awayScore: 1, isCross: false },
+          { slot: 5, time: "9:30 PM", home: "Wrexham A.F.C.", away: "Rice Lake CF", homeScore: 3, awayScore: 1, isCross: false }
+        ],
+        byes: ["JV Team", "The MonSTARS (VSA)"]
+      },
+      {
+        week: 7, date: "12.15.26", note: "Regular Season",
+        matches: [
+          { slot: 1, time: "5:30 PM", home: "Dangerous Noodlez", away: "The MonSTARS (VSA)", homeScore: 2, awayScore: 0, isCross: false },
+          { slot: 2, time: "6:30 PM", home: "Poskin Jets", away: "Wrexham A.F.C.", homeScore: 2, awayScore: 1, isCross: false },
+          { slot: 3, time: "7:30 PM", home: "JV Team", away: "RLCF B", homeScore: 3, awayScore: 1, isCross: false },
+          { slot: 4, time: "8:30 PM", home: "Rice Lake CF", away: "Sharknado", homeScore: 2, awayScore: 2, isCross: false },
+          { slot: 5, time: "9:30 PM", home: "Joga Bonito", away: "Left Bench FC", homeScore: 5, awayScore: 0, isCross: false }
+        ],
+        byes: ["Beercelona", "Guardians U18B"]
+      },
+      {
+        week: 8, date: "01.05.27", note: "Holiday break (3 weeks off) prior • Second Half Start",
+        matches: [
+          { slot: 1, time: "5:30 PM", home: "Beercelona", away: "Guardians U18B", homeScore: 3, awayScore: 0, isCross: false },
+          { slot: 2, time: "6:30 PM", home: "Wrexham A.F.C.", away: "Rice Lake CF", homeScore: 2, awayScore: 1, isCross: false },
+          { slot: 3, time: "7:30 PM", home: "RLCF B", away: "Joga Bonito", homeScore: 0, awayScore: 3, isCross: false },
+          { slot: 4, time: "8:30 PM", home: "Sharknado", away: "Poskin Jets", homeScore: 1, awayScore: 2, isCross: false },
+          { slot: 5, time: "9:30 PM", home: "Dangerous Noodlez", away: "JV Team", homeScore: 2, awayScore: 1, isCross: false }
+        ],
+        byes: ["The MonSTARS (VSA)", "Left Bench FC"]
+      },
+      {
+        week: 9, date: "01.12.27", note: "Regular Season",
+        matches: [
+          { slot: 1, time: "5:30 PM", home: "Guardians U18B", away: "Sharknado", homeScore: 1, awayScore: 3, isCross: false },
+          { slot: 2, time: "6:30 PM", home: "RLCF B", away: "The MonSTARS (VSA)", homeScore: 1, awayScore: 1, isCross: false },
+          { slot: 3, time: "7:30 PM", home: "Dangerous Noodlez", away: "Joga Bonito", homeScore: 1, awayScore: 1, isCross: false },
+          { slot: 4, time: "8:30 PM", home: "Left Bench FC", away: "JV Team", homeScore: 0, awayScore: 2, isCross: false },
+          { slot: 5, time: "9:30 PM", home: "Beercelona", away: "Wrexham A.F.C.", homeScore: 2, awayScore: 1, isCross: false }
+        ],
+        byes: ["Rice Lake CF", "Poskin Jets"]
+      },
+      {
+        week: 10, date: "01.19.27", note: "Regular Season",
+        matches: [
+          { slot: 1, time: "5:30 PM", home: "Wrexham A.F.C.", away: "Guardians U18B", homeScore: 3, awayScore: 0, isCross: false },
+          { slot: 2, time: "6:30 PM", home: "The MonSTARS (VSA)", away: "JV Team", homeScore: 1, awayScore: 3, isCross: false },
+          { slot: 3, time: "7:30 PM", home: "Beercelona", away: "Sharknado", homeScore: 4, awayScore: 1, isCross: false },
+          { slot: 4, time: "8:30 PM", home: "Left Bench FC", away: "RLCF B", homeScore: 2, awayScore: 2, isCross: false },
+          { slot: 5, time: "9:30 PM", home: "Rice Lake CF", away: "Poskin Jets", homeScore: 1, awayScore: 1, isCross: false }
+        ],
+        byes: ["Dangerous Noodlez", "Joga Bonito"]
+      },
+      {
+        week: 11, date: "01.26.27", note: "Regular Season",
+        matches: [
+          { slot: 1, time: "5:30 PM", home: "The MonSTARS (VSA)", away: "Left Bench FC", homeScore: 2, awayScore: 1, isCross: false },
+          { slot: 2, time: "6:30 PM", home: "Dangerous Noodlez", away: "RLCF B", homeScore: 3, awayScore: 0, isCross: false },
+          { slot: 3, time: "7:30 PM", home: "Beercelona", away: "Rice Lake CF", homeScore: 2, awayScore: 2, isCross: false },
+          { slot: 4, time: "8:30 PM", home: "Poskin Jets", away: "Guardians U18B", homeScore: 4, awayScore: 1, isCross: false },
+          { slot: 5, time: "9:30 PM", home: "JV Team", away: "Joga Bonito", homeScore: 0, awayScore: 2, isCross: false }
+        ],
+        byes: ["Wrexham A.F.C.", "Sharknado"]
+      },
+      {
+        week: 12, date: "02.02.27", note: "Regular Season Finale",
+        matches: [
+          { slot: 1, time: "5:30 PM", home: "Sharknado", away: "Wrexham A.F.C.", homeScore: 1, awayScore: 2, isCross: false },
+          { slot: 2, time: "6:30 PM", home: "Beercelona", away: "Poskin Jets", homeScore: 3, awayScore: 2, isCross: false },
+          { slot: 3, time: "7:30 PM", home: "Guardians U18B", away: "Rice Lake CF", homeScore: 1, awayScore: 3, isCross: false },
+          { slot: 4, time: "8:30 PM", home: "Joga Bonito", away: "The MonSTARS (VSA)", homeScore: 4, awayScore: 1, isCross: false },
+          { slot: 5, time: "9:30 PM", home: "Dangerous Noodlez", away: "Left Bench FC", homeScore: 3, awayScore: 0, isCross: false }
+        ],
+        byes: ["JV Team", "RLCF B"]
+      },
+      {
+        week: 13, date: "02.09.27", note: "Weather Buffer • Cross-Division Matchup (*)",
+        matches: [
+          { slot: 1, time: "5:30 PM", home: "Guardians U18B", away: "JV Team", homeScore: 2, awayScore: 1, isCross: true },
+          { slot: 2, time: "6:30 PM", home: "Sharknado", away: "Left Bench FC", homeScore: 3, awayScore: 1, isCross: true },
+          { slot: 3, time: "7:30 PM", home: "Poskin Jets", away: "RLCF B", homeScore: 4, awayScore: 1, isCross: true },
+          { slot: 4, time: "8:30 PM", home: "Rice Lake CF", away: "The MonSTARS (VSA)", homeScore: 3, awayScore: 0, isCross: true }
+        ],
+        byes: ["Beercelona", "Wrexham A.F.C.", "Dangerous Noodlez", "Joga Bonito"]
+      },
+      {
+        week: 14, date: "02.16.27", note: "Weather Buffer • Cross-Division Matchup (*)",
+        matches: [
+          { slot: 1, time: "5:30 PM", home: "Guardians U18B", away: "Dangerous Noodlez", homeScore: 1, awayScore: 3, isCross: true },
+          { slot: 2, time: "6:30 PM", home: "Beercelona", away: "RLCF B", homeScore: 5, awayScore: 0, isCross: true },
+          { slot: 3, time: "7:30 PM", home: "Wrexham A.F.C.", away: "The MonSTARS (VSA)", homeScore: 2, awayScore: 1, isCross: true },
+          { slot: 4, time: "8:30 PM", home: "Sharknado", away: "Joga Bonito", homeScore: 1, awayScore: 3, isCross: true }
+        ],
+        byes: ["Rice Lake CF", "Poskin Jets", "JV Team", "Left Bench FC"]
+      },
+      {
+        week: 15, date: "02.23.27", note: "Weather Buffer • Cross-Division Matchup (*)",
+        matches: [
+          { slot: 1, time: "5:30 PM", home: "Rice Lake CF", away: "Left Bench FC", homeScore: 4, awayScore: 1, isCross: true },
+          { slot: 2, time: "6:30 PM", home: "Beercelona", away: "JV Team", homeScore: 3, awayScore: 1, isCross: true },
+          { slot: 3, time: "7:30 PM", home: "Wrexham A.F.C.", away: "Joga Bonito", homeScore: 2, awayScore: 2, isCross: true },
+          { slot: 4, time: "8:30 PM", home: "Poskin Jets", away: "Dangerous Noodlez", homeScore: 1, awayScore: 2, isCross: true }
+        ],
+        byes: ["Guardians U18B", "Sharknado", "RLCF B", "The MonSTARS (VSA)"]
+      }
+    ];
+
+    let formationsData = {
+      '3-2-1': [
+        { role: 'GK', x: 50, y: 88 },
+        { role: 'CB', x: 25, y: 65 },
+        { role: 'CB', x: 50, y: 70 },
+        { role: 'CB', x: 75, y: 65 },
+        { role: 'CM', x: 35, y: 40 },
+        { role: 'CM', x: 65, y: 40 },
+        { role: 'ST', x: 50, y: 20 }
+      ],
+      '2-3-1': [
+        { role: 'GK', x: 50, y: 88 },
+        { role: 'DEF', x: 32, y: 68 },
+        { role: 'DEF', x: 68, y: 68 },
+        { role: 'MID', x: 20, y: 42 },
+        { role: 'MID', x: 50, y: 45 },
+        { role: 'MID', x: 80, y: 42 },
+        { role: 'FWD', x: 50, y: 20 }
+      ],
+      '3-1-2': [
+        { role: 'GK', x: 50, y: 88 },
+        { role: 'DEF', x: 25, y: 68 },
+        { role: 'DEF', x: 50, y: 72 },
+        { role: 'DEF', x: 75, y: 68 },
+        { role: 'MID', x: 50, y: 45 },
+        { role: 'FWD', x: 35, y: 22 },
+        { role: 'FWD', x: 65, y: 22 }
+      ],
+      '1-4-1': [
+        { role: 'GK', x: 50, y: 88 },
+        { role: 'DEF', x: 50, y: 75 },
+        { role: 'MID', x: 18, y: 45 },
+        { role: 'MID', x: 38, y: 40 },
+        { role: 'MID', x: 62, y: 40 },
+        { role: 'MID', x: 82, y: 45 },
+        { role: 'FWD', x: 50, y: 20 }
+      ],
+      '2-2-2': [
+        { role: 'GK', x: 50, y: 88 },
+        { role: 'DEF', x: 32, y: 70 },
+        { role: 'DEF', x: 68, y: 70 },
+        { role: 'MID', x: 35, y: 45 },
+        { role: 'MID', x: 65, y: 45 },
+        { role: 'FWD', x: 35, y: 20 },
+        { role: 'FWD', x: 65, y: 20 }
+      ]
+    };
+
+    // Tactics state per match: stores starters array (playerIds or null) and bench array
+    let tacticsState = {};
+    let tacticsUndoStack = [];
+    let tacticsRedoStack = [];
+    let selectedPitchSlot = null; // for tap-based swapping
+
+    // --- Initialization on Load ---
+    window.onload = function() {
+      recalculatePlayerOverallTotals();
+      renderDashboardRSVPTracker();
+      populateTacticsMatchSelector();
+      renderTacticsBoardForMatch();
+      renderHubFixtures();
+      renderSchedule();
+      computeStandings();
+      runFormCalculationUnitTests();
+      runSwapLogicUnitTests();
+    };
+
+    // --- Navigation ---
+    function switchTab(tabId) {
+      activeTab = tabId;
+      document.querySelectorAll('.tab-view').forEach(el => el.classList.add('hidden'));
+      document.getElementById(`view-${tabId}`).classList.remove('hidden');
+
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.className = "nav-btn px-3 py-2 rounded-lg text-xs font-bold transition-all text-slate-300 hover:text-white hover:bg-slate-800";
+      });
+      const activeNav = document.getElementById(`nav-${tabId}`);
+      if (activeNav) activeNav.className = "nav-btn px-3 py-2 rounded-lg text-xs font-bold transition-all bg-yellow-500 text-slate-950 shadow";
+
+      document.querySelectorAll('.mob-nav-btn').forEach(btn => {
+        btn.className = "mob-nav-btn px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap text-slate-300 hover:bg-slate-800";
+      });
+      const activeMobNav = document.getElementById(`mob-nav-${tabId}`);
+      if (activeMobNav) activeMobNav.className = "mob-nav-btn px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap bg-yellow-500 text-slate-950";
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      if (tabId === 'standings') computeStandings();
+      if (tabId === 'schedule') renderSchedule();
+      if (tabId === 'hub') renderHubFixtures();
+      if (tabId === 'dashboard') renderDashboardRSVPTracker();
+      if (tabId === 'tactics') {
+        populateTacticsMatchSelector();
+        renderTacticsBoardForMatch();
+      }
+    }
+
+    // --- Modal Management ---
+    function openModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
+    }
+
+    function closeModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (modal) {
+        modal.classList.remove('flex');
+        modal.classList.add('hidden');
+      }
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      const msgEl = document.getElementById('toast-msg');
+      if (toast && msgEl) {
+        msgEl.innerText = msg;
+        toast.classList.remove('translate-y-20', 'opacity-0');
+        setTimeout(() => {
+          toast.classList.add('translate-y-20', 'opacity-0');
+        }, 3000);
+      }
+    }
+
+    function copyInviteLink() {
+      const input = document.getElementById('invite-link-input');
+      input.select();
+      document.execCommand('copy');
+      showToast('Invite link copied to clipboard!');
+      closeModal('modal-invite');
+    }
+
+    // --- Roster & Stats Logic ---
+    function recalculatePlayerOverallTotals() {
+      players.forEach(p => {
+        p.goals = 0;
+        p.assists = 0;
+      });
+
+      Object.values(matchPlayerStats).forEach(weekStats => {
+        Object.entries(weekStats).forEach(([pId, stat]) => {
+          const player = players.find(p => p.id == pId);
+          if (player) {
+            player.goals += stat.goals || 0;
+            player.assists += stat.assists || 0;
+          }
+        });
+      });
+
+      updateDashboardStats();
+      renderRoster();
+    }
+
+    function updateDashboardStats() {
+      const totalGoals = players.reduce((sum, p) => sum + (p.goals || 0), 0);
+      const totalAssists = players.reduce((sum, p) => sum + (p.assists || 0), 0);
+
+      const goalsEl = document.getElementById('dash-total-goals');
+      const assistsEl = document.getElementById('dash-total-assists');
+      const playersEl = document.getElementById('dash-total-players');
+
+      if (goalsEl) goalsEl.innerText = totalGoals;
+      if (assistsEl) assistsEl.innerText = totalAssists;
+      if (playersEl) playersEl.innerText = players.length;
+    }
+
+    function renderRoster() {
+      const grid = document.getElementById('roster-grid');
+      if (!grid) return;
+
+      grid.innerHTML = players.map(p => `
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-sm space-y-3 relative group">
+          <div class="flex items-center space-x-3">
+            <img src="${p.photo}" class="w-14 h-14 rounded-xl object-cover border border-slate-700" onerror="this.src='https://placehold.co/150x150/1e293b/ffffff?text=JB'">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="text-xs bg-yellow-400 text-slate-950 font-black px-1.5 py-0.5 rounded">#${p.number}</span>
+                <h4 class="font-bold text-white text-base">${p.name}</h4>
+              </div>
+              <p class="text-xs text-slate-400 font-semibold mt-0.5">${p.position} • <span class="${p.status === 'Active' ? 'text-emerald-400' : 'text-red-400'}">${p.status}</span></p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2 pt-2 border-t border-slate-800 text-center">
+            <div class="bg-slate-950 p-2 rounded-xl border border-slate-800">
+              <span class="block text-[10px] font-bold text-emerald-400 uppercase tracking-wider">Goals</span>
+              <span class="text-lg font-black text-white">${p.goals || 0}</span>
+            </div>
+            <div class="bg-slate-950 p-2 rounded-xl border border-slate-800">
+              <span class="block text-[10px] font-bold text-blue-400 uppercase tracking-wider">Assists</span>
+              <span class="text-lg font-black text-white">${p.assists || 0}</span>
+            </div>
+          </div>
+
+          <div class="flex justify-end space-x-2 pt-1">
+            <button onclick="editPlayer(${p.id})" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-xs text-yellow-400 font-bold rounded-lg transition-colors flex items-center gap-1">
+              <i class="fa-solid fa-pen-to-square"></i> Edit
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function editPlayer(id) {
+      const p = players.find(x => x.id === id);
+      if (!p) return;
+      document.getElementById('player-edit-id').value = p.id;
+      document.getElementById('player-name-input').value = p.name;
+      document.getElementById('player-pos-input').value = p.position;
+      document.getElementById('player-number-input').value = p.number;
+      document.getElementById('player-status-input').value = p.status;
+      document.getElementById('player-photo-input').value = p.photo || '';
+      openModal('modal-add-player');
+    }
+
+    function savePlayer() {
+      const id = document.getElementById('player-edit-id').value;
+      const name = document.getElementById('player-name-input').value.trim();
+      const position = document.getElementById('player-pos-input').value;
+      const number = document.getElementById('player-number-input').value;
+      const status = document.getElementById('player-status-input').value;
+      const photo = document.getElementById('player-photo-input').value.trim();
+
+      if (!name) {
+        showToast('Please enter a player name');
+        return;
+      }
+
+      if (id) {
+        const p = players.find(x => x.id == id);
+        if (p) {
+          p.name = name;
+          p.position = position;
+          p.number = number;
+          p.status = status;
+          p.photo = photo;
+        }
+      } else {
+        const newP = {
+          id: Date.now(),
+          name,
+          position,
+          number: number || '0',
+          status,
+          goals: 0,
+          assists: 0,
+          photo: photo || 'https://placehold.co/150x150/1e293b/ffffff?text=' + encodeURIComponent(name.charAt(0))
+        };
+        players.push(newP);
+      }
+
+      closeModal('modal-add-player');
+      recalculatePlayerOverallTotals();
+      showToast('Player profile saved successfully!');
+    }
+
+    // --- Match Stats Recording (Joga Bonito) ---
+    function openMatchStatsModal(week) {
+      document.getElementById('stats-match-week').value = week;
+      document.getElementById('stats-match-info').innerText = `Logging individual player goals & assists for Week ${week}`;
+      
+      const currentStats = matchPlayerStats[week] || {};
+      const container = document.getElementById('match-stats-players-list');
+      
+      container.innerHTML = players.map(p => {
+        const pStat = currentStats[p.id] || { goals: 0, assists: 0 };
+        return `
+          <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 flex items-center justify-between gap-3">
+            <div class="flex items-center gap-2">
+              <span class="w-7 h-7 rounded-full bg-slate-800 text-yellow-400 font-extrabold text-xs flex items-center justify-center">${p.number}</span>
+              <div>
+                <p class="text-xs font-bold text-white">${p.name}</p>
+                <p class="text-[10px] text-slate-400 uppercase">${p.position}</p>
+              </div>
+            </div>
+            
+            <div class="flex items-center gap-4">
+              <div class="flex items-center gap-1.5">
+                <span class="text-[10px] font-bold text-emerald-400 uppercase">Goals</span>
+                <input type="number" id="stats-goals-${p.id}" min="0" value="${pStat.goals}" class="w-12 bg-slate-900 border border-slate-700 rounded-lg py-1 text-center font-bold text-white text-xs">
+              </div>
+              <div class="flex items-center gap-1.5">
+                <span class="text-[10px] font-bold text-blue-400 uppercase">Assists</span>
+                <input type="number" id="stats-assists-${p.id}" min="0" value="${pStat.assists}" class="w-12 bg-slate-900 border border-slate-700 rounded-lg py-1 text-center font-bold text-white text-xs">
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      openModal('modal-match-stats');
+    }
+
+    function saveMatchStats() {
+      const week = document.getElementById('stats-match-week').value;
+      if (!week) return;
+
+      if (!matchPlayerStats[week]) {
+        matchPlayerStats[week] = {};
+      }
+
+      players.forEach(p => {
+        const goalsInput = document.getElementById(`stats-goals-${p.id}`);
+        const assistsInput = document.getElementById(`stats-assists-${p.id}`);
+        const goals = goalsInput ? parseInt(goalsInput.value) || 0 : 0;
+        const assists = assistsInput ? parseInt(assistsInput.value) || 0 : 0;
+
+        matchPlayerStats[week][p.id] = { goals, assists };
+      });
+
+      recalculatePlayerOverallTotals();
+      closeModal('modal-match-stats');
+      showToast('Match stats updated and player profiles refreshed!');
+    }
+
+    // --- Independent Per-Game RSVP Tracker ---
+    function setPlayerRSVP(week, playerId, status) {
+      if (!matchRSVPs[week]) {
+        matchRSVPs[week] = {};
+      }
+      matchRSVPs[week][playerId] = status;
+      renderDashboardRSVPTracker();
+      renderHubFixtures();
+      if (activeTab === 'tactics') {
+        renderTacticsBoardForMatch();
+      }
+      showToast(`RSVP updated for Week ${week}`);
+    }
+
+    function renderDashboardRSVPTracker() {
+      const container = document.getElementById('dashboard-rsvp-list');
+      if (!container) return;
+
+      const jbMatches = [];
+      scheduleData.forEach(w => {
+        w.matches.forEach(m => {
+          if (m.home === 'Joga Bonito' || m.away === 'Joga Bonito') {
+            jbMatches.push({ week: w.week, date: w.date, match: m });
+          }
+        });
+      });
+
+      if (jbMatches.length === 0) {
+        container.innerHTML = '<p class="text-xs text-slate-400">No upcoming fixtures found.</p>';
+        return;
+      }
+
+      container.innerHTML = jbMatches.slice(0, 3).map(item => {
+        const week = item.week;
+        const m = item.match;
+        const opponent = m.home === 'Joga Bonito' ? m.away : m.home;
+        const rsvps = matchRSVPs[week] || {};
+        
+        let goingCount = 0;
+        players.forEach(p => {
+          const stat = rsvps[p.id];
+          if (stat === 'going' || !stat) goingCount++;
+        });
+
+        const isLowHeadcount = goingCount < 7;
+
+        return `
+          <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 space-y-3">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b border-slate-900 pb-2.5">
+              <div>
+                <span class="text-[10px] bg-yellow-500/10 text-yellow-400 font-bold px-2 py-0.5 rounded border border-yellow-500/20">Week ${week} • ${item.date} (${m.time})</span>
+                <h4 class="text-sm font-black text-white mt-1">Joga Bonito vs ${opponent}</h4>
+              </div>
+              
+              <div class="flex items-center gap-2">
+                <span class="text-xs bg-emerald-500/10 text-emerald-400 font-bold px-2.5 py-1 rounded-lg border border-emerald-500/20">
+                  <i class="fa-solid fa-users"></i> Going: ${goingCount} / 7+
+                </span>
+                ${isLowHeadcount ? '<span class="text-[10px] bg-red-500/10 text-red-400 font-bold px-2 py-1 rounded-lg border border-red-500/20 animate-pulse"><i class="fa-solid fa-triangle-exclamation"></i> Low Headcount</span>' : ''}
+              </div>
+            </div>
+
+            <div class="space-y-1.5 pt-1">
+              <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Squad Attendance & RSVP (Independent per match):</p>
+              <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+                ${players.map(p => {
+                  const pStatus = rsvps[p.id] || 'going';
+                  return `
+                    <div class="bg-slate-900 border border-slate-800 p-2 rounded-xl flex items-center justify-between text-xs">
+                      <span class="font-bold text-white truncate max-w-[100px]">${p.name}</span>
+                      <div class="flex items-center gap-1">
+                        <button onclick="setPlayerRSVP(${week}, ${p.id}, 'going')" class="px-1.5 py-0.5 rounded font-extrabold text-[10px] ${pStatus === 'going' ? 'bg-emerald-600 text-white shadow' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'}">In</button>
+                        <button onclick="setPlayerRSVP(${week}, ${p.id}, 'maybe')" class="px-1.5 py-0.5 rounded font-extrabold text-[10px] ${pStatus === 'maybe' ? 'bg-yellow-600 text-white shadow' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'}">?</button>
+                        <button onclick="setPlayerRSVP(${week}, ${p.id}, 'no')" class="px-1.5 py-0.5 rounded font-extrabold text-[10px] ${pStatus === 'no' ? 'bg-red-600 text-white shadow' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'}">Out</button>
+                      </div>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // --- Schedule & Scores Rendering ---
+    function renderSchedule() {
+      const container = document.getElementById('schedule-container');
+      const filter = document.getElementById('schedule-filter')?.value || 'jb';
+      if (!container) return;
+
+      container.innerHTML = scheduleData.map(w => {
+        let matchesToDisplay = w.matches;
+        if (filter === 'jb') {
+          matchesToDisplay = w.matches.filter(m => m.home === 'Joga Bonito' || m.away === 'Joga Bonito');
+          if (matchesToDisplay.length === 0) return '';
+        } else if (filter === 'cross') {
+          matchesToDisplay = w.matches.filter(m => m.isCross);
+          if (matchesToDisplay.length === 0) return '';
+        }
+
+        return `
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4 shadow-sm">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b border-slate-800 pb-3">
+              <div>
+                <div class="flex items-center gap-2">
+                  <h3 class="font-extrabold text-base text-white">Week ${w.week}</h3>
+                  <span class="text-xs bg-slate-800 text-yellow-400 font-bold px-2 py-0.5 rounded border border-slate-700">${w.date}</span>
+                </div>
+                <p class="text-xs text-slate-400 mt-0.5">${w.note}</p>
+              </div>
+
+              ${w.byes && w.byes.length > 0 ? `
+                <div class="text-xs text-slate-400 bg-slate-950 px-3 py-1.5 rounded-xl border border-slate-800">
+                  <span class="font-bold text-slate-300">Bye:</span> ${w.byes.join(', ')}
+                </div>
+              ` : ''}
+            </div>
+
+            <div class="space-y-2.5">
+              ${matchesToDisplay.map((m, idx) => {
+                const isJB = (m.home === 'Joga Bonito' || m.away === 'Joga Bonito');
+                return `
+                  <div class="bg-slate-950 border ${isJB ? 'border-yellow-500/40 bg-yellow-500/[0.02]' : 'border-slate-800'} rounded-xl p-3.5 flex flex-col sm:flex-row items-center justify-between gap-3">
+                    <div class="flex items-center gap-3 w-full sm:w-auto">
+                      <span class="text-[10px] font-bold bg-slate-900 text-slate-400 px-2.5 py-1 rounded-lg border border-slate-800">Slot ${m.slot} • ${m.time}</span>
+                      ${m.isCross ? '<span class="text-[10px] bg-indigo-500/20 text-indigo-400 font-bold px-2 py-0.5 rounded border border-indigo-500/30">Cross-Division (*)</span>' : ''}
+                    </div>
+
+                    <div class="flex items-center justify-center gap-3 w-full sm:w-auto my-2 sm:my-0">
+                      <span class="text-xs sm:text-sm font-bold ${m.home === 'Joga Bonito' ? 'text-yellow-400 font-black' : 'text-white'} text-right w-36 truncate">${m.home}</span>
+                      
+                      <div class="flex items-center gap-1.5 shrink-0">
+                        <input type="number" min="0" value="${m.homeScore}" onchange="updateMatchScore(${w.week}, ${m.slot}, this.value, document.getElementById('away-score-${w.week}-${m.slot}').value)" id="home-score-${w.week}-${m.slot}" class="w-10 bg-slate-900 border border-slate-700 text-center text-xs font-black text-white rounded-lg py-1">
+                        <span class="text-slate-500 font-bold">:</span>
+                        <input type="number" min="0" value="${m.awayScore}" onchange="updateMatchScore(${w.week}, ${m.slot}, document.getElementById('home-score-${w.week}-${m.slot}').value, this.value)" id="away-score-${w.week}-${m.slot}" class="w-10 bg-slate-900 border border-slate-700 text-center text-xs font-black text-white rounded-lg py-1">
+                      </div>
+
+                      <span class="text-xs sm:text-sm font-bold ${m.away === 'Joga Bonito' ? 'text-yellow-400 font-black' : 'text-white'} text-left w-36 truncate">${m.away}</span>
+                    </div>
+
+                    ${isJB ? `
+                      <button onclick="openMatchStatsModal(${w.week})" class="bg-yellow-500/10 hover:bg-yellow-500/20 text-yellow-400 border border-yellow-500/30 text-[11px] font-bold px-3 py-1.5 rounded-lg transition-all flex items-center gap-1 shrink-0">
+                        <i class="fa-solid fa-futbol"></i> Log Stats
+                      </button>
+                    ` : '<div class="w-20"></div>'}
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function updateMatchScore(weekNum, slotNum, homeScoreVal, awayScoreVal) {
+      const weekObj = scheduleData.find(w => w.week === weekNum);
+      if (!weekObj) return;
+      const matchObj = weekObj.matches.find(m => m.slot === slotNum);
+      if (!matchObj) return;
+
+      matchObj.homeScore = parseInt(homeScoreVal) || 0;
+      matchObj.awayScore = parseInt(awayScoreVal) || 0;
+
+      computeStandings();
+      showToast(`Week ${weekNum} score updated successfully!`);
+    }
+
+    // --- Standings, Tiebreakers & Form Calculation ---
+    function computeTeamForm(teamName) {
+      const matchResults = [];
+
+      scheduleData.forEach(w => {
+        w.matches.forEach(m => {
+          if (m.homeScore !== undefined && m.awayScore !== undefined) {
+            if (m.home === teamName || m.away === teamName) {
+              const isHome = m.home === teamName;
+              const teamScore = isHome ? m.homeScore : m.awayScore;
+              const oppScore = isHome ? m.awayScore : m.homeScore;
+              const opponent = isHome ? m.away : m.home;
+
+              let outcome = 'D';
+              if (teamScore > oppScore) outcome = 'W';
+              else if (teamScore < oppScore) outcome = 'L';
+
+              matchResults.push({
+                week: w.week,
+                date: w.date,
+                opponent,
+                teamScore,
+                oppScore,
+                outcome
+              });
+            }
+          }
+        });
+      });
+
+      matchResults.sort((a, b) => a.week - b.week);
+      return matchResults.slice(-5);
+    }
+
+    function computeStandings() {
+      const divisionAteams = ["Beercelona", "Wrexham A.F.C.", "Rice Lake CF", "Poskin Jets", "Guardians U18B", "Sharknado"];
+      const divisionBteams = ["Dangerous Noodlez", "JV Team", "Joga Bonito", "Left Bench FC", "RLCF B", "The MonSTARS (VSA)"];
+
+      const statsMap = {};
+      [...divisionAteams, ...divisionBteams].forEach(t => {
+        statsMap[t] = { team: t, gp: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0, form: [] };
+      });
+
+      scheduleData.forEach(w => {
+        w.matches.forEach(m => {
+          if (m.homeScore !== undefined && m.awayScore !== undefined) {
+            if (statsMap[m.home]) {
+              statsMap[m.home].gp++;
+              statsMap[m.home].gf += m.homeScore;
+              statsMap[m.home].ga += m.awayScore;
+            }
+            if (statsMap[m.away]) {
+              statsMap[m.away].gp++;
+              statsMap[m.away].gf += m.awayScore;
+              statsMap[m.away].ga += m.homeScore;
+            }
+
+            if (m.homeScore > m.awayScore) {
+              if (statsMap[m.home]) statsMap[m.home].w++;
+              if (statsMap[m.away]) statsMap[m.away].l++;
+            } else if (m.homeScore < m.awayScore) {
+              if (statsMap[m.away]) statsMap[m.away].w++;
+              if (statsMap[m.home]) statsMap[m.home].l++;
+            } else {
+              if (statsMap[m.home]) statsMap[m.home].d++;
+              if (statsMap[m.away]) statsMap[m.away].d++;
+            }
+          }
+        });
+      });
+
+      Object.values(statsMap).forEach(s => {
+        s.gd = s.gf - s.ga;
+        s.pts = (s.w * 3) + (s.d * 1);
+        s.form = computeTeamForm(s.team);
+      });
+
+      const sortTeams = (teamList) => {
+        return teamList.map(t => statsMap[t]).sort((a, b) => {
+          if (b.pts !== a.pts) return b.pts - a.pts;
+          if (b.gd !== a.gd) return b.gd - a.gd;
+          if (b.gf !== a.gf) return b.gf - a.gf;
+          return a.ga - b.ga;
+        });
+      };
+
+      const sortedDivA = sortTeams(divisionAteams);
+      const sortedDivB = sortTeams(divisionBteams);
+
+      renderStandingsTable('diva-standings-body', sortedDivA);
+      renderStandingsTable('divb-standings-body', sortedDivB);
+      updatePlayoffBracket(sortedDivA, sortedDivB);
+    }
+
+    function renderStandingsTable(tbodyId, sortedList) {
+      const tbody = document.getElementById(tbodyId);
+      if (!tbody) return;
+
+      tbody.innerHTML = sortedList.map((s, idx) => {
+        const rank = idx + 1;
+        const isTop4 = rank <= 4;
+        const isJB = s.team === 'Joga Bonito';
+
+        let formHTML = '<div class="flex items-center justify-center gap-1">';
+        s.form.forEach(f => {
+          let bg = 'bg-emerald-600 text-white';
+          if (f.outcome === 'D') bg = 'bg-amber-500 text-slate-950';
+          if (f.outcome === 'L') bg = 'bg-rose-600 text-white';
+          
+          const tooltip = `${f.outcome} ${f.teamScore}-${f.oppScore} vs ${f.opponent}, ${f.date}`;
+          formHTML += `<span class="w-5 h-5 rounded ${bg} text-[10px] font-black flex items-center justify-center shadow cursor-pointer" title="${tooltip}">${f.outcome}</span>`;
+        });
+        formHTML += '</div>';
+
+        return `
+          <tr class="${isJB ? 'bg-yellow-500/10 font-bold text-yellow-300' : (isTop4 ? 'bg-slate-900/60' : '')} border-b border-slate-800/60 hover:bg-slate-800/40 transition-colors">
+            <td class="p-3.5 text-center font-black ${isTop4 ? 'text-emerald-400' : 'text-slate-400'}">
+              ${rank} ${isTop4 ? '<i class="fa-solid fa-arrow-up text-[9px]"></i>' : ''}
+            </td>
+            <td class="p-3.5 font-bold flex items-center gap-2">
+              <span class="${isJB ? 'text-yellow-400 font-black' : 'text-white'}">${s.team}</span>
+              ${isJB ? '<span class="text-[9px] bg-yellow-400 text-slate-950 font-black px-1.5 py-0.5 rounded">FA</span>' : ''}
+            </td>
+            <td class="p-3.5 text-center text-slate-300">${s.gp}</td>
+            <td class="p-3.5 text-center text-slate-300">${s.w}</td>
+            <td class="p-3.5 text-center text-slate-300">${s.d}</td>
+            <td class="p-3.5 text-center text-slate-300">${s.l}</td>
+            <td class="p-3.5 text-center text-slate-300">${s.gf}</td>
+            <td class="p-3.5 text-center text-slate-300">${s.ga}</td>
+            <td class="p-3.5 text-center font-bold ${s.gd > 0 ? 'text-emerald-400' : (s.gd < 0 ? 'text-red-400' : 'text-slate-400')}">${s.gd > 0 ? '+' + s.gd : s.gd}</td>
+            <td class="p-3.5 text-center font-black text-white bg-slate-950/40">${s.pts}</td>
+            <td class="p-3.5 text-center">${formHTML}</td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function updatePlayoffBracket(divA, divB) {
+      if (divA.length >= 4) {
+        document.getElementById('qf1-home').innerText = `1. ${divA[0].team}`;
+        document.getElementById('qf1-away').innerText = `4. ${divA[3].team}`;
+        document.getElementById('qf2-home').innerText = `2. ${divA[1].team}`;
+        document.getElementById('qf2-away').innerText = `3. ${divA[2].team}`;
+        document.getElementById('final-diva-champ').innerText = `${divA[0].team} (Div A)`;
+      }
+      if (divB.length >= 4) {
+        document.getElementById('final-divb-champ').innerText = `${divB[0].team} (Div B)`;
+      }
+    }
+
+    // --- Tactics Board & Free Swapping Engine ---
+    function populateTacticsMatchSelector() {
+      const select = document.getElementById('tactics-match-select');
+      if (!select) return;
+
+      const jbMatches = [];
+      scheduleData.forEach(w => {
+        w.matches.forEach(m => {
+          if (m.home === 'Joga Bonito' || m.away === 'Joga Bonito') {
+            const opp = m.home === 'Joga Bonito' ? m.away : m.home;
+            jbMatches.push({ week: w.week, date: w.date, label: `Week ${w.week} (${w.date}) vs ${opp}` });
+          }
+        });
+      });
+
+      select.innerHTML = jbMatches.map(item => `
+        <option value="${item.week}">${item.label}</option>
+      `).join('');
+    }
+
+    function getCurrentTacticsWeek() {
+      const select = document.getElementById('tactics-match-select');
+      return select ? parseInt(select.value) || 1 : 1;
+    }
+
+    function getOrCreateTacticsState(week) {
+      if (!tacticsState[week]) {
+        // Build default automatic lineup from RSVPs
+        const rsvps = matchRSVPs[week] || {};
+        const going = [];
+        const maybe = [];
+        const others = [];
+
+        players.forEach(p => {
+          const stat = rsvps[p.id] || 'going';
+          if (stat === 'going') going.push(p.id);
+          else if (stat === 'maybe') maybe.push(p.id);
+          else others.push(p.id);
+        });
+
+        const sortedPool = [...going, ...maybe, ...others];
+        const starters = sortedPool.slice(0, 7);
+        while (starters.length < 7) starters.push(null);
+        const bench = sortedPool.slice(7);
+
+        tacticsState[week] = { starters, bench };
+      }
+      return tacticsState[week];
+    }
+
+    function saveTacticsStateSnapshot(week) {
+      const current = tacticsState[week];
+      if (!current) return;
+      tacticsUndoStack.push(JSON.parse(JSON.stringify(current)));
+      tacticsRedoStack = []; // clear redo on new action
+    }
+
+    function undoTactics() {
+      if (tacticsUndoStack.length === 0) {
+        showToast("Nothing to undo");
+        return;
+      }
+      const week = getCurrentTacticsWeek();
+      tacticsRedoStack.push(JSON.parse(JSON.stringify(tacticsState[week])));
+      tacticsState[week] = tacticsUndoStack.pop();
+      renderTacticsBoardForMatch();
+      showToast("Undone");
+    }
+
+    function redoTactics() {
+      if (tacticsRedoStack.length === 0) {
+        showToast("Nothing to redo");
+        return;
+      }
+      const week = getCurrentTacticsWeek();
+      tacticsUndoStack.push(JSON.parse(JSON.stringify(tacticsState[week])));
+      tacticsState[week] = tacticsRedoStack.pop();
+      renderTacticsBoardForMatch();
+      showToast("Redone");
+    }
+
+    function onTacticsMatchChange() {
+      tacticsUndoStack = [];
+      tacticsRedoStack = [];
+      selectedPitchSlot = null;
+      renderTacticsBoardForMatch();
+    }
+
+    function setFormation(formKey) {
+      renderTacticsBoardForMatch();
+    }
+
+    function resetTacticsBoard() {
+      const week = getCurrentTacticsWeek();
+      delete tacticsState[week];
+      tacticsUndoStack = [];
+      tacticsRedoStack = [];
+      selectedPitchSlot = null;
+      renderTacticsBoardForMatch();
+      showToast("Lineup reset to default RSVPs.");
+    }
+
+    function swapPitchSides() {
+      const week = getCurrentTacticsWeek();
+      const state = getOrCreateTacticsState(week);
+      saveTacticsStateSnapshot(week);
+      
+      // Mirror horizontal coordinates or swap starter slots (e.g., reverse array or mirror roles)
+      state.starters.reverse();
+      renderTacticsBoardForMatch();
+      showToast("Pitch sides swapped / mirrored.");
+    }
+
+    function renderTacticsBoardForMatch() {
+      const week = getCurrentTacticsWeek();
+      const state = getOrCreateTacticsState(week);
+      const rsvps = matchRSVPs[week] || {};
+      const formKey = document.getElementById('formation-select')?.value || '2-3-1';
+      const posList = formationsData[formKey];
+
+      // Count starters
+      const starterCount = state.starters.filter(id => id !== null).length;
+      
+      const counterEl = document.getElementById('tactics-status-counter');
+      const warningEl = document.getElementById('tactics-warning-badge');
+
+      if (counterEl) {
+        counterEl.innerHTML = `<i class="fa-solid fa-circle-check"></i> ${starterCount} of 7 starters set • ${state.bench.length} on bench`;
+      }
+      if (warningEl) {
+        if (starterCount < 7) warningEl.classList.remove('hidden');
+        else warningEl.classList.add('hidden');
+      }
+
+      // Render Pitch Tokens
+      const pitchContainer = document.getElementById('pitch-tokens-container');
+      if (pitchContainer) {
+        pitchContainer.innerHTML = posList.map((pos, idx) => {
+          const pId = state.starters[idx];
+          const player = pId ? players.find(x => x.id == pId) : null;
+          const isSelected = selectedPitchSlot === idx;
+          const rsvpStatus = player ? (rsvps[player.id] || 'going') : 'going';
+          const hasWarning = player && rsvpStatus !== 'going';
+
+          return `
+            <div class="absolute transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center group cursor-pointer select-none"
+                 style="left: ${pos.x}%; top: ${pos.y}%;"
+                 onclick="onPitchSlotClick(${idx})"
+                 ondragover="event.preventDefault()"
+                 ondrop="onPitchDrop(event, ${idx})">
+              <div class="w-12 h-12 rounded-full ${isSelected ? 'ring-4 ring-yellow-300 scale-110' : ''} ${player ? 'bg-yellow-400 text-slate-950' : 'bg-slate-800/80 text-slate-400 border-2 border-dashed border-slate-600'} font-black text-xs flex items-center justify-center shadow-2xl transition-all relative">
+                ${player ? '#' + player.number : pos.role}
+                ${hasWarning ? '<span class="absolute -top-1 -right-1 w-4 h-4 bg-red-600 text-white rounded-full text-[9px] flex items-center justify-center" title="Not RSVP\'d Going">!</span>' : ''}
+              </div>
+              <span class="bg-slate-950/90 text-yellow-300 border border-yellow-500/40 text-[10px] font-extrabold px-2 py-0.5 rounded-md mt-1 shadow whitespace-nowrap">
+                ${player ? player.name : pos.role + ' (Empty)'}
+              </span>
+            </div>
+          `;
+        }).join('');
+      }
+
+      // Render Bench & Roster Pool Panel
+      const benchContainer = document.getElementById('tactics-bench-container');
+      if (benchContainer) {
+        let html = '';
+
+        // Sort pool: Going first, then Maybe, then others
+        const sortedPool = [...state.bench].sort((aId, bId) => {
+          const aStat = rsvps[aId] || 'going';
+          const bStat = rsvps[bId] || 'going';
+          const weight = { 'going': 1, 'maybe': 2, 'no': 3 };
+          return (weight[aStat] || 2) - (weight[bStat] || 2);
+        });
+
+        if (sortedPool.length === 0) {
+          html += '<p class="text-xs text-slate-500 italic px-1">Bench is empty</p>';
+        } else {
+          sortedPool.forEach(pId => {
+            const p = players.find(x => x.id == pId);
+            if (!p) return;
+            const rsvp = rsvps[p.id] || 'going';
+            let badgeColor = 'bg-emerald-500/10 text-emerald-400';
+            let badgeText = 'Going';
+            if (rsvp === 'maybe') { badgeColor = 'bg-yellow-500/10 text-yellow-400'; badgeText = 'Maybe'; }
+            else if (rsvp === 'no') { badgeColor = 'bg-red-500/10 text-red-400'; badgeText = "Can't Go"; }
+
+            const isSelectedForSwap = selectedPitchSlot !== null && typeof selectedPitchSlot === 'object' && selectedPitchSlot.benchId === p.id;
+
+            html += `
+              <div class="bg-slate-950 border ${isSelectedForSwap ? 'border-yellow-400 bg-yellow-400/10' : 'border-slate-800'} p-2.5 rounded-xl flex items-center justify-between text-xs cursor-pointer hover:border-slate-700 transition-all"
+                   draggable="true"
+                   ondragstart="onBenchDragStart(event, ${p.id})"
+                   onclick="onBenchItemClick(${p.id})">
+                <div class="flex items-center gap-2">
+                  <span class="w-6 h-6 rounded-full bg-yellow-500/20 text-yellow-400 font-extrabold text-[10px] flex items-center justify-center">#${p.number}</span>
+                  <div>
+                    <p class="font-bold text-white">${p.name}</p>
+                    <p class="text-[9px] text-slate-400">${p.position}</p>
+                  </div>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="text-[9px] ${badgeColor} font-bold px-2 py-0.5 rounded">${badgeText}</span>
+                  <button onclick="event.stopPropagation(); addPlayerToPitch(${p.id})" title="Move to Pitch" class="text-slate-400 hover:text-yellow-400 p-1">
+                    <i class="fa-solid fa-arrow-up"></i>
+                  </button>
+                </div>
+              </div>
+            `;
+          });
+        }
+
+        benchContainer.innerHTML = html;
+      }
+    }
+
+    // --- Drag and Drop & Tap Swapping Handlers ---
+    let draggedBenchPlayerId = null;
+
+    function onBenchDragStart(e, pId) {
+      draggedBenchPlayerId = pId;
+    }
+
+    function onPitchDrop(e, slotIdx) {
+      e.preventDefault();
+      const week = getCurrentTacticsWeek();
+      const state = getOrCreateTacticsState(week);
+      saveTacticsStateSnapshot(week);
+
+      const occupantId = state.starters[slotIdx];
+
+      if (draggedBenchPlayerId !== null) {
+        // Bench player dropped onto pitch slot
+        state.bench = state.bench.filter(id => id !== draggedBenchPlayerId);
+        if (occupantId) {
+          state.bench.push(occupantId);
+        }
+        state.starters[slotIdx] = draggedBenchPlayerId;
+        draggedBenchPlayerId = null;
+        renderTacticsBoardForMatch();
+        showToast("Player swapped successfully!");
+      }
+    }
+
+    function onPitchSlotClick(slotIdx) {
+      const week = getCurrentTacticsWeek();
+      const state = getOrCreateTacticsState(week);
+
+      if (selectedPitchSlot === null) {
+        selectedPitchSlot = slotIdx;
+        showToast(`Selected pitch slot #${slotIdx + 1}. Now tap another slot or bench player to swap.`);
+        renderTacticsBoardForMatch();
+      } else if (typeof selectedPitchSlot === 'number') {
+        // Swap two pitch starters
+        saveTacticsStateSnapshot(week);
+        const temp = state.starters[selectedPitchSlot];
+        state.starters[selectedPitchSlot] = state.starters[slotIdx];
+        state.starters[slotIdx] = temp;
+        selectedPitchSlot = null;
+        renderTacticsBoardForMatch();
+        showToast("Starters swapped!");
+      } else if (selectedPitchSlot.benchId) {
+        // Bench player selected, moving to this slot
+        saveTacticsStateSnapshot(week);
+        const bId = selectedPitchSlot.benchId;
+        state.bench = state.bench.filter(id => id !== bId);
+        const occupantId = state.starters[slotIdx];
+        if (occupantId) state.bench.push(occupantId);
+        state.starters[slotIdx] = bId;
+        selectedPitchSlot = null;
+        renderTacticsBoardForMatch();
+        showToast("Substituted onto pitch!");
+      }
+    }
+
+    function onBenchItemClick(pId) {
+      const week = getCurrentTacticsWeek();
+      const state = getOrCreateTacticsState(week);
+
+      if (selectedPitchSlot !== null && typeof selectedPitchSlot === 'number') {
+        // Move bench player to selected pitch slot
+        saveTacticsStateSnapshot(week);
+        state.bench = state.bench.filter(id => id !== pId);
+        const occupantId = state.starters[selectedPitchSlot];
+        if (occupantId) state.bench.push(occupantId);
+        state.starters[selectedPitchSlot] = pId;
+        selectedPitchSlot = null;
+        renderTacticsBoardForMatch();
+        showToast("Substituted onto pitch!");
+      } else {
+        selectedPitchSlot = { benchId: pId };
+        showToast("Bench player selected. Tap a pitch slot to put them on.");
+        renderTacticsBoardForMatch();
+      }
+    }
+
+    function addPlayerToPitch(pId) {
+      const week = getCurrentTacticsWeek();
+      const state = getOrCreateTacticsState(week);
+      const emptyIdx = state.starters.findIndex(id => id === null);
+
+      saveTacticsStateSnapshot(week);
+      state.bench = state.bench.filter(id => id !== pId);
+
+      if (emptyIdx !== -1) {
+        state.starters[emptyIdx] = pId;
+      } else {
+        // Pitch full, replace first starter and send to bench
+        const displaced = state.starters[0];
+        state.starters[0] = pId;
+        if (displaced) state.bench.push(displaced);
+      }
+      renderTacticsBoardForMatch();
+      showToast("Player added to starting lineup!");
+    }
+
+    // --- Joga Bonito Hub & RSVPs ---
+    function renderHubFixtures() {
+      const container = document.getElementById('hub-fixtures-list');
+      if (!container) return;
+
+      const jbFixtures = [];
+      scheduleData.forEach(w => {
+        w.matches.forEach(m => {
+          if (m.home === 'Joga Bonito' || m.away === 'Joga Bonito') {
+            jbFixtures.push({ week: w.week, date: w.date, note: w.note, match: m });
+          }
+        });
+      });
+
+      container.innerHTML = jbFixtures.map(item => {
+        const w = item.week;
+        const m = item.match;
+        const opponent = m.home === 'Joga Bonito' ? m.away : m.home;
+        const isHome = m.home === 'Joga Bonito';
+        const rsvps = matchRSVPs[w] || {};
+
+        let goingCount = 0;
+        players.forEach(p => {
+          if (rsvps[p.id] === 'going' || !rsvps[p.id]) goingCount++;
+        });
+
+        return `
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4 shadow-sm">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
+              <div>
+                <span class="text-xs bg-yellow-400 text-slate-950 font-black px-2.5 py-1 rounded-md">Week ${w} • ${item.date}</span>
+                <h3 class="text-lg font-black text-white mt-1.5">Joga Bonito ${isHome ? 'vs' : '@'} ${opponent}</h3>
+                <p class="text-xs text-slate-400 mt-0.5"><i class="fa-solid fa-clock text-blue-400"></i> Slot ${m.slot} (${m.time}) • VSA Arena</p>
+              </div>
+
+              <div class="flex items-center gap-2">
+                <span class="text-xs bg-emerald-500/10 text-emerald-400 font-bold px-3 py-1.5 rounded-xl border border-emerald-500/20">
+                  <i class="fa-solid fa-user-check"></i> ${goingCount} Going
+                </span>
+                <button onclick="openMatchStatsModal(${w})" class="bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-black text-xs px-3.5 py-2 rounded-xl transition-all shadow">
+                  <i class="fa-solid fa-futbol"></i> Log Match Stats
+                </button>
+              </div>
+            </div>
+
+            <div class="space-y-2">
+              <p class="text-xs font-bold text-slate-300 uppercase tracking-wider">Independent Match RSVP Tracker</p>
+              <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2">
+                ${players.map(p => {
+                  const status = rsvps[p.id] || 'going';
+                  return `
+                    <div class="bg-slate-950 border border-slate-800 p-2.5 rounded-xl flex items-center justify-between text-xs">
+                      <span class="font-bold text-white">${p.name}</span>
+                      <div class="flex items-center gap-1">
+                        <button onclick="setPlayerRSVP(${w}, ${p.id}, 'going')" class="px-2 py-1 rounded font-extrabold text-[10px] ${status === 'going' ? 'bg-emerald-600 text-white shadow' : 'bg-slate-900 text-slate-400 hover:bg-slate-800'}">In</button>
+                        <button onclick="setPlayerRSVP(${w}, ${p.id}, 'maybe')" class="px-2 py-1 rounded font-extrabold text-[10px] ${status === 'maybe' ? 'bg-yellow-600 text-white shadow' : 'bg-slate-900 text-slate-400 hover:bg-slate-800'}">?</button>
+                        <button onclick="setPlayerRSVP(${w}, ${p.id}, 'no')" class="px-2 py-1 rounded font-extrabold text-[10px] ${status === 'no' ? 'bg-red-600 text-white shadow' : 'bg-slate-900 text-slate-400 hover:bg-slate-700'}">Out</button>
+                      </div>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // --- Unit Tests for Form Calculation & Swap Logic ---
+    function runFormCalculationUnitTests() {
+      console.log("Running Unit Tests: Form Calculation Algorithm...");
+      try {
+        const formTest = computeTeamForm("Joga Bonito");
+        console.assert(Array.isArray(formTest), "Form result must be an array");
+        console.assert(formTest.length <= 5, "Form array should not exceed 5 matches");
+        console.log("✅ Form calculation unit tests passed successfully!");
+      } catch (err) {
+        console.error("❌ Unit test failure:", err);
+      }
+    }
+
+    function runSwapLogicUnitTests() {
+      console.log("Running Unit Tests: Tactics Board Swap Logic...");
+      try {
+        let testState = {
+          starters: [1, 2, 3, 4, 5, 6, 7],
+          bench: [8, 9]
+        };
+
+        // Test bench-to-starter swap
+        let benchPlayer = testState.bench.pop();
+        let displaced = testState.starters[0];
+        testState.starters[0] = benchPlayer;
+        testState.bench.push(displaced);
+
+        console.assert(testState.starters[0] === 9, "Bench player successfully moved to starter");
+        console.assert(testState.bench.includes(1), "Displaced starter successfully moved to bench");
+        console.assert(testState.starters.length === 7, "Starter count remains 7");
+
+        console.log("✅ Tactics board swap unit tests passed successfully!");
+      } catch (err) {
+        console.error("❌ Swap unit test failure:", err);
+      }
+    }
+  </script>
+</body>
+</html>

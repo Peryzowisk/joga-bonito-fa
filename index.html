@@ -561,23 +561,24 @@
 
   <!-- ================= MODALS ================= -->
 
-  <!-- COACH LOGIN MODAL -->
-  <div id="modal-admin-pin" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
-    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-sm w-full p-6 shadow-2xl relative space-y-4 text-center">
-      <div class="w-12 h-12 bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 rounded-full flex items-center justify-center mx-auto text-lg">
-        <i class="fa-solid fa-lock"></i>
-      </div>
-      <div>
-        <h3 class="text-base font-black text-white">Coach / Admin Login</h3>
-        <p class="text-xs text-slate-400 mt-1">Enter PIN to manage match scores and stats</p>
-      </div>
-      <input type="password" id="admin-pin-input" maxlength="4" placeholder="••••" class="w-32 mx-auto bg-slate-950 border border-slate-700 text-center text-xl tracking-widest text-white rounded-xl px-3 py-2.5">
-      <div class="flex justify-center gap-2 pt-2">
-        <button onclick="closeModal('modal-admin-pin')" class="px-4 py-2 bg-slate-800 text-slate-300 text-xs font-bold rounded-xl">Cancel</button>
-        <button onclick="verifyPinCode()" class="px-4 py-2 bg-yellow-500 text-slate-950 text-xs font-black rounded-xl shadow">Login</button>
-      </div>
+<!-- COACH LOGIN MODAL -->
+<div id="modal-admin-pin" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+  <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-sm w-full p-6 shadow-2xl relative space-y-4 text-center">
+    <div class="w-12 h-12 bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 rounded-full flex items-center justify-center mx-auto text-lg">
+      <i class="fa-solid fa-lock"></i>
+    </div>
+    <div>
+      <h3 class="text-base font-black text-white">Coach / Admin Login</h3>
+      <p class="text-xs text-slate-400 mt-1">Sign in to manage match scores and stats</p>
+    </div>
+    <input type="email" id="admin-email-input" placeholder="Coach email" class="w-full bg-slate-950 border border-slate-700 text-sm text-white rounded-xl px-3 py-2.5">
+    <input type="password" id="admin-pin-input" placeholder="Password" class="w-full bg-slate-950 border border-slate-700 text-sm text-white rounded-xl px-3 py-2.5">
+    <div class="flex justify-center gap-2 pt-2">
+      <button onclick="closeModal('modal-admin-pin')" class="px-4 py-2 bg-slate-800 text-slate-300 text-xs font-bold rounded-xl">Cancel</button>
+      <button onclick="verifyPinCode()" class="px-4 py-2 bg-yellow-500 text-slate-950 text-xs font-black rounded-xl shadow">Login</button>
     </div>
   </div>
+</div>
 
   <!-- ADD / EDIT PLAYER MODAL -->
   <div id="modal-add-player" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
@@ -712,6 +713,9 @@
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+    import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+    const COACH_UID = "PASTE_COACH_UID_HERE";
 
     const firebaseConfig = {
       apiKey: "AIzaSyA6oT25Pjglio6XZFVtarMq_t6WuzWda5c",
@@ -726,10 +730,18 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
+    const auth = getAuth(app);
     window.dbRef = db;
     window.firebaseRef = ref;
     window.firebaseSet = set;
     window.firebaseOnValue = onValue;
+    window.coachLogin = (email, pw) => signInWithEmailAndPassword(auth, email, pw);
+    window.coachLogout = () => signOut(auth);
+
+    onAuthStateChanged(auth, (user) => {
+      if (user && user.uid !== COACH_UID) { signOut(auth); return; }
+      window.setCoachState(!!user);
+    });
 
     initRealtimeSync();
   </script>
@@ -1044,37 +1056,45 @@
 
     // --- Admin Authentication (Secret Coach PIN) ---
     function requestAdminAccess() {
-      if (isAdminAuthenticated) {
-        isAdminAuthenticated = false;
-        document.getElementById('user-role-indicator').innerText = "Viewing as: Player (RSVP enabled)";
-        document.getElementById('user-role-indicator').className = "text-[11px] text-emerald-400 font-medium";
-        document.getElementById('admin-auth-btn').innerHTML = '<i class="fa-solid fa-lock text-[11px]"></i><span>Coach Login</span>';
-        document.getElementById('add-player-btn').classList.add('hidden');
-        showToast("Logged out of Coach mode.");
-        renderSchedule();
-        renderRoster();
-      } else {
-        openModal('modal-admin-pin');
-      }
-    }
+  if (isAdminAuthenticated) {
+    window.coachLogout();
+  } else {
+    openModal('modal-admin-pin');
+  }
+}
 
-    function verifyPinCode() {
-      const pin = document.getElementById('admin-pin-input').value;
-      if (pin === "1986") {
-        isAdminAuthenticated = true;
-        closeModal('modal-admin-pin');
-        document.getElementById('admin-pin-input').value = '';
-        document.getElementById('user-role-indicator').innerText = "Viewing as: COACH (Full Access)";
-        document.getElementById('user-role-indicator').className = "text-[11px] text-yellow-400 font-bold";
-        document.getElementById('admin-auth-btn').innerHTML = '<i class="fa-solid fa-unlock text-[11px]"></i><span>Coach Logout</span>';
-        document.getElementById('add-player-btn').classList.remove('hidden');
-        showToast("Coach authenticated successfully!");
-        renderSchedule();
-        renderRoster();
-      } else {
-        showToast("Incorrect PIN.");
-      }
-    }
+window.setCoachState = function (isCoach) {
+  isAdminAuthenticated = isCoach;
+  const roleEl = document.getElementById('user-role-indicator');
+  const btn = document.getElementById('admin-auth-btn');
+  const addBtn = document.getElementById('add-player-btn');
+  if (isCoach) {
+    roleEl.innerText = "Viewing as: COACH (Full Access)";
+    roleEl.className = "text-[11px] text-yellow-400 font-bold";
+    btn.innerHTML = '<i class="fa-solid fa-unlock text-[11px]"></i><span>Coach Logout</span>';
+    addBtn.classList.remove('hidden');
+  } else {
+    roleEl.innerText = "Viewing as: Player (RSVP enabled)";
+    roleEl.className = "text-[11px] text-emerald-400 font-medium";
+    btn.innerHTML = '<i class="fa-solid fa-lock text-[11px]"></i><span>Coach Login</span>';
+    addBtn.classList.add('hidden');
+  }
+  renderSchedule();
+  renderRoster();
+};
+
+async function verifyPinCode() {
+  const email = document.getElementById('admin-email-input').value.trim();
+  const pw = document.getElementById('admin-pin-input').value;
+  try {
+    await window.coachLogin(email, pw);
+    closeModal('modal-admin-pin');
+    document.getElementById('admin-pin-input').value = '';
+    showToast("Coach authenticated successfully!");
+  } catch (e) {
+    showToast("Incorrect email or password.");
+  }
+}
 
     function verifyAdminAction(callback) {
       if (isAdminAuthenticated) {
@@ -1332,7 +1352,7 @@
     function setPlayerRSVP(week, playerId, status) {
       if (!matchRSVPs[week]) matchRSVPs[week] = {};
       matchRSVPs[week][playerId] = status;
-      syncToFirebase('rsvps', matchRSVPs);
+      syncToFirebase('rsvps/' + week + '/' + playerId, status);
       renderDashboardRSVPTracker();
       renderHubFixtures();
       if (activeTab === 'tactics') renderTacticsBoardForMatch();

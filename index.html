@@ -76,13 +76,10 @@
 
       <!-- ACTION BUTTONS -->
       <div class="flex items-center gap-2">
-        <button onclick="openModal('modal-invite')" class="bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs px-3.5 py-2 rounded-xl transition-all shadow flex items-center gap-1.5">
-          <i class="fa-solid fa-user-plus text-[11px]"></i>
-          <span class="hidden sm:inline">Invite Player</span>
-        </button>
+        <button id="my-profile-btn" onclick="openMyProfile()" class="hidden bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs px-3.5 py-2 rounded-xl transition-all shadow items-center gap-1.5"><i class="fa-solid fa-id-card text-[11px]"></i> <span class="hidden sm:inline">My Profile</span></button>
         <button onclick="requestAdminAccess()" id="admin-auth-btn" class="bg-slate-800 hover:bg-slate-700 text-yellow-400 font-bold text-xs px-3.5 py-2 rounded-xl border border-slate-700 transition-all shadow flex items-center gap-1.5">
           <i class="fa-solid fa-lock text-[11px]"></i>
-          <span>Coach Login</span>
+          <span>Login</span>
         </button>
       </div>
     </div>
@@ -547,9 +544,7 @@
           </h2>
           <p class="text-xs text-slate-400 mt-1">Review all Joga Bonito fixtures, manage per-match RSVPs, and record individual player match stats.</p>
         </div>
-        <button onclick="openModal('modal-invite')" class="bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs px-4 py-2.5 rounded-xl transition-all shadow flex items-center gap-2">
-          <i class="fa-solid fa-user-plus"></i> Share Invite Link
-        </button>
+        
       </div>
 
       <div id="hub-fixtures-list" class="space-y-4">
@@ -561,24 +556,42 @@
 
   <!-- ================= MODALS ================= -->
 
-<!-- COACH LOGIN MODAL -->
+<!-- LOGIN MODAL -->
 <div id="modal-admin-pin" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
   <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-sm w-full p-6 shadow-2xl relative space-y-4 text-center">
     <div class="w-12 h-12 bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 rounded-full flex items-center justify-center mx-auto text-lg">
       <i class="fa-solid fa-lock"></i>
     </div>
     <div>
-      <h3 class="text-base font-black text-white">Coach / Admin Login</h3>
-      <p class="text-xs text-slate-400 mt-1">Sign in to manage match scores and stats</p>
+      <h3 class="text-base font-black text-white">Sign in</h3>
+      <p class="text-xs text-slate-400 mt-1">Players and coach sign in with email and password</p>
     </div>
-    <input type="email" id="admin-email-input" placeholder="Coach email" class="w-full bg-slate-950 border border-slate-700 text-sm text-white rounded-xl px-3 py-2.5">
-    <input type="password" id="admin-pin-input" placeholder="Password" class="w-full bg-slate-950 border border-slate-700 text-sm text-white rounded-xl px-3 py-2.5">
+    <input type="email" id="admin-email-input" autocomplete="username" placeholder="Email" class="w-full bg-slate-950 border border-slate-700 text-sm text-white rounded-xl px-3 py-2.5">
+    <input type="password" id="admin-pin-input" autocomplete="current-password" placeholder="Password" class="w-full bg-slate-950 border border-slate-700 text-sm text-white rounded-xl px-3 py-2.5">
+    <button type="button" onclick="resetPassword()" class="text-xs text-yellow-400 underline font-bold">Set or reset my password</button>
     <div class="flex justify-center gap-2 pt-2">
       <button onclick="closeModal('modal-admin-pin')" class="px-4 py-2 bg-slate-800 text-slate-300 text-xs font-bold rounded-xl">Cancel</button>
-      <button onclick="verifyPinCode()" class="px-4 py-2 bg-yellow-500 text-slate-950 text-xs font-black rounded-xl shadow">Login</button>
+      <button id="login-submit-btn" onclick="verifyPinCode()" class="px-4 py-2 bg-yellow-500 text-slate-950 text-xs font-black rounded-xl shadow">Login</button>
     </div>
   </div>
 </div>
+
+<!-- MY PROFILE MODAL -->
+<div id="modal-profile" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+  <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-sm w-full p-6 shadow-2xl space-y-4">
+    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+      <h3 class="text-lg font-black text-white flex items-center gap-2"><i class="fa-solid fa-id-card text-yellow-400"></i> My Profile</h3>
+      <button onclick="closeModal('modal-profile')" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+    </div>
+    <div id="profile-body" class="space-y-4"></div>
+    <div class="flex justify-end gap-2 pt-2 border-t border-slate-800">
+      <button onclick="closeModal('modal-profile')" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold rounded-xl">Close</button>
+      <button onclick="closeModal('modal-profile'); switchTab('hub')" class="px-4 py-2 bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-black text-xs rounded-xl shadow">Set my availability</button>
+    </div>
+  </div>
+</div>
+
+  
 
   <!-- ADD / EDIT PLAYER MODAL -->
   <div id="modal-add-player" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
@@ -638,25 +651,7 @@
     </div>
   </div>
 
-<!-- INVITE PLAYER MODAL -->
-<div id="modal-invite" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
-  <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
-    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-      <h3 class="text-lg font-black text-white flex items-center gap-2">
-        <i class="fa-solid fa-share-nodes text-yellow-400"></i> Invite Players
-      </h3>
-      <button onclick="closeModal('modal-invite')" class="text-slate-400 hover:text-white">
-        <i class="fa-solid fa-xmark text-lg"></i>
-      </button>
-    </div>
-    <p class="text-xs text-slate-300 leading-relaxed">
-      Every player gets a personal invite link. The coach logs in, opens <span class="text-white font-bold">Squad Roster</span>, and taps <span class="text-white font-bold">Invite link</span> on that player's card, then sends it to them. Each link only works for that one player.
-    </p>
-    <div class="flex justify-end pt-2 border-t border-slate-800">
-      <button onclick="closeModal('modal-invite')" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold rounded-xl">Close</button>
-    </div>
-  </div>
-</div>
+
 
   <!-- MATCH STATS MODAL -->
   <div id="modal-match-stats" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
@@ -686,28 +681,7 @@
     </div>
   </div>
 
-  <!-- CLAIM PLAYER MODAL -->
-<div id="modal-claim" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
-  <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
-    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-      <h3 class="text-lg font-black text-white flex items-center gap-2">
-        <i class="fa-solid fa-user-check text-yellow-400"></i> Link your player
-      </h3>
-      <button onclick="closeModal('modal-claim')" class="text-slate-400 hover:text-white">
-        <i class="fa-solid fa-xmark text-lg"></i>
-      </button>
-    </div>
-    <p class="text-xs text-slate-300 leading-relaxed">
-      Use the personal invite link your coach sent you, or enter your name and code below. Your RSVPs will be tied to this device.
-    </p>
-    <select id="claim-player-select" class="w-full bg-slate-950 border border-slate-700 text-sm text-white font-semibold rounded-xl p-2.5"></select>
-    <input type="text" id="claim-code-input" maxlength="12" placeholder="Invite code" class="w-full bg-slate-950 border border-slate-700 text-sm text-white font-mono tracking-widest uppercase rounded-xl p-2.5">
-    <div class="flex justify-end gap-2 pt-2 border-t border-slate-800">
-      <button onclick="closeModal('modal-claim')" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold rounded-xl">Just viewing</button>
-      <button onclick="claimPlayer()" class="px-4 py-2 bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-black text-xs rounded-xl shadow">Link me</button>
-    </div>
-  </div>
-</div>
+  
 
   <!-- TOAST NOTIFICATION -->
   <div id="toast" class="fixed bottom-5 right-5 bg-emerald-600 text-white text-xs font-bold px-4 py-3 rounded-xl shadow-2xl transform translate-y-20 opacity-0 transition-all duration-300 z-50 flex items-center gap-2">
@@ -718,40 +692,33 @@
   <!-- FIREBASE REALTIME DATABASE & APP LOGIC -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getDatabase, ref, set, update, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
-    import { getAuth, signInWithEmailAndPassword, signInAnonymously, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+    import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-    const COACH_UID = "YLwmcJsGGTU766nGzLJTztJaZZT2";
+    const COACH_UID = "YLwmcJsGGTU766nGzLJTztJaZZT2";   // must match database.rules.json
 
     const firebaseConfig = {
-    apiKey: "AIzaSyBJNt-6CNVJiViCsUR3U52U2JEm3myg8r8",
-    authDomain: "joga-bonito-fa-2dc72.firebaseapp.com",
-    databaseURL: "https://joga-bonito-fa-2dc72-default-rtdb.firebaseio.com",
-    projectId: "joga-bonito-fa-2dc72",
-    storageBucket: "joga-bonito-fa-2dc72.firebasestorage.app",
-    messagingSenderId: "930594271966",
-    appId: "1:930594271966:web:e4544436ba6564e79c084f",
-    measurementId: "G-LSS4X18XL9"
-  };
+      apiKey: "AIzaSyBJNt-6CNVJiViCsUR3U52U2JEm3myg8r8",
+      authDomain: "joga-bonito-fa-2dc72.firebaseapp.com",
+      databaseURL: "https://joga-bonito-fa-2dc72-default-rtdb.firebaseio.com",
+      projectId: "joga-bonito-fa-2dc72",
+      storageBucket: "joga-bonito-fa-2dc72.firebasestorage.app",
+      messagingSenderId: "930594271966",
+      appId: "1:930594271966:web:e4544436ba6564e79c084f",
+      measurementId: "G-LSS4X18XL9"
+    };
 
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
     const auth = getAuth(app);
-    window.dbRef = db;
-    window.firebaseRef = ref;
-    window.firebaseSet = set;
-    window.firebaseUpdate = update;
-    window.firebaseOnValue = onValue;
-    window.coachLogin = (email, pw) => signInWithEmailAndPassword(auth, email, pw);
-    window.coachLogout = () => signOut(auth);
+    const P = (path) => ref(db, 'jogaBonitoFA/' + path);
+    window.fbOnValue = (path, ok, fail) => onValue(P(path), ok, fail);   // returns an unsubscribe function
+    window.fbSet = (path, data) => set(P(path), data);
+    window.fbLogin = (email, pw) => signInWithEmailAndPassword(auth, email, pw);
+    window.fbLogout = () => signOut(auth);
+    window.fbReset = (email) => sendPasswordResetEmail(auth, email);
 
-    onAuthStateChanged(auth, (user) => {
-      if (!user) { signInAnonymously(auth); return; }          // every visitor gets an identity
-      if (!user.isAnonymous && user.uid !== COACH_UID) { signOut(auth); return; }
-      window.currentUid = user.uid;
-      window.setCoachState(user.uid === COACH_UID);
-    });
-
+    onAuthStateChanged(auth, (user) => window.onAuthChange(user, !!user && user.uid === COACH_UID));
     initRealtimeSync();
   </script>
 
@@ -760,12 +727,8 @@
     // --- Data Store & State ---
     let activeTab = 'dashboard';
     let isAdminAuthenticated = false;
-    let playerClaims = {};
-    let inviteCodes = {};
-    let inviteCodesLoaded = false;
-    let inviteListenerStarted = false;
-    let claimsLoaded = false;
-    let claimPromptShown = false;
+    let authUser = null, linkedPlayerId = null, authState = 'guest', unsubUser = null, profileShownFor = null;
+    const serverCache = {};
 
     let players = [
       { id: 1, name: "Marcus Silva", position: "GK", number: "1", status: "Active", goals: 0, assists: 0, photo: "https://placehold.co/150x150/1e293b/ffffff?text=MS" },
@@ -784,30 +747,9 @@
       { id: 14, name: "Vinícius Jr.", position: "FWD", number: "7", status: "Active", goals: 0, assists: 0, photo: "https://placehold.co/150x150/1e293b/ffffff?text=V7" }
     ];
 
-    let matchPlayerStats = {
-      1: { 3: { goals: 1, assists: 0 }, 4: { goals: 1, assists: 1 }, 5: { goals: 2, assists: 0 }, 2: { goals: 0, assists: 1 } },
-      2: { 5: { goals: 2, assists: 0 }, 4: { goals: 1, assists: 0 } },
-      3: { 5: { goals: 1, assists: 1 }, 3: { goals: 2, assists: 0 } },
-      5: { 4: { goals: 1, assists: 1 }, 5: { goals: 3, assists: 0 } },
-      6: { 2: { goals: 1, assists: 1 }, 7: { goals: 1, assists: 0 } },
-      7: { 5: { goals: 3, assists: 2 }, 6: { goals: 2, assists: 1 } }
-    };
+    let matchPlayerStats = {};   // filled from the database only
 
-    // Independent Per-Game RSVPs with cloud sync
-    let matchRSVPs = {
-      1: { 1: 'going', 2: 'going', 3: 'going', 4: 'going', 5: 'going', 6: 'going', 7: 'going', 8: 'going', 9: 'going' },
-      2: { 1: 'going', 2: 'going', 3: 'going', 4: 'going', 5: 'going', 6: 'going', 7: 'going' },
-      3: { 1: 'going', 2: 'maybe', 3: 'going', 4: 'going', 5: 'going', 6: 'going', 7: 'maybe' },
-      5: { 1: 'going', 2: 'going', 3: 'going', 4: 'going', 5: 'going', 6: 'going', 7: 'going' },
-      6: { 1: 'going', 2: 'going', 3: 'going', 4: 'going', 5: 'going', 6: 'going', 7: 'going' },
-      7: { 1: 'going', 2: 'going', 3: 'going', 4: 'going', 5: 'going', 6: 'going', 7: 'going' },
-      8: { 1: 'going', 2: 'going', 3: 'going', 4: 'going', 5: 'going', 6: 'going', 7: 'going' },
-      9: { 1: 'going', 2: 'going', 3: 'going', 4: 'going', 5: 'going', 6: 'going', 7: 'going' },
-      11: { 1: 'going', 2: 'going', 3: 'going', 4: 'going', 5: 'going', 6: 'going', 7: 'going' },
-      12: { 1: 'going', 2: 'going', 3: 'going', 4: 'going', 5: 'going', 6: 'going', 7: 'going' },
-      14: { 1: 'going', 2: 'going', 3: 'going', 4: 'going', 5: 'going', 6: 'going', 7: 'going' },
-      15: { 1: 'going', 2: 'going', 3: 'going', 4: 'going', 5: 'going', 6: 'going', 7: 'going' }
-    };
+    let matchRSVPs = {};
 
     let scheduleData = [
       {
@@ -1027,117 +969,182 @@
     let tacticsRedoStack = [];
     let selectedPitchSlot = null;
 
-    // --- Firebase Real-Time Syncing ---
-    function initRealtimeSync() {
-      if (!window.dbRef) return;
+    // --- Firebase Real-Time Syncing (public data) ---
+    const asList = (v) => Array.isArray(v) ? v.filter(Boolean) : Object.values(v);
 
-      window.firebaseOnValue(window.firebaseRef(window.dbRef, 'jogaBonitoFA/rsvps'), (snapshot) => {
-        const val = snapshot.val();
-        if (val) {
-          matchRSVPs = val;
-          renderDashboardRSVPTracker();
-          renderHubFixtures();
-          if (activeTab === 'tactics') renderTacticsBoardForMatch();
-        }
-      });
-
-      window.firebaseOnValue(window.firebaseRef(window.dbRef, 'jogaBonitoFA/scheduleData'), (snapshot) => {
-        const val = snapshot.val();
-        if (val) {
-          scheduleData = val;
-          renderNextFixture(); 
-          renderSchedule();
-          computeStandings();
-          renderDashboardRSVPTracker();
-        }
-      });
-
-      window.firebaseOnValue(window.firebaseRef(window.dbRef, 'jogaBonitoFA/players'), (snapshot) => {
-        const val = snapshot.val();
-        if (val) {
-          players = val;
-          recalculatePlayerOverallTotals();
-        }
-      });
-
-      window.firebaseOnValue(window.firebaseRef(window.dbRef, 'jogaBonitoFA/playerClaims'), (snapshot) => {
-      playerClaims = snapshot.val() || {};
-      claimsLoaded = true;
-      updateIdentityUI();
-      maybeShowClaimModal();
-      if (activeTab === 'roster') renderRoster();
-      });
-
-      window.firebaseOnValue(window.firebaseRef(window.dbRef, 'jogaBonitoFA/matchPlayerStats'), (snapshot) => {
-        const val = snapshot.val();
-        if (val) {
-          matchPlayerStats = val;
-          recalculatePlayerOverallTotals();
-        }
-      });
+    function esc(v) {
+      return String(v ?? '').replace(/[&<>"']/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
     }
 
-    function syncToFirebase(path, data) {
-      if (window.dbRef) {
-        window.firebaseSet(window.firebaseRef(window.dbRef, 'jogaBonitoFA/' + path), data);
+    function friendlyError(e) {
+      const c = (e && e.code) || '';
+      const m = (e && e.message) || '';
+      if (/permission_denied|permission denied/i.test(c + ' ' + m)) return 'Permission denied: your account is not allowed to do that.';
+      if (['auth/invalid-credential', 'auth/wrong-password', 'auth/user-not-found', 'auth/invalid-login-credentials'].includes(c)) return 'Incorrect email or password.';
+      if (c === 'auth/too-many-requests') return 'Too many attempts. Wait a few minutes or reset your password.';
+      if (c === 'auth/network-request-failed') return 'Network problem. Check your connection and try again.';
+      if (c === 'auth/invalid-email') return 'Enter a valid email address.';
+      if (c === 'auth/user-disabled') return 'This account has been disabled. Ask your coach.';
+      return 'Something went wrong (' + (c || m || 'unknown error') + ').';
+    }
+
+    function listen(path, apply) {
+      window.fbOnValue(path, (snap) => { serverCache[path] = snap.val(); apply(snap.val()); },
+        (e) => showToast('Could not load ' + path + ': ' + friendlyError(e)));
+    }
+
+    function initRealtimeSync() {
+      listen('rsvps', (v) => {
+        matchRSVPs = v || {};
+        renderDashboardRSVPTracker(); renderHubFixtures();
+        if (activeTab === 'tactics') renderTacticsBoardForMatch();
+      });
+      listen('scheduleData', (v) => {
+        if (!v) return;
+        scheduleData = asList(v);
+        renderNextFixture(); renderSchedule(); computeStandings(); renderDashboardRSVPTracker();
+      });
+      listen('players', (v) => {
+        if (!v) return;
+        players = asList(v);
+        recalculatePlayerOverallTotals(); renderAuthUI();
+      });
+      listen('matchPlayerStats', (v) => { matchPlayerStats = v || {}; recalculatePlayerOverallTotals(); });
+    }
+
+    // Put local state back to what the server last confirmed (used when a save fails)
+    function restoreFromServer(root) {
+      const v = serverCache[root];
+      if (root === 'rsvps') { matchRSVPs = v || {}; renderDashboardRSVPTracker(); renderHubFixtures(); return; }
+      if (root === 'players' && v) players = asList(v);
+      if (root === 'scheduleData' && v) scheduleData = asList(v);
+      if (root === 'matchPlayerStats') matchPlayerStats = v || {};
+      recalculatePlayerOverallTotals(); renderSchedule(); computeStandings();
+    }
+
+    // Success is reported only after Firebase confirms the write
+    async function saveRemote(path, data, okMsg, onOk) {
+      if (path === 'players' && !serverCache.players &&
+          !confirm('The database has no roster yet. Saving will create it from the list shown here (including any sample players). Continue?')) {
+        restoreFromServer('players'); return false;
+      }
+      try {
+        await window.fbSet(path, data);
+        if (onOk) onOk();
+        showToast(okMsg);
+        return true;
+      } catch (e) {
+        restoreFromServer(path.split('/')[0]);
+        showToast('Not saved: ' + friendlyError(e));
+        return false;
       }
     }
 
-    // --- Admin Authentication (Secret Coach PIN) ---
-    function requestAdminAccess() {
-  if (isAdminAuthenticated) {
-    window.coachLogout();
-  } else {
-    openModal('modal-admin-pin');
-  }
-}
+    // --- Authentication & player profile ---
+    function myPlayer() {
+      return linkedPlayerId === null ? null : (players.find((p) => String(p.id) === linkedPlayerId) || null);
+    }
 
-  window.setCoachState = function (isCoach) {
-    isAdminAuthenticated = isCoach;
-    const roleEl = document.getElementById('user-role-indicator');
-    const btn = document.getElementById('admin-auth-btn');
-    const addBtn = document.getElementById('add-player-btn');
-    if (isCoach) {
-      roleEl.innerText = "Viewing as: COACH (Full Access)";
-      roleEl.className = "text-[11px] text-yellow-400 font-bold";
-      btn.innerHTML = '<i class="fa-solid fa-unlock text-[11px]"></i><span>Coach Logout</span>';
-      addBtn.classList.remove('hidden');
-    } else {
-      btn.innerHTML = '<i class="fa-solid fa-lock text-[11px]"></i><span>Coach Login</span>';
-      addBtn.classList.add('hidden');
-      updateIdentityUI();
-    }
-    renderSchedule();
-    renderRoster();
-    maybeShowClaimModal();
-    if (isCoach && !inviteListenerStarted) {
-      inviteListenerStarted = true;
-      window.firebaseOnValue(window.firebaseRef(window.dbRef, 'jogaBonitoFA/inviteCodes'), (snap) => {
-      inviteCodes = snap.val() || {};
-      inviteCodesLoaded = true;
-    });
-    }
+    window.onAuthChange = function (user, isCoach) {
+      if (unsubUser) { unsubUser(); unsubUser = null; }          // drop the previous account's listener
+      authUser = user; isAdminAuthenticated = isCoach; linkedPlayerId = null; profileShownFor = null;
+      authState = !user ? 'guest' : (isCoach ? 'coach' : 'loading');
+      closeModal('modal-profile');
+      if (user && !isCoach) {
+        const uid = user.uid;
+        unsubUser = window.fbOnValue('userPlayers/' + uid, (snap) => {
+          if (!authUser || authUser.uid !== uid) return;
+          linkedPlayerId = snap.exists() ? String(snap.val()) : null;
+          authState = linkedPlayerId ? 'linked' : 'unlinked';
+          renderAuthUI();
+        }, (e) => {
+          if (!authUser || authUser.uid !== uid) return;
+          linkedPlayerId = null; authState = 'unlinked'; renderAuthUI();
+          showToast('Could not read your player link: ' + friendlyError(e));
+        });
+      }
+      renderAuthUI();
     };
 
-async function verifyPinCode() {
-  const email = document.getElementById('admin-email-input').value.trim();
-  const pw = document.getElementById('admin-pin-input').value;
-  try {
-    await window.coachLogin(email, pw);
-    closeModal('modal-admin-pin');
-    document.getElementById('admin-pin-input').value = '';
-    showToast("Coach authenticated successfully!");
-  } catch (e) {
-    showToast("Incorrect email or password.");
-  }
-}
+    function renderAuthUI() {
+      const roleEl = document.getElementById('user-role-indicator');
+      const btn = document.getElementById('admin-auth-btn');
+      const addBtn = document.getElementById('add-player-btn');
+      const profBtn = document.getElementById('my-profile-btn');
+      const p = myPlayer();
+      let txt = 'Viewing as: Guest (log in to set your availability)';
+      let cls = 'text-[11px] text-emerald-400 font-medium';
+      if (authState === 'coach') { txt = 'Viewing as: COACH (Full Access)'; cls = 'text-[11px] text-yellow-400 font-bold'; }
+      else if (authState === 'loading') txt = 'Signing in...';
+      else if (authState === 'linked') txt = 'Signed in as ' + (p ? p.name : 'player ' + linkedPlayerId);
+      else if (authState === 'unlinked') { txt = 'Account not linked to a player yet. Ask your coach.'; cls = 'text-[11px] text-amber-400 font-medium'; }
+      roleEl.className = cls; roleEl.innerText = txt;
+      btn.innerHTML = authUser
+        ? '<i class="fa-solid fa-right-from-bracket text-[11px]"></i><span>Logout</span>'
+        : '<i class="fa-solid fa-lock text-[11px]"></i><span>Login</span>';
+      addBtn.classList.toggle('hidden', !isAdminAuthenticated);
+      profBtn.classList.toggle('hidden', !(authState === 'linked' && p));
+      renderSchedule(); renderRoster();
+      if (authState === 'linked' && p && profileShownFor !== authUser.uid) { profileShownFor = authUser.uid; openMyProfile(); }
+    }
+
+    function openMyProfile() {
+      const p = myPlayer();
+      if (!p) { showToast('Your player profile is not loaded yet.'); return; }
+      document.getElementById('profile-body').innerHTML = `
+        <div class="flex items-center gap-3">
+          <img src="${esc(p.photo)}" class="w-16 h-16 rounded-xl object-cover border border-slate-700" onerror="this.src='https://placehold.co/150x150/1e293b/ffffff?text=JB'">
+          <div>
+            <span class="text-xs bg-yellow-400 text-slate-950 font-black px-1.5 py-0.5 rounded">#${esc(p.number)}</span>
+            <h4 class="font-bold text-white text-lg mt-1">${esc(p.name)}</h4>
+            <p class="text-xs text-slate-400 font-semibold">${esc(p.position)} • ${esc(p.status)}</p>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-2 text-center">
+          <div class="bg-slate-950 p-2 rounded-xl border border-slate-800"><span class="block text-[10px] font-bold text-emerald-400 uppercase tracking-wider">Goals</span><span class="text-lg font-black text-white">${Number(p.goals) || 0}</span></div>
+          <div class="bg-slate-950 p-2 rounded-xl border border-slate-800"><span class="block text-[10px] font-bold text-blue-400 uppercase tracking-wider">Assists</span><span class="text-lg font-black text-white">${Number(p.assists) || 0}</span></div>
+        </div>`;
+      openModal('modal-profile');
+    }
+
+    function requestAdminAccess() {
+      if (authUser) window.fbLogout().catch((e) => showToast(friendlyError(e)));
+      else openModal('modal-admin-pin');
+    }
+
+    async function verifyPinCode() {
+      const email = document.getElementById('admin-email-input').value.trim();
+      const pw = document.getElementById('admin-pin-input').value;
+      const btn = document.getElementById('login-submit-btn');
+      if (!email || !pw) { showToast('Enter your email and password.'); return; }
+      btn.disabled = true; btn.innerText = 'Signing in...';
+      try {
+        await window.fbLogin(email, pw);
+        closeModal('modal-admin-pin');
+        document.getElementById('admin-pin-input').value = '';
+        showToast('Signed in.');
+      } catch (e) {
+        showToast(friendlyError(e));
+      } finally {
+        btn.disabled = false; btn.innerText = 'Login';
+      }
+    }
+
+    async function resetPassword() {
+      const email = document.getElementById('admin-email-input').value.trim();
+      if (!email) { showToast('Type your email first, then tap the link again.'); return; }
+      try {
+        await window.fbReset(email);
+        showToast('If this email has an account, a password email is on its way.');
+      } catch (e) {
+        showToast(friendlyError(e));
+      }
+    }
 
     function verifyAdminAction(callback) {
-      if (isAdminAuthenticated) {
-        callback();
-      } else {
-        openModal('modal-admin-pin');
-      }
+      if (isAdminAuthenticated) callback();
+      else if (authUser) showToast('Only the coach can do that.');
+      else openModal('modal-admin-pin');
     }
 
     // --- Initialization on Load ---
@@ -1210,120 +1217,6 @@ async function verifyPinCode() {
       }
     }
 
-    function copyInviteLink() {
-      const input = document.getElementById('invite-link-input');
-      input.select();
-      document.execCommand('copy');
-      showToast('Invite link copied to clipboard!');
-      closeModal('modal-invite');
-    }
-    // --- Player identity (who is this device?) ---
-    function myPlayerId() {
-      const uid = window.currentUid;
-      if (!uid) return null;
-      const key = Object.keys(playerClaims).find(k => playerClaims[k] === uid);
-      return key !== undefined ? key : null;
-    }
-    
-    function canEditRSVP(playerId) {
-      return isAdminAuthenticated || String(myPlayerId()) === String(playerId);
-    }
-
-    function maybeShowClaimModal() {
-      if (!claimsLoaded || claimPromptShown || isAdminAuthenticated || !window.currentUid) return;
-      if (myPlayerId() !== null) return;
-      claimPromptShown = true;
-      openClaimModal();
-    }
-    
-    function updateIdentityUI() {
-      const roleEl = document.getElementById('user-role-indicator');
-      if (!roleEl || isAdminAuthenticated) return;
-      const pid = myPlayerId();
-      const p = pid !== null ? players.find(x => String(x.id) === String(pid)) : null;
-      roleEl.className = "text-[11px] text-emerald-400 font-medium";
-      roleEl.innerHTML = p
-        ? `Viewing as: ${p.name} (RSVP enabled)`
-        : `Viewing as: Guest • <button onclick="openClaimModal()" class="underline text-yellow-400 font-bold">pick your player</button>`;
-    }
-    
-  function openClaimModal() {
-  const taken = Object.keys(playerClaims).filter(k => playerClaims[k]);
-  const free = players.filter(p => !taken.includes(String(p.id)));
-
-  // Prefill from a personal link: ?join=PLAYERID-CODE
-  const join = new URLSearchParams(location.search).get('join') || '';
-  const dash = join.indexOf('-');
-  const urlPid = dash > 0 ? join.slice(0, dash) : '';
-  const urlCode = dash > 0 ? join.slice(dash + 1) : '';
-
-  const sel = document.getElementById('claim-player-select');
-  sel.innerHTML = free.map(p =>
-    `<option value="${p.id}" ${String(p.id) === urlPid ? 'selected' : ''}>#${p.number} ${p.name}</option>`
-  ).join('');
-  document.getElementById('claim-code-input').value = urlCode;
-  openModal('modal-claim');
-}
-
-async function claimPlayer() {
-  const uid = window.currentUid;
-  const pid = document.getElementById('claim-player-select').value;
-  const code = document.getElementById('claim-code-input').value.trim().toUpperCase();
-  if (!uid) { showToast('Connecting... try again in a moment.'); return; }
-  if (!pid || !code) { showToast('Pick your name and enter your code.'); return; }
-  try {
-    await window.firebaseSet(window.firebaseRef(window.dbRef, 'jogaBonitoFA/claimAttempts/' + uid), code);
-    await window.firebaseUpdate(window.firebaseRef(window.dbRef, 'jogaBonitoFA'), {
-      ['playerClaims/' + pid]: uid,
-      ['claimedBy/' + uid]: String(pid)
-    });
-    closeModal('modal-claim');
-    showToast('You are now linked to your player.');
-  } catch (e) {
-    showToast('Wrong code, name already taken, or this device already has a player.');
-  }
-}
-
-// --- Coach: invite codes ---
-function genCode() {
-  const chars = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
-  const arr = new Uint32Array(6);
-  crypto.getRandomValues(arr);
-  return Array.from(arr, n => chars[n % chars.length]).join('');
-}
-
-async function copyPlayerInvite(pid) {
-  if (!isAdminAuthenticated) return;
-  if (!inviteCodesLoaded) { showToast('Loading codes... try again in a second.'); return; }
-  let code = inviteCodes[pid];
-  if (!code) {
-    code = genCode();
-    await window.firebaseSet(window.firebaseRef(window.dbRef, 'jogaBonitoFA/inviteCodes/' + pid), code);
-  }
-  const link = location.origin + location.pathname + '?join=' + pid + '-' + code;
-  try {
-    await navigator.clipboard.writeText(link);
-    showToast('Personal invite link copied!');
-  } catch (e) {
-    prompt('Copy this personal invite link:', link);
-  }
-}
-
-async function releasePlayerClaim(playerId) {
-  if (!isAdminAuthenticated) return;
-  const uid = playerClaims[playerId];
-  const updates = {
-    ['playerClaims/' + playerId]: null,
-    ['inviteCodes/' + playerId]: genCode()   // old code stops working
-  };
-  if (uid) updates['claimedBy/' + uid] = null;
-  try {
-    await window.firebaseUpdate(window.firebaseRef(window.dbRef, 'jogaBonitoFA'), updates);
-    showToast('Device released. Send the player their new invite link.');
-  } catch (e) {
-    showToast('Could not release this player.');
-  }
-}
     // --- Roster & Stats ---
     function recalculatePlayerOverallTotals() {
       players.forEach(p => {
@@ -1357,20 +1250,19 @@ async function releasePlayerClaim(playerId) {
     }
 
     function renderRoster() {
-      updateIdentityUI();
       const grid = document.getElementById('roster-grid');
       if (!grid) return;
 
       grid.innerHTML = players.map(p => `
         <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 shadow-sm space-y-3 relative group">
           <div class="flex items-center space-x-3">
-            <img src="${p.photo}" class="w-14 h-14 rounded-xl object-cover border border-slate-700" onerror="this.src='https://placehold.co/150x150/1e293b/ffffff?text=JB'">
+            <img src="${esc(p.photo)}" class="w-14 h-14 rounded-xl object-cover border border-slate-700" onerror="this.src='https://placehold.co/150x150/1e293b/ffffff?text=JB'">
             <div>
               <div class="flex items-center gap-2">
-                <span class="text-xs bg-yellow-400 text-slate-950 font-black px-1.5 py-0.5 rounded">#${p.number}</span>
-                <h4 class="font-bold text-white text-base">${p.name}</h4>
+                <span class="text-xs bg-yellow-400 text-slate-950 font-black px-1.5 py-0.5 rounded">#${esc(p.number)}</span>
+                <h4 class="font-bold text-white text-base">${esc(p.name)}</h4>
               </div>
-              <p class="text-xs text-slate-400 font-semibold mt-0.5">${p.position} • <span class="${p.status === 'Active' ? 'text-emerald-400' : 'text-red-400'}">${p.status}</span></p>
+              <p class="text-xs text-slate-400 font-semibold mt-0.5">${esc(p.position)} • <span class="${p.status === 'Active' ? 'text-emerald-400' : 'text-red-400'}">${esc(p.status)}</span></p>
             </div>
           </div>
 
@@ -1386,13 +1278,6 @@ async function releasePlayerClaim(playerId) {
           </div>
           ${isAdminAuthenticated ? `
             <div class="flex flex-wrap justify-end gap-2 pt-1">
-              <button onclick="copyPlayerInvite('${p.id}')" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-xs text-white font-bold rounded-lg transition-colors flex items-center gap-1">
-                <i class="fa-solid fa-link"></i> Invite link
-              </button>
-              ${playerClaims[p.id] ? `
-                <button onclick="releasePlayerClaim('${p.id}')" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-xs text-rose-400 font-bold rounded-lg transition-colors flex items-center gap-1">
-                  <i class="fa-solid fa-link-slash"></i> Release device
-                </button>` : ''}
               <button onclick="editPlayer(${p.id})" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-xs text-yellow-400 font-bold rounded-lg transition-colors flex items-center gap-1">
                 <i class="fa-solid fa-pen-to-square"></i> Edit
               </button>
@@ -1437,10 +1322,7 @@ async function releasePlayerClaim(playerId) {
         });
       }
 
-      syncToFirebase('players', players);
-      closeModal('modal-add-player');
-      recalculatePlayerOverallTotals();
-      showToast('Player profile saved successfully!');
+      saveRemote('players', players, 'Player saved.', () => { closeModal('modal-add-player'); recalculatePlayerOverallTotals(); });
     }
 
     // --- Match Stats (Coach Only) ---
@@ -1457,10 +1339,10 @@ async function releasePlayerClaim(playerId) {
           return `
             <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 flex items-center justify-between gap-3">
               <div class="flex items-center gap-2">
-                <span class="w-7 h-7 rounded-full bg-slate-800 text-yellow-400 font-extrabold text-xs flex items-center justify-center">${p.number}</span>
+                <span class="w-7 h-7 rounded-full bg-slate-800 text-yellow-400 font-extrabold text-xs flex items-center justify-center">${esc(p.number)}</span>
                 <div>
-                  <p class="text-xs font-bold text-white">${p.name}</p>
-                  <p class="text-[10px] text-slate-400 uppercase">${p.position}</p>
+                  <p class="text-xs font-bold text-white">${esc(p.name)}</p>
+                  <p class="text-[10px] text-slate-400 uppercase">${esc(p.position)}</p>
                 </div>
               </div>
               <div class="flex items-center gap-4">
@@ -1493,32 +1375,25 @@ async function releasePlayerClaim(playerId) {
         matchPlayerStats[week][p.id] = { goals, assists };
       });
 
-      syncToFirebase('matchPlayerStats', matchPlayerStats);
-      syncToFirebase('players', players);
-      recalculatePlayerOverallTotals();
-      closeModal('modal-match-stats');
-      showToast('Match stats updated and player profiles refreshed!');
+      saveRemote('matchPlayerStats', matchPlayerStats, 'Match stats saved.', () => { recalculatePlayerOverallTotals(); closeModal('modal-match-stats'); });
     }
 
-    // --- RSVPs (Open to All Users with Real-Time Sync) ---
-    function setPlayerRSVP(week, playerId, status) {
-  if (!canEditRSVP(playerId)) {
-    if (myPlayerId() === null) {
-      showToast('Pick your player first to set an RSVP.');
-      openClaimModal();
-    } else {
-      showToast('You can only change your own RSVP.');
+    // --- RSVPs (own availability only; enforced again by database rules) ---
+    async function setPlayerRSVP(week, playerId, status) {
+      if (!authUser) { showToast('Log in to set your availability.'); openModal('modal-admin-pin'); return; }
+      if (!isAdminAuthenticated) {
+        if (authState === 'loading') { showToast('Still signing in... try again in a moment.'); return; }
+        if (linkedPlayerId === null) { showToast('Your account is not linked to a player yet. Ask your coach.'); return; }
+        if (String(playerId) !== linkedPlayerId) { showToast('You can only change your own availability.'); return; }
+      }
+      if (!matchRSVPs[week]) matchRSVPs[week] = {};
+      matchRSVPs[week][playerId] = status;
+      await saveRemote('rsvps/' + week + '/' + playerId, status, 'Availability saved for Week ' + week + '.', () => {
+        renderDashboardRSVPTracker(); renderHubFixtures();
+        if (activeTab === 'tactics') renderTacticsBoardForMatch();
+      });
     }
-    return;
-  }
-  if (!matchRSVPs[week]) matchRSVPs[week] = {};
-  matchRSVPs[week][playerId] = status;
-  syncToFirebase('rsvps/' + week + '/' + playerId, status);
-  renderDashboardRSVPTracker();
-  renderHubFixtures();
-  if (activeTab === 'tactics') renderTacticsBoardForMatch();
-  showToast(`RSVP updated for Week ${week}`);
-}
+
 
     function renderDashboardRSVPTracker() {
       const container = document.getElementById('dashboard-rsvp-list');
@@ -1549,8 +1424,8 @@ async function releasePlayerClaim(playerId) {
           <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 space-y-3">
             <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b border-slate-900 pb-2.5">
               <div>
-                <span class="text-[10px] bg-yellow-500/10 text-yellow-400 font-bold px-2 py-0.5 rounded border border-yellow-500/20">Week ${week} • ${item.date} (${m.time})</span>
-                <h4 class="text-sm font-black text-white mt-1">Joga Bonito vs ${opponent}</h4>
+                <span class="text-[10px] bg-yellow-500/10 text-yellow-400 font-bold px-2 py-0.5 rounded border border-yellow-500/20">Week ${week} • ${esc(item.date)} (${esc(m.time)})</span>
+                <h4 class="text-sm font-black text-white mt-1">Joga Bonito vs ${esc(opponent)}</h4>
               </div>
               <span class="text-xs bg-emerald-500/10 text-emerald-400 font-bold px-2.5 py-1 rounded-lg border border-emerald-500/20">
                 <i class="fa-solid fa-users"></i> Going: ${goingCount} / 7+
@@ -1562,7 +1437,7 @@ async function releasePlayerClaim(playerId) {
                 const pStatus = rsvps[p.id] || 'going';
                 return `
                   <div class="bg-slate-900 border border-slate-800 p-2 rounded-xl flex items-center justify-between text-xs">
-                    <span class="font-bold text-white truncate max-w-[100px]">${p.name}</span>
+                    <span class="font-bold text-white truncate max-w-[100px]">${esc(p.name)}</span>
                     <div class="flex items-center gap-1">
                       <button onclick="setPlayerRSVP(${week}, ${p.id}, 'going')" class="px-1.5 py-0.5 rounded font-extrabold text-[10px] ${pStatus === 'going' ? 'bg-emerald-600 text-white shadow' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'}">In</button>
                       <button onclick="setPlayerRSVP(${week}, ${p.id}, 'maybe')" class="px-1.5 py-0.5 rounded font-extrabold text-[10px] ${pStatus === 'maybe' ? 'bg-yellow-600 text-white shadow' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'}">?</button>
@@ -1599,9 +1474,9 @@ async function releasePlayerClaim(playerId) {
               <div>
                 <div class="flex items-center gap-2">
                   <h3 class="font-extrabold text-base text-white">Week ${w.week}</h3>
-                  <span class="text-xs bg-slate-800 text-yellow-400 font-bold px-2 py-0.5 rounded border border-slate-700">${w.date}</span>
+                  <span class="text-xs bg-slate-800 text-yellow-400 font-bold px-2 py-0.5 rounded border border-slate-700">${esc(w.date)}</span>
                 </div>
-                <p class="text-xs text-slate-400 mt-0.5">${w.note}</p>
+                <p class="text-xs text-slate-400 mt-0.5">${esc(w.note)}</p>
               </div>
             </div>
 
@@ -1610,10 +1485,10 @@ async function releasePlayerClaim(playerId) {
                 const isJB = (m.home === 'Joga Bonito' || m.away === 'Joga Bonito');
                 return `
                   <div class="bg-slate-950 border ${isJB ? 'border-yellow-500/40 bg-yellow-500/[0.02]' : 'border-slate-800'} rounded-xl p-3.5 flex flex-col sm:flex-row items-center justify-between gap-3">
-                    <span class="text-[10px] font-bold bg-slate-900 text-slate-400 px-2.5 py-1 rounded-lg border border-slate-800">Slot ${m.slot} • ${m.time}</span>
+                    <span class="text-[10px] font-bold bg-slate-900 text-slate-400 px-2.5 py-1 rounded-lg border border-slate-800">Slot ${m.slot} • ${esc(m.time)}</span>
 
                     <div class="flex items-center justify-center gap-3 w-full sm:w-auto my-2 sm:my-0">
-                      <span class="text-xs sm:text-sm font-bold text-white text-right w-36 truncate">${m.home}</span>
+                      <span class="text-xs sm:text-sm font-bold text-white text-right w-36 truncate">${esc(m.home)}</span>
                       
                       <div class="flex items-center gap-1.5 shrink-0">
                         <input type="number" min="0" value="${m.homeScore ?? ''}" ${isAdminAuthenticated ? `onchange="updateMatchScore(${w.week}, ${m.slot}, this.value, document.getElementById('away-score-${w.week}-${m.slot}').value)"` : 'readonly'} id="home-score-${w.week}-${m.slot}" class="w-10 bg-slate-900 border border-slate-700 text-center text-xs font-black text-white rounded-lg py-1 ${isAdminAuthenticated ? '' : 'opacity-75 cursor-not-allowed'}">
@@ -1621,7 +1496,7 @@ async function releasePlayerClaim(playerId) {
                         <input type="number" min="0" value="${m.awayScore ?? ''}" ${isAdminAuthenticated ? `onchange="updateMatchScore(${w.week}, ${m.slot}, document.getElementById('home-score-${w.week}-${m.slot}').value, this.value)"` : 'readonly'} id="away-score-${w.week}-${m.slot}" class="w-10 bg-slate-900 border border-slate-700 text-center text-xs font-black text-white rounded-lg py-1 ${isAdminAuthenticated ? '' : 'opacity-75 cursor-not-allowed'}">
                       </div>
 
-                      <span class="text-xs sm:text-sm font-bold text-white text-left w-36 truncate">${m.away}</span>
+                      <span class="text-xs sm:text-sm font-bold text-white text-left w-36 truncate">${esc(m.away)}</span>
                     </div>
 
                     ${isJB ? `
@@ -1648,9 +1523,7 @@ async function releasePlayerClaim(playerId) {
         matchObj.homeScore = (homeScoreVal === '' || homeScoreVal == null) ? null : (parseInt(homeScoreVal) || 0);
         matchObj.awayScore = (awayScoreVal === '' || awayScoreVal == null) ? null : (parseInt(awayScoreVal) || 0);
 
-        syncToFirebase('scheduleData', scheduleData);
-        computeStandings();
-        showToast(`Week ${weekNum} score updated successfully!`);
+        saveRemote('scheduleData', scheduleData, `Week ${weekNum} score saved.`, () => computeStandings());
       });
     }
 
@@ -1758,7 +1631,7 @@ setText('qf2-away', `3. ${sortedB[2].team}`);
     return `
       <tr class="${isJB ? 'bg-yellow-500/10 font-bold text-yellow-300' : (isTop4 ? 'bg-slate-900/60' : '')} border-b border-slate-800/60">
         <td class="p-3.5 text-center font-black ${isTop4 ? 'text-emerald-400' : 'text-slate-400'}">${rank}</td>
-        <td class="p-3.5 font-bold text-white">${s.team}</td>
+        <td class="p-3.5 font-bold text-white">${esc(s.team)}</td>
         <td class="p-3.5 text-center text-slate-300">${s.gp}</td>
         <td class="p-3.5 text-center text-slate-300">${s.w}</td>
         <td class="p-3.5 text-center text-slate-300">${s.d}</td>
@@ -1783,7 +1656,7 @@ setText('qf2-away', `3. ${sortedB[2].team}`);
         w.matches.forEach(m => {
           if (m.home === 'Joga Bonito' || m.away === 'Joga Bonito') {
             const opp = m.home === 'Joga Bonito' ? m.away : m.home;
-            jbMatches.push({ week: w.week, date: w.date, label: `Week ${w.week} (${w.date}) vs ${opp}` });
+            jbMatches.push({ week: w.week, date: w.date, label: `Week ${w.week} (${esc(w.date)}) vs ${esc(opp)}` });
           }
         });
       });
@@ -1903,10 +1776,10 @@ setText('qf2-away', `3. ${sortedB[2].team}`);
                  ondragover="event.preventDefault()"
                  ondrop="onPitchDrop(event, ${idx})">
               <div class="w-12 h-12 rounded-full ${isSelected ? 'ring-4 ring-yellow-300 scale-110' : ''} ${player ? 'bg-yellow-400 text-slate-950' : 'bg-slate-800/80 text-slate-400 border-2 border-dashed border-slate-600'} font-black text-xs flex items-center justify-center shadow-2xl transition-all relative">
-                ${player ? '#' + player.number : pos.role}
+                ${player ? '#' + esc(player.number) : pos.role}
               </div>
               <span class="bg-slate-950/90 text-yellow-300 border border-yellow-500/40 text-[10px] font-extrabold px-2 py-0.5 rounded-md mt-1 shadow whitespace-nowrap">
-                ${player ? player.name : pos.role + ' (Empty)'}
+                ${player ? esc(player.name) : pos.role + ' (Empty)'}
               </span>
             </div>
           `;
@@ -1941,10 +1814,10 @@ setText('qf2-away', `3. ${sortedB[2].team}`);
                    ondragstart="onBenchDragStart(event, ${p.id})"
                    onclick="onBenchItemClick(${p.id})">
                 <div class="flex items-center gap-2">
-                  <span class="w-6 h-6 rounded-full bg-yellow-500/20 text-yellow-400 font-extrabold text-[10px] flex items-center justify-center">#${p.number}</span>
+                  <span class="w-6 h-6 rounded-full bg-yellow-500/20 text-yellow-400 font-extrabold text-[10px] flex items-center justify-center">#${esc(p.number)}</span>
                   <div>
-                    <p class="font-bold text-white">${p.name}</p>
-                    <p class="text-[9px] text-slate-400">${p.position}</p>
+                    <p class="font-bold text-white">${esc(p.name)}</p>
+                    <p class="text-[9px] text-slate-400">${esc(p.position)}</p>
                   </div>
                 </div>
                 <div class="flex items-center gap-2">
@@ -2081,7 +1954,7 @@ function renderNextFixture() {
 
   weekEl.innerText = 'Week ' + next.week;
   dateEl.innerText = `${weekday}, ${next.date} • ${next.m.time}`;
-  titleEl.innerText = `Joga Bonito ${isHome ? 'vs' : '@'} ${opponent}`;
+  titleEl.innerText = `Joga Bonito ${isHome ? 'vs' : '@'} ${esc(opponent)}`;
 }
     // --- Hub Fixtures ---
     function renderHubFixtures() {
@@ -2110,8 +1983,8 @@ function renderNextFixture() {
           <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4 shadow-sm">
             <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-slate-800 pb-3">
               <div>
-                <span class="text-xs bg-yellow-400 text-slate-950 font-black px-2.5 py-1 rounded-md">Week ${w} • ${item.date}</span>
-                <h3 class="text-lg font-black text-white mt-1.5">Joga Bonito ${isHome ? 'vs' : '@'} ${opponent}</h3>
+                <span class="text-xs bg-yellow-400 text-slate-950 font-black px-2.5 py-1 rounded-md">Week ${w} • ${esc(item.date)}</span>
+                <h3 class="text-lg font-black text-white mt-1.5">Joga Bonito ${isHome ? 'vs' : '@'} ${esc(opponent)}</h3>
               </div>
               <div class="flex items-center gap-2">
                 <span class="text-xs bg-emerald-500/10 text-emerald-400 font-bold px-3 py-1.5 rounded-xl border border-emerald-500/20">
@@ -2128,7 +2001,7 @@ function renderNextFixture() {
                 const status = rsvps[p.id] || 'going';
                 return `
                   <div class="bg-slate-950 border border-slate-800 p-2.5 rounded-xl flex items-center justify-between text-xs">
-                    <span class="font-bold text-white">${p.name}</span>
+                    <span class="font-bold text-white">${esc(p.name)}</span>
                     <div class="flex items-center gap-1">
                       <button onclick="setPlayerRSVP(${w}, ${p.id}, 'going')" class="px-2 py-1 rounded font-extrabold text-[10px] ${status === 'going' ? 'bg-emerald-600 text-white shadow' : 'bg-slate-900 text-slate-400 hover:bg-slate-800'}">In</button>
                       <button onclick="setPlayerRSVP(${w}, ${p.id}, 'maybe')" class="px-2 py-1 rounded font-extrabold text-[10px] ${status === 'maybe' ? 'bg-yellow-600 text-white shadow' : 'bg-slate-900 text-slate-400 hover:bg-slate-800'}">?</button>

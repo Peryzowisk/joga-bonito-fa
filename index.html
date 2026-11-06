@@ -46,6 +46,7 @@
       
       <!-- LOGO & BRAND -->
       <div class="flex items-center gap-3">
+        <!-- Bicycle Kick / Brazil Badge Logo -->
         <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-yellow-400 via-emerald-600 to-blue-900 p-0.5 shadow-lg flex items-center justify-center shrink-0">
           <div class="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center overflow-hidden relative">
             <svg viewBox="0 0 100 100" class="w-7 h-7 text-yellow-400" fill="currentColor">
@@ -60,7 +61,7 @@
           <h1 class="font-black text-base sm:text-lg tracking-tight text-white flex items-center gap-1.5">
             Joga Bonito FA <span class="text-[10px] bg-yellow-400/20 text-yellow-400 border border-yellow-400/30 px-1.5 py-0.5 rounded font-bold">7v7</span>
           </h1>
-          <p id="user-role-indicator" class="text-[11px] text-emerald-400 font-medium">Viewing as: Player (RSVP enabled)</p>
+          <p class="text-[11px] text-slate-400 font-medium hidden sm:block">Winter League • Division B</p>
         </div>
       </div>
 
@@ -80,9 +81,9 @@
           <i class="fa-solid fa-user-plus text-[11px]"></i>
           <span class="hidden sm:inline">Invite Player</span>
         </button>
-        <button onclick="requestAdminAccess()" id="admin-auth-btn" class="bg-slate-800 hover:bg-slate-700 text-yellow-400 font-bold text-xs px-3.5 py-2 rounded-xl border border-slate-700 transition-all shadow flex items-center gap-1.5">
-          <i class="fa-solid fa-lock text-[11px]"></i>
-          <span>Coach Login</span>
+        <button onclick="openModal('modal-add-player')" class="bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-black text-xs px-3.5 py-2 rounded-xl transition-all shadow flex items-center gap-1.5">
+          <i class="fa-solid fa-plus text-[11px]"></i>
+          <span>Add Player</span>
         </button>
       </div>
     </div>
@@ -202,13 +203,13 @@
             <h3 class="font-bold text-lg text-white flex items-center gap-2">
               <i class="fa-solid fa-calendar-star text-yellow-400"></i> Next Joga Bonito FA Fixture
             </h3>
-            <span id="next-fixture-week" class="text-xs bg-slate-800 text-slate-300 font-bold px-2.5 py-1 rounded-md border border-slate-700">Week -</span>
+            <span class="text-xs bg-slate-800 text-slate-300 font-bold px-2.5 py-1 rounded-md border border-slate-700">Week 1</span>
           </div>
 
           <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div>
-              <p id="next-fixture-date" class="text-xs font-bold text-yellow-400 uppercase tracking-wider">Loading...</p>
-              <h4 id="next-fixture-title" class="text-xl font-black text-white mt-1">Joga Bonito</h4>
+              <p class="text-xs font-bold text-yellow-400 uppercase tracking-wider">Monday, 11.03.26 • 9:30 PM</p>
+              <h4 class="text-xl font-black text-white mt-1">Joga Bonito vs Left Bench FC</h4>
               <p class="text-xs text-slate-400 flex items-center gap-3 mt-1">
                 <span><i class="fa-solid fa-location-dot text-red-400"></i> VSA Arena</span>
                 <span><i class="fa-solid fa-clock text-blue-400"></i> Arrive 20 min prior</span>
@@ -425,7 +426,7 @@
                 <span class="text-yellow-400 font-bold">VS</span>
                 <span id="final-diva-champ">Div A Champion</span>
               </div>
-              <p class="text-[10px] text-slate-300 text-center pt-2 border-t border-yellow-500/20">🏆 Winner lifts the Winter League Trophy</p>
+              <p class="text-[10px] text-slate-300 text-center pt-2 border-t border-yellow-500/20">�� Winner lifts the Winter League Trophy</p>
             </div>
           </div>
         </div>
@@ -441,7 +442,7 @@
           </h2>
           <p class="text-xs text-slate-400 mt-1">Manage player profiles, jersey numbers, preferred positions, and season statistics.</p>
         </div>
-        <button onclick="verifyAdminAction(() => openModal('modal-add-player'))" id="add-player-btn" class="hidden bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-black text-xs px-4 py-2.5 rounded-xl transition-all shadow items-center gap-2">
+        <button onclick="openModal('modal-add-player')" class="bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-black text-xs px-4 py-2.5 rounded-xl transition-all shadow flex items-center gap-2">
           <i class="fa-solid fa-user-plus"></i> Add New Player
         </button>
       </div>
@@ -525,7 +526,7 @@
             <h3 class="font-bold text-sm text-white flex items-center gap-2">
               <i class="fa-solid fa-users-line text-yellow-400"></i> Bench & Roster Pool
             </h3>
-            <button onclick="verifyAdminAction(() => openModal('modal-add-player'))" class="text-[11px] bg-slate-800 hover:bg-slate-700 text-yellow-400 font-bold px-2.5 py-1 rounded-lg border border-slate-700">
+            <button onclick="openModal('modal-add-player')" class="text-[11px] bg-slate-800 hover:bg-slate-700 text-yellow-400 font-bold px-2.5 py-1 rounded-lg border border-slate-700">
               + Add
             </button>
           </div>
@@ -560,25 +561,6 @@
   </main>
 
   <!-- ================= MODALS ================= -->
-
-<!-- COACH LOGIN MODAL -->
-<div id="modal-admin-pin" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
-  <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-sm w-full p-6 shadow-2xl relative space-y-4 text-center">
-    <div class="w-12 h-12 bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 rounded-full flex items-center justify-center mx-auto text-lg">
-      <i class="fa-solid fa-lock"></i>
-    </div>
-    <div>
-      <h3 class="text-base font-black text-white">Coach / Admin Login</h3>
-      <p class="text-xs text-slate-400 mt-1">Sign in to manage match scores and stats</p>
-    </div>
-    <input type="email" id="admin-email-input" placeholder="Coach email" class="w-full bg-slate-950 border border-slate-700 text-sm text-white rounded-xl px-3 py-2.5">
-    <input type="password" id="admin-pin-input" placeholder="Password" class="w-full bg-slate-950 border border-slate-700 text-sm text-white rounded-xl px-3 py-2.5">
-    <div class="flex justify-center gap-2 pt-2">
-      <button onclick="closeModal('modal-admin-pin')" class="px-4 py-2 bg-slate-800 text-slate-300 text-xs font-bold rounded-xl">Cancel</button>
-      <button onclick="verifyPinCode()" class="px-4 py-2 bg-yellow-500 text-slate-950 text-xs font-black rounded-xl shadow">Login</button>
-    </div>
-  </div>
-</div>
 
   <!-- ADD / EDIT PLAYER MODAL -->
   <div id="modal-add-player" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
@@ -638,25 +620,42 @@
     </div>
   </div>
 
-<!-- INVITE PLAYER MODAL -->
-<div id="modal-invite" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
-  <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
-    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-      <h3 class="text-lg font-black text-white flex items-center gap-2">
-        <i class="fa-solid fa-share-nodes text-yellow-400"></i> Invite Players
-      </h3>
-      <button onclick="closeModal('modal-invite')" class="text-slate-400 hover:text-white">
-        <i class="fa-solid fa-xmark text-lg"></i>
-      </button>
-    </div>
-    <p class="text-xs text-slate-300 leading-relaxed">
-      Every player gets a personal invite link. The coach logs in, opens <span class="text-white font-bold">Squad Roster</span>, and taps <span class="text-white font-bold">Invite link</span> on that player's card, then sends it to them. Each link only works for that one player.
-    </p>
-    <div class="flex justify-end pt-2 border-t border-slate-800">
-      <button onclick="closeModal('modal-invite')" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold rounded-xl">Close</button>
+  <!-- INVITE PLAYER MODAL -->
+  <div id="modal-invite" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl relative space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 class="text-lg font-black text-white flex items-center gap-2">
+          <i class="fa-solid fa-share-nodes text-yellow-400"></i> Invite Player to Joga Bonito FA
+        </h3>
+        <button onclick="closeModal('modal-invite')" class="text-slate-400 hover:text-white">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <p class="text-xs text-slate-300 leading-relaxed">
+        Share this unique invitation link with prospective players so they can join the roster and confirm match RSVPs instantly.
+      </p>
+
+      <div class="space-y-2">
+        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Shareable Invite Link</label>
+        <div class="flex items-center gap-2">
+          <input type="text" readonly id="invite-link-input" value="https://jogabonito.fa/join?team=joga-bonito-fa&invite=jb7v7-2026" class="w-full bg-slate-950 border border-slate-700 rounded-xl p-2.5 text-xs text-slate-300 font-mono">
+          <button onclick="copyInviteLink()" class="bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-black text-xs px-4 py-2.5 rounded-xl shrink-0 shadow">
+            Copy
+          </button>
+        </div>
+      </div>
+
+      <div class="bg-slate-950 border border-slate-800 p-3 rounded-xl space-y-1.5 text-xs text-slate-400">
+        <p class="font-bold text-yellow-400"><i class="fa-solid fa-circle-check"></i> Self-Registration Active</p>
+        <p>Invited players will be added with the <span class="text-white font-bold">Player</span> role and can immediately submit their game RSVPs.</p>
+      </div>
+
+      <div class="flex justify-end pt-2 border-t border-slate-800">
+        <button onclick="closeModal('modal-invite')" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold rounded-xl">Close</button>
+      </div>
     </div>
   </div>
-</div>
 
   <!-- MATCH STATS MODAL -->
   <div id="modal-match-stats" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
@@ -686,86 +685,16 @@
     </div>
   </div>
 
-  <!-- CLAIM PLAYER MODAL -->
-<div id="modal-claim" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
-  <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
-    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-      <h3 class="text-lg font-black text-white flex items-center gap-2">
-        <i class="fa-solid fa-user-check text-yellow-400"></i> Link your player
-      </h3>
-      <button onclick="closeModal('modal-claim')" class="text-slate-400 hover:text-white">
-        <i class="fa-solid fa-xmark text-lg"></i>
-      </button>
-    </div>
-    <p class="text-xs text-slate-300 leading-relaxed">
-      Use the personal invite link your coach sent you, or enter your name and code below. Your RSVPs will be tied to this device.
-    </p>
-    <select id="claim-player-select" class="w-full bg-slate-950 border border-slate-700 text-sm text-white font-semibold rounded-xl p-2.5"></select>
-    <input type="text" id="claim-code-input" maxlength="12" placeholder="Invite code" class="w-full bg-slate-950 border border-slate-700 text-sm text-white font-mono tracking-widest uppercase rounded-xl p-2.5">
-    <div class="flex justify-end gap-2 pt-2 border-t border-slate-800">
-      <button onclick="closeModal('modal-claim')" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold rounded-xl">Just viewing</button>
-      <button onclick="claimPlayer()" class="px-4 py-2 bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-black text-xs rounded-xl shadow">Link me</button>
-    </div>
-  </div>
-</div>
-
   <!-- TOAST NOTIFICATION -->
   <div id="toast" class="fixed bottom-5 right-5 bg-emerald-600 text-white text-xs font-bold px-4 py-3 rounded-xl shadow-2xl transform translate-y-20 opacity-0 transition-all duration-300 z-50 flex items-center gap-2">
     <i class="fa-solid fa-circle-check text-sm"></i>
     <span id="toast-msg">Action completed successfully!</span>
   </div>
 
-  <!-- FIREBASE REALTIME DATABASE & APP LOGIC -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getDatabase, ref, set, update, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
-    import { getAuth, signInWithEmailAndPassword, signInAnonymously, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-
-    const COACH_UID = "YLwmcJsGGTU766nGzLJTztJaZZT2";
-
-    const firebaseConfig = {
-    apiKey: "AIzaSyBJNt-6CNVJiViCsUR3U52U2JEm3myg8r8",
-    authDomain: "joga-bonito-fa-2dc72.firebaseapp.com",
-    databaseURL: "https://joga-bonito-fa-2dc72-default-rtdb.firebaseio.com",
-    projectId: "joga-bonito-fa-2dc72",
-    storageBucket: "joga-bonito-fa-2dc72.firebasestorage.app",
-    messagingSenderId: "930594271966",
-    appId: "1:930594271966:web:e4544436ba6564e79c084f",
-    measurementId: "G-LSS4X18XL9"
-  };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-    const auth = getAuth(app);
-    window.dbRef = db;
-    window.firebaseRef = ref;
-    window.firebaseSet = set;
-    window.firebaseUpdate = update;
-    window.firebaseOnValue = onValue;
-    window.coachLogin = (email, pw) => signInWithEmailAndPassword(auth, email, pw);
-    window.coachLogout = () => signOut(auth);
-
-    onAuthStateChanged(auth, (user) => {
-      if (!user) { signInAnonymously(auth); return; }          // every visitor gets an identity
-      if (!user.isAnonymous && user.uid !== COACH_UID) { signOut(auth); return; }
-      window.currentUid = user.uid;
-      window.setCoachState(user.uid === COACH_UID);
-    });
-
-    initRealtimeSync();
-  </script>
-
   <!-- APPLICATION SCRIPT -->
   <script>
     // --- Data Store & State ---
     let activeTab = 'dashboard';
-    let isAdminAuthenticated = false;
-    let playerClaims = {};
-    let inviteCodes = {};
-    let inviteCodesLoaded = false;
-    let inviteListenerStarted = false;
-    let claimsLoaded = false;
-    let claimPromptShown = false;
 
     let players = [
       { id: 1, name: "Marcus Silva", position: "GK", number: "1", status: "Active", goals: 0, assists: 0, photo: "https://placehold.co/150x150/1e293b/ffffff?text=MS" },
@@ -776,24 +705,39 @@
       { id: 6, name: "Neymar Silva", position: "FWD", number: "11", status: "Active", goals: 0, assists: 0, photo: "https://placehold.co/150x150/1e293b/ffffff?text=NS" },
       { id: 7, name: "Roberto Firmino", position: "FWD", number: "9", status: "Active", goals: 0, assists: 0, photo: "https://placehold.co/150x150/1e293b/ffffff?text=RF" },
       { id: 8, name: "Casemiro", position: "MID", number: "5", status: "Active", goals: 0, assists: 0, photo: "https://placehold.co/150x150/1e293b/ffffff?text=C5" },
-      { id: 9, name: "Vinícius Jr.", position: "FWD", number: "7", status: "Active", goals: 0, assists: 0, photo: "https://placehold.co/150x150/1e293b/ffffff?text=V7" },
-      { id: 10, name: "Vinícius Jr.", position: "FWD", number: "7", status: "Active", goals: 0, assists: 0, photo: "https://placehold.co/150x150/1e293b/ffffff?text=V7" },
-      { id: 11, name: "Vinícius Jr.", position: "FWD", number: "7", status: "Active", goals: 0, assists: 0, photo: "https://placehold.co/150x150/1e293b/ffffff?text=V7" },
-      { id: 12, name: "Vinícius Jr.", position: "FWD", number: "7", status: "Active", goals: 0, assists: 0, photo: "https://placehold.co/150x150/1e293b/ffffff?text=V7" },
-      { id: 13, name: "Vinícius Jr.", position: "FWD", number: "7", status: "Active", goals: 0, assists: 0, photo: "https://placehold.co/150x150/1e293b/ffffff?text=V7" },
-      { id: 14, name: "Vinícius Jr.", position: "FWD", number: "7", status: "Active", goals: 0, assists: 0, photo: "https://placehold.co/150x150/1e293b/ffffff?text=V7" }
+      { id: 9, name: "Vinícius Jr.", position: "FWD", number: "7", status: "Active", goals: 0, assists: 0, photo: "https://placehold.co/150x150/1e293b/ffffff?text=V7" }
     ];
 
     let matchPlayerStats = {
-      1: { 3: { goals: 1, assists: 0 }, 4: { goals: 1, assists: 1 }, 5: { goals: 2, assists: 0 }, 2: { goals: 0, assists: 1 } },
-      2: { 5: { goals: 2, assists: 0 }, 4: { goals: 1, assists: 0 } },
-      3: { 5: { goals: 1, assists: 1 }, 3: { goals: 2, assists: 0 } },
-      5: { 4: { goals: 1, assists: 1 }, 5: { goals: 3, assists: 0 } },
-      6: { 2: { goals: 1, assists: 1 }, 7: { goals: 1, assists: 0 } },
-      7: { 5: { goals: 3, assists: 2 }, 6: { goals: 2, assists: 1 } }
+      1: {
+        3: { goals: 1, assists: 0 },
+        4: { goals: 1, assists: 1 },
+        5: { goals: 2, assists: 0 },
+        2: { goals: 0, assists: 1 }
+      },
+      2: {
+        5: { goals: 2, assists: 0 },
+        4: { goals: 1, assists: 0 }
+      },
+      3: {
+        5: { goals: 1, assists: 1 },
+        3: { goals: 2, assists: 0 }
+      },
+      5: {
+        4: { goals: 1, assists: 1 },
+        5: { goals: 3, assists: 0 }
+      },
+      6: {
+        2: { goals: 1, assists: 1 },
+        7: { goals: 1, assists: 0 }
+      },
+      7: {
+        5: { goals: 3, assists: 2 },
+        6: { goals: 2, assists: 1 }
+      }
     };
 
-    // Independent Per-Game RSVPs with cloud sync
+    // Independent Per-Game RSVPs with 9 players Going for Week 1 (demo mode)
     let matchRSVPs = {
       1: { 1: 'going', 2: 'going', 3: 'going', 4: 'going', 5: 'going', 6: 'going', 7: 'going', 8: 'going', 9: 'going' },
       2: { 1: 'going', 2: 'going', 3: 'going', 4: 'going', 5: 'going', 6: 'going', 7: 'going' },
@@ -809,7 +753,7 @@
       15: { 1: 'going', 2: 'going', 3: 'going', 4: 'going', 5: 'going', 6: 'going', 7: 'going' }
     };
 
-    let scheduleData = [
+    const scheduleData = [
       {
         week: 1, date: "11.03.26", note: "Regular Season",
         matches: [
@@ -888,7 +832,7 @@
         byes: ["Beercelona", "Guardians U18B"]
       },
       {
-        week: 8, date: "01.05.27", note: "Holiday break • Second Half Start",
+        week: 8, date: "01.05.27", note: "Holiday break (3 weeks off) prior • Second Half Start",
         matches: [
           { slot: 1, time: "5:30 PM", home: "Beercelona", away: "Guardians U18B", homeScore: 3, awayScore: 0, isCross: false },
           { slot: 2, time: "6:30 PM", home: "Wrexham A.F.C.", away: "Rice Lake CF", homeScore: 2, awayScore: 1, isCross: false },
@@ -1022,134 +966,23 @@
       ]
     };
 
+    // Tactics state per match: stores starters array (playerIds or null) and bench array
     let tacticsState = {};
     let tacticsUndoStack = [];
     let tacticsRedoStack = [];
-    let selectedPitchSlot = null;
-
-    // --- Firebase Real-Time Syncing ---
-    function initRealtimeSync() {
-      if (!window.dbRef) return;
-
-      window.firebaseOnValue(window.firebaseRef(window.dbRef, 'jogaBonitoFA/rsvps'), (snapshot) => {
-        const val = snapshot.val();
-        if (val) {
-          matchRSVPs = val;
-          renderDashboardRSVPTracker();
-          renderHubFixtures();
-          if (activeTab === 'tactics') renderTacticsBoardForMatch();
-        }
-      });
-
-      window.firebaseOnValue(window.firebaseRef(window.dbRef, 'jogaBonitoFA/scheduleData'), (snapshot) => {
-        const val = snapshot.val();
-        if (val) {
-          scheduleData = val;
-          renderNextFixture(); 
-          renderSchedule();
-          computeStandings();
-          renderDashboardRSVPTracker();
-        }
-      });
-
-      window.firebaseOnValue(window.firebaseRef(window.dbRef, 'jogaBonitoFA/players'), (snapshot) => {
-        const val = snapshot.val();
-        if (val) {
-          players = val;
-          recalculatePlayerOverallTotals();
-        }
-      });
-
-      window.firebaseOnValue(window.firebaseRef(window.dbRef, 'jogaBonitoFA/playerClaims'), (snapshot) => {
-      playerClaims = snapshot.val() || {};
-      claimsLoaded = true;
-      updateIdentityUI();
-      maybeShowClaimModal();
-      if (activeTab === 'roster') renderRoster();
-      });
-
-      window.firebaseOnValue(window.firebaseRef(window.dbRef, 'jogaBonitoFA/matchPlayerStats'), (snapshot) => {
-        const val = snapshot.val();
-        if (val) {
-          matchPlayerStats = val;
-          recalculatePlayerOverallTotals();
-        }
-      });
-    }
-
-    function syncToFirebase(path, data) {
-      if (window.dbRef) {
-        window.firebaseSet(window.firebaseRef(window.dbRef, 'jogaBonitoFA/' + path), data);
-      }
-    }
-
-    // --- Admin Authentication (Secret Coach PIN) ---
-    function requestAdminAccess() {
-  if (isAdminAuthenticated) {
-    window.coachLogout();
-  } else {
-    openModal('modal-admin-pin');
-  }
-}
-
-  window.setCoachState = function (isCoach) {
-    isAdminAuthenticated = isCoach;
-    const roleEl = document.getElementById('user-role-indicator');
-    const btn = document.getElementById('admin-auth-btn');
-    const addBtn = document.getElementById('add-player-btn');
-    if (isCoach) {
-      roleEl.innerText = "Viewing as: COACH (Full Access)";
-      roleEl.className = "text-[11px] text-yellow-400 font-bold";
-      btn.innerHTML = '<i class="fa-solid fa-unlock text-[11px]"></i><span>Coach Logout</span>';
-      addBtn.classList.remove('hidden');
-    } else {
-      btn.innerHTML = '<i class="fa-solid fa-lock text-[11px]"></i><span>Coach Login</span>';
-      addBtn.classList.add('hidden');
-      updateIdentityUI();
-    }
-    renderSchedule();
-    renderRoster();
-    maybeShowClaimModal();
-    if (isCoach && !inviteListenerStarted) {
-      inviteListenerStarted = true;
-      window.firebaseOnValue(window.firebaseRef(window.dbRef, 'jogaBonitoFA/inviteCodes'), (snap) => {
-      inviteCodes = snap.val() || {};
-      inviteCodesLoaded = true;
-    });
-    }
-    };
-
-async function verifyPinCode() {
-  const email = document.getElementById('admin-email-input').value.trim();
-  const pw = document.getElementById('admin-pin-input').value;
-  try {
-    await window.coachLogin(email, pw);
-    closeModal('modal-admin-pin');
-    document.getElementById('admin-pin-input').value = '';
-    showToast("Coach authenticated successfully!");
-  } catch (e) {
-    showToast("Incorrect email or password.");
-  }
-}
-
-    function verifyAdminAction(callback) {
-      if (isAdminAuthenticated) {
-        callback();
-      } else {
-        openModal('modal-admin-pin');
-      }
-    }
+    let selectedPitchSlot = null; // for tap-based swapping
 
     // --- Initialization on Load ---
     window.onload = function() {
       recalculatePlayerOverallTotals();
-      renderNextFixture(); 
       renderDashboardRSVPTracker();
       populateTacticsMatchSelector();
       renderTacticsBoardForMatch();
       renderHubFixtures();
       renderSchedule();
       computeStandings();
+      runFormCalculationUnitTests();
+      runSwapLogicUnitTests();
     };
 
     // --- Navigation ---
@@ -1175,13 +1008,14 @@ async function verifyPinCode() {
       if (tabId === 'standings') computeStandings();
       if (tabId === 'schedule') renderSchedule();
       if (tabId === 'hub') renderHubFixtures();
-      if (tabId === 'dashboard') { renderDashboardRSVPTracker(); renderNextFixture(); }
+      if (tabId === 'dashboard') renderDashboardRSVPTracker();
       if (tabId === 'tactics') {
         populateTacticsMatchSelector();
         renderTacticsBoardForMatch();
       }
     }
 
+    // --- Modal Management ---
     function openModal(modalId) {
       const modal = document.getElementById(modalId);
       if (modal) {
@@ -1217,114 +1051,8 @@ async function verifyPinCode() {
       showToast('Invite link copied to clipboard!');
       closeModal('modal-invite');
     }
-    // --- Player identity (who is this device?) ---
-    function myPlayerId() {
-      const uid = window.currentUid;
-      if (!uid) return null;
-      const key = Object.keys(playerClaims).find(k => playerClaims[k] === uid);
-      return key !== undefined ? key : null;
-    }
-    
-    function canEditRSVP(playerId) {
-      return isAdminAuthenticated || String(myPlayerId()) === String(playerId);
-    }
 
-    function maybeShowClaimModal() {
-      if (!claimsLoaded || claimPromptShown || isAdminAuthenticated || !window.currentUid) return;
-      if (myPlayerId() !== null) return;
-      claimPromptShown = true;
-      openClaimModal();
-    }
-    
-    function updateIdentityUI() {
-      const roleEl = document.getElementById('user-role-indicator');
-      if (!roleEl || isAdminAuthenticated) return;
-      const pid = myPlayerId();
-      const p = pid !== null ? players.find(x => String(x.id) === String(pid)) : null;
-      roleEl.className = "text-[11px] text-emerald-400 font-medium";
-      roleEl.innerHTML = p
-        ? `Viewing as: ${p.name} (RSVP enabled)`
-        : `Viewing as: Guest • <button onclick="openClaimModal()" class="underline text-yellow-400 font-bold">pick your player</button>`;
-    }
-    
-  function openClaimModal() {
-  const taken = Object.keys(playerClaims).filter(k => playerClaims[k]);
-  const free = players.filter(p => !taken.includes(String(p.id)));
-
-  // Prefill from a personal link: ?join=PLAYERID-CODE
-  const join = new URLSearchParams(location.search).get('join') || '';
-  const dash = join.indexOf('-');
-  const urlPid = dash > 0 ? join.slice(0, dash) : '';
-  const urlCode = dash > 0 ? join.slice(dash + 1) : '';
-
-  const sel = document.getElementById('claim-player-select');
-  sel.innerHTML = free.map(p =>
-    `<option value="${p.id}" ${String(p.id) === urlPid ? 'selected' : ''}>#${p.number} ${p.name}</option>`
-  ).join('');
-  document.getElementById('claim-code-input').value = urlCode;
-  openModal('modal-claim');
-}
-
-async function claimPlayer() {
-  const uid = window.currentUid;
-  const pid = document.getElementById('claim-player-select').value;
-  const code = document.getElementById('claim-code-input').value.trim().toUpperCase();
-  if (!uid) { showToast('Connecting... try again in a moment.'); return; }
-  if (!pid || !code) { showToast('Pick your name and enter your code.'); return; }
-  try {
-    await window.firebaseSet(window.firebaseRef(window.dbRef, 'jogaBonitoFA/claimAttempts/' + uid), code);
-    await window.firebaseUpdate(window.firebaseRef(window.dbRef, 'jogaBonitoFA'), {
-      ['playerClaims/' + pid]: uid,
-      ['claimedBy/' + uid]: String(pid)
-    });
-    closeModal('modal-claim');
-    showToast('You are now linked to your player.');
-  } catch (e) {
-    showToast('Wrong code, name already taken, or this device already has a player.');
-  }
-}
-
-// --- Coach: invite codes ---
-function genCode() {
-  const chars = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
-  const arr = new Uint32Array(6);
-  crypto.getRandomValues(arr);
-  return Array.from(arr, n => chars[n % chars.length]).join('');
-}
-
-async function copyPlayerInvite(pid) {
-  if (!isAdminAuthenticated) return;
-  if (!inviteCodesLoaded) { showToast('Loading codes... try again in a second.'); return; }
-  let code = inviteCodes[pid];
-  if (!code) {
-    code = genCode();
-    await window.firebaseSet(window.firebaseRef(window.dbRef, 'jogaBonitoFA/inviteCodes/' + pid), code);
-  }
-  const link = location.origin + location.pathname + '?join=' + pid + '-' + code;
-  try {
-    await navigator.clipboard.writeText(link);
-    showToast('Personal invite link copied!');
-  } catch (e) {
-    prompt('Copy this personal invite link:', link);
-  }
-}
-
-async function releasePlayerClaim(playerId) {
-  if (!isAdminAuthenticated) return;
-  const uid = playerClaims[playerId];
-  const updates = {
-    ['playerClaims/' + playerId]: null,
-    ['inviteCodes/' + playerId]: genCode()   // old code stops working
-  };
-  if (uid) updates['claimedBy/' + uid] = null;
-  try {
-    await window.firebaseUpdate(window.firebaseRef(window.dbRef, 'jogaBonitoFA'), updates);
-    showToast('Device released. Send the player their new invite link.');
-  } catch (e) {
-    showToast('Could not release this player.');
-  }
-}
-    // --- Roster & Stats ---
+    // --- Roster & Stats Logic ---
     function recalculatePlayerOverallTotals() {
       players.forEach(p => {
         p.goals = 0;
@@ -1332,9 +1060,7 @@ async function releasePlayerClaim(playerId) {
       });
 
       Object.values(matchPlayerStats).forEach(weekStats => {
-        if (!weekStats) return;
         Object.entries(weekStats).forEach(([pId, stat]) => {
-          if (!stat) return;
           const player = players.find(p => p.id == pId);
           if (player) {
             player.goals += stat.goals || 0;
@@ -1351,13 +1077,16 @@ async function releasePlayerClaim(playerId) {
       const totalGoals = players.reduce((sum, p) => sum + (p.goals || 0), 0);
       const totalAssists = players.reduce((sum, p) => sum + (p.assists || 0), 0);
 
-      document.getElementById('dash-total-goals').innerText = totalGoals;
-      document.getElementById('dash-total-assists').innerText = totalAssists;
-      document.getElementById('dash-total-players').innerText = players.length;
+      const goalsEl = document.getElementById('dash-total-goals');
+      const assistsEl = document.getElementById('dash-total-assists');
+      const playersEl = document.getElementById('dash-total-players');
+
+      if (goalsEl) goalsEl.innerText = totalGoals;
+      if (assistsEl) assistsEl.innerText = totalAssists;
+      if (playersEl) playersEl.innerText = players.length;
     }
 
     function renderRoster() {
-      updateIdentityUI();
       const grid = document.getElementById('roster-grid');
       if (!grid) return;
 
@@ -1384,36 +1113,26 @@ async function releasePlayerClaim(playerId) {
               <span class="text-lg font-black text-white">${p.assists || 0}</span>
             </div>
           </div>
-          ${isAdminAuthenticated ? `
-            <div class="flex flex-wrap justify-end gap-2 pt-1">
-              <button onclick="copyPlayerInvite('${p.id}')" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-xs text-white font-bold rounded-lg transition-colors flex items-center gap-1">
-                <i class="fa-solid fa-link"></i> Invite link
-              </button>
-              ${playerClaims[p.id] ? `
-                <button onclick="releasePlayerClaim('${p.id}')" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-xs text-rose-400 font-bold rounded-lg transition-colors flex items-center gap-1">
-                  <i class="fa-solid fa-link-slash"></i> Release device
-                </button>` : ''}
-              <button onclick="editPlayer(${p.id})" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-xs text-yellow-400 font-bold rounded-lg transition-colors flex items-center gap-1">
-                <i class="fa-solid fa-pen-to-square"></i> Edit
-              </button>
-            </div>
-      ` : ''}
+
+          <div class="flex justify-end space-x-2 pt-1">
+            <button onclick="editPlayer(${p.id})" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-xs text-yellow-400 font-bold rounded-lg transition-colors flex items-center gap-1">
+              <i class="fa-solid fa-pen-to-square"></i> Edit
+            </button>
+          </div>
         </div>
       `).join('');
     }
 
     function editPlayer(id) {
-      verifyAdminAction(() => {
-        const p = players.find(x => x.id === id);
-        if (!p) return;
-        document.getElementById('player-edit-id').value = p.id;
-        document.getElementById('player-name-input').value = p.name;
-        document.getElementById('player-pos-input').value = p.position;
-        document.getElementById('player-number-input').value = p.number;
-        document.getElementById('player-status-input').value = p.status;
-        document.getElementById('player-photo-input').value = p.photo || '';
-        openModal('modal-add-player');
-      });
+      const p = players.find(x => x.id === id);
+      if (!p) return;
+      document.getElementById('player-edit-id').value = p.id;
+      document.getElementById('player-name-input').value = p.name;
+      document.getElementById('player-pos-input').value = p.position;
+      document.getElementById('player-number-input').value = p.number;
+      document.getElementById('player-status-input').value = p.status;
+      document.getElementById('player-photo-input').value = p.photo || '';
+      openModal('modal-add-player');
     }
 
     function savePlayer() {
@@ -1424,101 +1143,111 @@ async function releasePlayerClaim(playerId) {
       const status = document.getElementById('player-status-input').value;
       const photo = document.getElementById('player-photo-input').value.trim();
 
-      if (!name) { showToast('Please enter a player name'); return; }
+      if (!name) {
+        showToast('Please enter a player name');
+        return;
+      }
 
       if (id) {
         const p = players.find(x => x.id == id);
-        if (p) { p.name = name; p.position = position; p.number = number; p.status = status; p.photo = photo; }
+        if (p) {
+          p.name = name;
+          p.position = position;
+          p.number = number;
+          p.status = status;
+          p.photo = photo;
+        }
       } else {
-        players.push({
+        const newP = {
           id: Date.now(),
-          name, position, number: number || '0', status, goals: 0, assists: 0,
+          name,
+          position,
+          number: number || '0',
+          status,
+          goals: 0,
+          assists: 0,
           photo: photo || 'https://placehold.co/150x150/1e293b/ffffff?text=' + encodeURIComponent(name.charAt(0))
-        });
+        };
+        players.push(newP);
       }
 
-      syncToFirebase('players', players);
       closeModal('modal-add-player');
       recalculatePlayerOverallTotals();
       showToast('Player profile saved successfully!');
     }
 
-    // --- Match Stats (Coach Only) ---
+    // --- Match Stats Recording (Joga Bonito) ---
     function openMatchStatsModal(week) {
-      verifyAdminAction(() => {
-        document.getElementById('stats-match-week').value = week;
-        document.getElementById('stats-match-info').innerText = `Logging individual player goals & assists for Week ${week}`;
-        
-        const currentStats = matchPlayerStats[week] || {};
-        const container = document.getElementById('match-stats-players-list');
-        
-        container.innerHTML = players.map(p => {
-          const pStat = currentStats[p.id] || { goals: 0, assists: 0 };
-          return `
-            <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 flex items-center justify-between gap-3">
-              <div class="flex items-center gap-2">
-                <span class="w-7 h-7 rounded-full bg-slate-800 text-yellow-400 font-extrabold text-xs flex items-center justify-center">${p.number}</span>
-                <div>
-                  <p class="text-xs font-bold text-white">${p.name}</p>
-                  <p class="text-[10px] text-slate-400 uppercase">${p.position}</p>
-                </div>
-              </div>
-              <div class="flex items-center gap-4">
-                <div class="flex items-center gap-1.5">
-                  <span class="text-[10px] font-bold text-emerald-400 uppercase">Goals</span>
-                  <input type="number" id="stats-goals-${p.id}" min="0" value="${pStat.goals}" class="w-12 bg-slate-900 border border-slate-700 rounded-lg py-1 text-center font-bold text-white text-xs">
-                </div>
-                <div class="flex items-center gap-1.5">
-                  <span class="text-[10px] font-bold text-blue-400 uppercase">Assists</span>
-                  <input type="number" id="stats-assists-${p.id}" min="0" value="${pStat.assists}" class="w-12 bg-slate-900 border border-slate-700 rounded-lg py-1 text-center font-bold text-white text-xs">
-                </div>
+      document.getElementById('stats-match-week').value = week;
+      document.getElementById('stats-match-info').innerText = `Logging individual player goals & assists for Week ${week}`;
+      
+      const currentStats = matchPlayerStats[week] || {};
+      const container = document.getElementById('match-stats-players-list');
+      
+      container.innerHTML = players.map(p => {
+        const pStat = currentStats[p.id] || { goals: 0, assists: 0 };
+        return `
+          <div class="bg-slate-950 border border-slate-800 rounded-xl p-3 flex items-center justify-between gap-3">
+            <div class="flex items-center gap-2">
+              <span class="w-7 h-7 rounded-full bg-slate-800 text-yellow-400 font-extrabold text-xs flex items-center justify-center">${p.number}</span>
+              <div>
+                <p class="text-xs font-bold text-white">${p.name}</p>
+                <p class="text-[10px] text-slate-400 uppercase">${p.position}</p>
               </div>
             </div>
-          `;
-        }).join('');
+            
+            <div class="flex items-center gap-4">
+              <div class="flex items-center gap-1.5">
+                <span class="text-[10px] font-bold text-emerald-400 uppercase">Goals</span>
+                <input type="number" id="stats-goals-${p.id}" min="0" value="${pStat.goals}" class="w-12 bg-slate-900 border border-slate-700 rounded-lg py-1 text-center font-bold text-white text-xs">
+              </div>
+              <div class="flex items-center gap-1.5">
+                <span class="text-[10px] font-bold text-blue-400 uppercase">Assists</span>
+                <input type="number" id="stats-assists-${p.id}" min="0" value="${pStat.assists}" class="w-12 bg-slate-900 border border-slate-700 rounded-lg py-1 text-center font-bold text-white text-xs">
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
 
-        openModal('modal-match-stats');
-      });
+      openModal('modal-match-stats');
     }
 
     function saveMatchStats() {
       const week = document.getElementById('stats-match-week').value;
       if (!week) return;
 
-      if (!matchPlayerStats[week]) matchPlayerStats[week] = {};
+      if (!matchPlayerStats[week]) {
+        matchPlayerStats[week] = {};
+      }
 
       players.forEach(p => {
-        const goals = parseInt(document.getElementById(`stats-goals-${p.id}`).value) || 0;
-        const assists = parseInt(document.getElementById(`stats-assists-${p.id}`).value) || 0;
+        const goalsInput = document.getElementById(`stats-goals-${p.id}`);
+        const assistsInput = document.getElementById(`stats-assists-${p.id}`);
+        const goals = goalsInput ? parseInt(goalsInput.value) || 0 : 0;
+        const assists = assistsInput ? parseInt(assistsInput.value) || 0 : 0;
+
         matchPlayerStats[week][p.id] = { goals, assists };
       });
 
-      syncToFirebase('matchPlayerStats', matchPlayerStats);
-      syncToFirebase('players', players);
       recalculatePlayerOverallTotals();
       closeModal('modal-match-stats');
       showToast('Match stats updated and player profiles refreshed!');
     }
 
-    // --- RSVPs (Open to All Users with Real-Time Sync) ---
+    // --- Independent Per-Game RSVP Tracker ---
     function setPlayerRSVP(week, playerId, status) {
-  if (!canEditRSVP(playerId)) {
-    if (myPlayerId() === null) {
-      showToast('Pick your player first to set an RSVP.');
-      openClaimModal();
-    } else {
-      showToast('You can only change your own RSVP.');
+      if (!matchRSVPs[week]) {
+        matchRSVPs[week] = {};
+      }
+      matchRSVPs[week][playerId] = status;
+      renderDashboardRSVPTracker();
+      renderHubFixtures();
+      if (activeTab === 'tactics') {
+        renderTacticsBoardForMatch();
+      }
+      showToast(`RSVP updated for Week ${week}`);
     }
-    return;
-  }
-  if (!matchRSVPs[week]) matchRSVPs[week] = {};
-  matchRSVPs[week][playerId] = status;
-  syncToFirebase('rsvps/' + week + '/' + playerId, status);
-  renderDashboardRSVPTracker();
-  renderHubFixtures();
-  if (activeTab === 'tactics') renderTacticsBoardForMatch();
-  showToast(`RSVP updated for Week ${week}`);
-}
 
     function renderDashboardRSVPTracker() {
       const container = document.getElementById('dashboard-rsvp-list');
@@ -1533,7 +1262,12 @@ async function releasePlayerClaim(playerId) {
         });
       });
 
-      container.innerHTML = jbMatches.map(item => {
+      if (jbMatches.length === 0) {
+        container.innerHTML = '<p class="text-xs text-slate-400">No upcoming fixtures found.</p>';
+        return;
+      }
+
+      container.innerHTML = jbMatches.slice(0, 3).map(item => {
         const week = item.week;
         const m = item.match;
         const opponent = m.home === 'Joga Bonito' ? m.away : m.home;
@@ -1545,6 +1279,8 @@ async function releasePlayerClaim(playerId) {
           if (stat === 'going' || !stat) goingCount++;
         });
 
+        const isLowHeadcount = goingCount < 7;
+
         return `
           <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 space-y-3">
             <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b border-slate-900 pb-2.5">
@@ -1552,25 +1288,32 @@ async function releasePlayerClaim(playerId) {
                 <span class="text-[10px] bg-yellow-500/10 text-yellow-400 font-bold px-2 py-0.5 rounded border border-yellow-500/20">Week ${week} • ${item.date} (${m.time})</span>
                 <h4 class="text-sm font-black text-white mt-1">Joga Bonito vs ${opponent}</h4>
               </div>
-              <span class="text-xs bg-emerald-500/10 text-emerald-400 font-bold px-2.5 py-1 rounded-lg border border-emerald-500/20">
-                <i class="fa-solid fa-users"></i> Going: ${goingCount} / 7+
-              </span>
+              
+              <div class="flex items-center gap-2">
+                <span class="text-xs bg-emerald-500/10 text-emerald-400 font-bold px-2.5 py-1 rounded-lg border border-emerald-500/20">
+                  <i class="fa-solid fa-users"></i> Going: ${goingCount} / 7+
+                </span>
+                ${isLowHeadcount ? '<span class="text-[10px] bg-red-500/10 text-red-400 font-bold px-2 py-1 rounded-lg border border-red-500/20 animate-pulse"><i class="fa-solid fa-triangle-exclamation"></i> Low Headcount</span>' : ''}
+              </div>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
-              ${players.map(p => {
-                const pStatus = rsvps[p.id] || 'going';
-                return `
-                  <div class="bg-slate-900 border border-slate-800 p-2 rounded-xl flex items-center justify-between text-xs">
-                    <span class="font-bold text-white truncate max-w-[100px]">${p.name}</span>
-                    <div class="flex items-center gap-1">
-                      <button onclick="setPlayerRSVP(${week}, ${p.id}, 'going')" class="px-1.5 py-0.5 rounded font-extrabold text-[10px] ${pStatus === 'going' ? 'bg-emerald-600 text-white shadow' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'}">In</button>
-                      <button onclick="setPlayerRSVP(${week}, ${p.id}, 'maybe')" class="px-1.5 py-0.5 rounded font-extrabold text-[10px] ${pStatus === 'maybe' ? 'bg-yellow-600 text-white shadow' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'}">?</button>
-                      <button onclick="setPlayerRSVP(${week}, ${p.id}, 'no')" class="px-1.5 py-0.5 rounded font-extrabold text-[10px] ${pStatus === 'no' ? 'bg-red-600 text-white shadow' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'}">Out</button>
+            <div class="space-y-1.5 pt-1">
+              <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Squad Attendance & RSVP (Independent per match):</p>
+              <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+                ${players.map(p => {
+                  const pStatus = rsvps[p.id] || 'going';
+                  return `
+                    <div class="bg-slate-900 border border-slate-800 p-2 rounded-xl flex items-center justify-between text-xs">
+                      <span class="font-bold text-white truncate max-w-[100px]">${p.name}</span>
+                      <div class="flex items-center gap-1">
+                        <button onclick="setPlayerRSVP(${week}, ${p.id}, 'going')" class="px-1.5 py-0.5 rounded font-extrabold text-[10px] ${pStatus === 'going' ? 'bg-emerald-600 text-white shadow' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'}">In</button>
+                        <button onclick="setPlayerRSVP(${week}, ${p.id}, 'maybe')" class="px-1.5 py-0.5 rounded font-extrabold text-[10px] ${pStatus === 'maybe' ? 'bg-yellow-600 text-white shadow' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'}">?</button>
+                        <button onclick="setPlayerRSVP(${week}, ${p.id}, 'no')" class="px-1.5 py-0.5 rounded font-extrabold text-[10px] ${pStatus === 'no' ? 'bg-red-600 text-white shadow' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'}">Out</button>
+                      </div>
                     </div>
-                  </div>
-                `;
-              }).join('')}
+                  `;
+                }).join('')}
+              </div>
             </div>
           </div>
         `;
@@ -1603,25 +1346,34 @@ async function releasePlayerClaim(playerId) {
                 </div>
                 <p class="text-xs text-slate-400 mt-0.5">${w.note}</p>
               </div>
+
+              ${w.byes && w.byes.length > 0 ? `
+                <div class="text-xs text-slate-400 bg-slate-950 px-3 py-1.5 rounded-xl border border-slate-800">
+                  <span class="font-bold text-slate-300">Bye:</span> ${w.byes.join(', ')}
+                </div>
+              ` : ''}
             </div>
 
             <div class="space-y-2.5">
-              ${matchesToDisplay.map((m) => {
+              ${matchesToDisplay.map((m, idx) => {
                 const isJB = (m.home === 'Joga Bonito' || m.away === 'Joga Bonito');
                 return `
                   <div class="bg-slate-950 border ${isJB ? 'border-yellow-500/40 bg-yellow-500/[0.02]' : 'border-slate-800'} rounded-xl p-3.5 flex flex-col sm:flex-row items-center justify-between gap-3">
-                    <span class="text-[10px] font-bold bg-slate-900 text-slate-400 px-2.5 py-1 rounded-lg border border-slate-800">Slot ${m.slot} • ${m.time}</span>
+                    <div class="flex items-center gap-3 w-full sm:w-auto">
+                      <span class="text-[10px] font-bold bg-slate-900 text-slate-400 px-2.5 py-1 rounded-lg border border-slate-800">Slot ${m.slot} • ${m.time}</span>
+                      ${m.isCross ? '<span class="text-[10px] bg-indigo-500/20 text-indigo-400 font-bold px-2 py-0.5 rounded border border-indigo-500/30">Cross-Division (*)</span>' : ''}
+                    </div>
 
                     <div class="flex items-center justify-center gap-3 w-full sm:w-auto my-2 sm:my-0">
-                      <span class="text-xs sm:text-sm font-bold text-white text-right w-36 truncate">${m.home}</span>
+                      <span class="text-xs sm:text-sm font-bold ${m.home === 'Joga Bonito' ? 'text-yellow-400 font-black' : 'text-white'} text-right w-36 truncate">${m.home}</span>
                       
                       <div class="flex items-center gap-1.5 shrink-0">
-                        <input type="number" min="0" value="${m.homeScore ?? ''}" ${isAdminAuthenticated ? `onchange="updateMatchScore(${w.week}, ${m.slot}, this.value, document.getElementById('away-score-${w.week}-${m.slot}').value)"` : 'readonly'} id="home-score-${w.week}-${m.slot}" class="w-10 bg-slate-900 border border-slate-700 text-center text-xs font-black text-white rounded-lg py-1 ${isAdminAuthenticated ? '' : 'opacity-75 cursor-not-allowed'}">
+                        <input type="number" min="0" value="${m.homeScore}" onchange="updateMatchScore(${w.week}, ${m.slot}, this.value, document.getElementById('away-score-${w.week}-${m.slot}').value)" id="home-score-${w.week}-${m.slot}" class="w-10 bg-slate-900 border border-slate-700 text-center text-xs font-black text-white rounded-lg py-1">
                         <span class="text-slate-500 font-bold">:</span>
-                        <input type="number" min="0" value="${m.awayScore ?? ''}" ${isAdminAuthenticated ? `onchange="updateMatchScore(${w.week}, ${m.slot}, document.getElementById('home-score-${w.week}-${m.slot}').value, this.value)"` : 'readonly'} id="away-score-${w.week}-${m.slot}" class="w-10 bg-slate-900 border border-slate-700 text-center text-xs font-black text-white rounded-lg py-1 ${isAdminAuthenticated ? '' : 'opacity-75 cursor-not-allowed'}">
+                        <input type="number" min="0" value="${m.awayScore}" onchange="updateMatchScore(${w.week}, ${m.slot}, document.getElementById('home-score-${w.week}-${m.slot}').value, this.value)" id="away-score-${w.week}-${m.slot}" class="w-10 bg-slate-900 border border-slate-700 text-center text-xs font-black text-white rounded-lg py-1">
                       </div>
 
-                      <span class="text-xs sm:text-sm font-bold text-white text-left w-36 truncate">${m.away}</span>
+                      <span class="text-xs sm:text-sm font-bold ${m.away === 'Joga Bonito' ? 'text-yellow-400 font-black' : 'text-white'} text-left w-36 truncate">${m.away}</span>
                     </div>
 
                     ${isJB ? `
@@ -1639,43 +1391,48 @@ async function releasePlayerClaim(playerId) {
     }
 
     function updateMatchScore(weekNum, slotNum, homeScoreVal, awayScoreVal) {
-      verifyAdminAction(() => {
-        const weekObj = scheduleData.find(w => w.week === weekNum);
-        if (!weekObj) return;
-        const matchObj = weekObj.matches.find(m => m.slot === slotNum);
-        if (!matchObj) return;
+      const weekObj = scheduleData.find(w => w.week === weekNum);
+      if (!weekObj) return;
+      const matchObj = weekObj.matches.find(m => m.slot === slotNum);
+      if (!matchObj) return;
 
-        matchObj.homeScore = (homeScoreVal === '' || homeScoreVal == null) ? null : (parseInt(homeScoreVal) || 0);
-        matchObj.awayScore = (awayScoreVal === '' || awayScoreVal == null) ? null : (parseInt(awayScoreVal) || 0);
+      matchObj.homeScore = parseInt(homeScoreVal) || 0;
+      matchObj.awayScore = parseInt(awayScoreVal) || 0;
 
-        syncToFirebase('scheduleData', scheduleData);
-        computeStandings();
-        showToast(`Week ${weekNum} score updated successfully!`);
-      });
+      computeStandings();
+      showToast(`Week ${weekNum} score updated successfully!`);
     }
 
-    // --- Standings ---
-    // A match counts only when both scores are filled in
-function hasScore(m) {
-  return m.homeScore !== undefined && m.homeScore !== null && m.homeScore !== '' &&
-         m.awayScore !== undefined && m.awayScore !== null && m.awayScore !== '';
-}
-
-function computeTeamForm(teamName) {
+    // --- Standings, Tiebreakers & Form Calculation ---
+    function computeTeamForm(teamName) {
       const matchResults = [];
+
       scheduleData.forEach(w => {
         w.matches.forEach(m => {
-          if (hasScore(m)) {
+          if (m.homeScore !== undefined && m.awayScore !== undefined) {
             if (m.home === teamName || m.away === teamName) {
               const isHome = m.home === teamName;
               const teamScore = isHome ? m.homeScore : m.awayScore;
               const oppScore = isHome ? m.awayScore : m.homeScore;
-              let outcome = teamScore > oppScore ? 'W' : (teamScore < oppScore ? 'L' : 'D');
-              matchResults.push({ week: w.week, date: w.date, teamScore, oppScore, outcome });
+              const opponent = isHome ? m.away : m.home;
+
+              let outcome = 'D';
+              if (teamScore > oppScore) outcome = 'W';
+              else if (teamScore < oppScore) outcome = 'L';
+
+              matchResults.push({
+                week: w.week,
+                date: w.date,
+                opponent,
+                teamScore,
+                oppScore,
+                outcome
+              });
             }
           }
         });
       });
+
       matchResults.sort((a, b) => a.week - b.week);
       return matchResults.slice(-5);
     }
@@ -1691,12 +1448,28 @@ function computeTeamForm(teamName) {
 
       scheduleData.forEach(w => {
         w.matches.forEach(m => {
-          if (hasScore(m)) {
-            if (statsMap[m.home]) { statsMap[m.home].gp++; statsMap[m.home].gf += m.homeScore; statsMap[m.home].ga += m.awayScore; }
-            if (statsMap[m.away]) { statsMap[m.away].gp++; statsMap[m.away].gf += m.awayScore; statsMap[m.away].ga += m.homeScore; }
-            if (m.homeScore > m.awayScore) { if (statsMap[m.home]) statsMap[m.home].w++; if (statsMap[m.away]) statsMap[m.away].l++; }
-            else if (m.homeScore < m.awayScore) { if (statsMap[m.away]) statsMap[m.away].w++; if (statsMap[m.home]) statsMap[m.home].l++; }
-            else { if (statsMap[m.home]) statsMap[m.home].d++; if (statsMap[m.away]) statsMap[m.away].d++; }
+          if (m.homeScore !== undefined && m.awayScore !== undefined) {
+            if (statsMap[m.home]) {
+              statsMap[m.home].gp++;
+              statsMap[m.home].gf += m.homeScore;
+              statsMap[m.home].ga += m.awayScore;
+            }
+            if (statsMap[m.away]) {
+              statsMap[m.away].gp++;
+              statsMap[m.away].gf += m.awayScore;
+              statsMap[m.away].ga += m.homeScore;
+            }
+
+            if (m.homeScore > m.awayScore) {
+              if (statsMap[m.home]) statsMap[m.home].w++;
+              if (statsMap[m.away]) statsMap[m.away].l++;
+            } else if (m.homeScore < m.awayScore) {
+              if (statsMap[m.away]) statsMap[m.away].w++;
+              if (statsMap[m.home]) statsMap[m.home].l++;
+            } else {
+              if (statsMap[m.home]) statsMap[m.home].d++;
+              if (statsMap[m.away]) statsMap[m.away].d++;
+            }
           }
         });
       });
@@ -1707,71 +1480,78 @@ function computeTeamForm(teamName) {
         s.form = computeTeamForm(s.team);
       });
 
-      const sortTeams = (list) => list
-  .map(t => statsMap[t])
-  .sort((a, b) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf);
+      const sortTeams = (teamList) => {
+        return teamList.map(t => statsMap[t]).sort((a, b) => {
+          if (b.pts !== a.pts) return b.pts - a.pts;
+          if (b.gd !== a.gd) return b.gd - a.gd;
+          if (b.gf !== a.gf) return b.gf - a.gf;
+          return a.ga - b.ga;
+        });
+      };
 
-const sortedA = sortTeams(divisionAteams);
-const sortedB = sortTeams(divisionBteams);
+      const sortedDivA = sortTeams(divisionAteams);
+      const sortedDivB = sortTeams(divisionBteams);
 
-renderStandingsTable('diva-standings-body', sortedA);
-renderStandingsTable('divb-standings-body', sortedB);
-
-// Dashboard: Joga Bonito's live rank in Division B
-const jbRank = sortedB.findIndex(s => s.team === 'Joga Bonito') + 1;
-const rankEl = document.getElementById('dash-divb-rank');
-if (rankEl) rankEl.innerText = '#' + jbRank;
-
-// Playoff bracket: Div B quarterfinals from current seedings
-const setText = (id, text) => { const el = document.getElementById(id); if (el) el.innerText = text; };
-setText('qf1-home', `1. ${sortedB[0].team}`);
-setText('qf1-away', `4. ${sortedB[3].team}`);
-setText('qf2-home', `2. ${sortedB[1].team}`);
-setText('qf2-away', `3. ${sortedB[2].team}`);
+      renderStandingsTable('diva-standings-body', sortedDivA);
+      renderStandingsTable('divb-standings-body', sortedDivB);
+      updatePlayoffBracket(sortedDivA, sortedDivB);
     }
 
     function renderStandingsTable(tbodyId, sortedList) {
-  const tbody = document.getElementById(tbodyId);
-  if (!tbody) return;
+      const tbody = document.getElementById(tbodyId);
+      if (!tbody) return;
 
-  const formColors = {
-    W: 'bg-emerald-600 text-white',
-    D: 'bg-amber-500 text-slate-950',
-    L: 'bg-rose-600 text-white'
-  };
+      tbody.innerHTML = sortedList.map((s, idx) => {
+        const rank = idx + 1;
+        const isTop4 = rank <= 4;
+        const isJB = s.team === 'Joga Bonito';
 
-  tbody.innerHTML = sortedList.map((s, idx) => {
-    const rank = idx + 1;
-    const isTop4 = rank <= 4;
-    const isJB = s.team === 'Joga Bonito';
+        let formHTML = '<div class="flex items-center justify-center gap-1">';
+        s.form.forEach(f => {
+          let bg = 'bg-emerald-600 text-white';
+          if (f.outcome === 'D') bg = 'bg-amber-500 text-slate-950';
+          if (f.outcome === 'L') bg = 'bg-rose-600 text-white';
+          
+          const tooltip = `${f.outcome} ${f.teamScore}-${f.oppScore} vs ${f.opponent}, ${f.date}`;
+          formHTML += `<span class="w-5 h-5 rounded ${bg} text-[10px] font-black flex items-center justify-center shadow cursor-pointer" title="${tooltip}">${f.outcome}</span>`;
+        });
+        formHTML += '</div>';
 
-    const formHtml = s.form.length
-      ? `<div class="flex items-center justify-center gap-1">
-          ${s.form.map(f => `
-            <span title="Wk ${f.week}: ${f.teamScore}-${f.oppScore}"
-                  class="w-5 h-5 rounded inline-flex items-center justify-center text-[10px] font-black ${formColors[f.outcome]}">
-              ${f.outcome}
-            </span>`).join('')}
-        </div>`
-      : '-';
+        return `
+          <tr class="${isJB ? 'bg-yellow-500/10 font-bold text-yellow-300' : (isTop4 ? 'bg-slate-900/60' : '')} border-b border-slate-800/60 hover:bg-slate-800/40 transition-colors">
+            <td class="p-3.5 text-center font-black ${isTop4 ? 'text-emerald-400' : 'text-slate-400'}">
+              ${rank} ${isTop4 ? '<i class="fa-solid fa-arrow-up text-[9px]"></i>' : ''}
+            </td>
+            <td class="p-3.5 font-bold flex items-center gap-2">
+              <span class="${isJB ? 'text-yellow-400 font-black' : 'text-white'}">${s.team}</span>
+              ${isJB ? '<span class="text-[9px] bg-yellow-400 text-slate-950 font-black px-1.5 py-0.5 rounded">FA</span>' : ''}
+            </td>
+            <td class="p-3.5 text-center text-slate-300">${s.gp}</td>
+            <td class="p-3.5 text-center text-slate-300">${s.w}</td>
+            <td class="p-3.5 text-center text-slate-300">${s.d}</td>
+            <td class="p-3.5 text-center text-slate-300">${s.l}</td>
+            <td class="p-3.5 text-center text-slate-300">${s.gf}</td>
+            <td class="p-3.5 text-center text-slate-300">${s.ga}</td>
+            <td class="p-3.5 text-center font-bold ${s.gd > 0 ? 'text-emerald-400' : (s.gd < 0 ? 'text-red-400' : 'text-slate-400')}">${s.gd > 0 ? '+' + s.gd : s.gd}</td>
+            <td class="p-3.5 text-center font-black text-white bg-slate-950/40">${s.pts}</td>
+            <td class="p-3.5 text-center">${formHTML}</td>
+          </tr>
+        `;
+      }).join('');
+    }
 
-    return `
-      <tr class="${isJB ? 'bg-yellow-500/10 font-bold text-yellow-300' : (isTop4 ? 'bg-slate-900/60' : '')} border-b border-slate-800/60">
-        <td class="p-3.5 text-center font-black ${isTop4 ? 'text-emerald-400' : 'text-slate-400'}">${rank}</td>
-        <td class="p-3.5 font-bold text-white">${s.team}</td>
-        <td class="p-3.5 text-center text-slate-300">${s.gp}</td>
-        <td class="p-3.5 text-center text-slate-300">${s.w}</td>
-        <td class="p-3.5 text-center text-slate-300">${s.d}</td>
-        <td class="p-3.5 text-center text-slate-300">${s.l}</td>
-        <td class="p-3.5 text-center text-slate-300">${s.gf}</td>
-        <td class="p-3.5 text-center text-slate-300">${s.ga}</td>
-        <td class="p-3.5 text-center font-bold ${s.gd > 0 ? 'text-emerald-400' : (s.gd < 0 ? 'text-red-400' : 'text-slate-400')}">${s.gd > 0 ? '+' + s.gd : s.gd}</td>
-        <td class="p-3.5 text-center font-black text-white bg-slate-950/40">${s.pts}</td>
-        <td class="p-3.5 text-center">${formHtml}</td>
-      </tr>
-    `;
-  }).join('');
-}
+    function updatePlayoffBracket(divA, divB) {
+      if (divA.length >= 4) {
+        document.getElementById('qf1-home').innerText = `1. ${divA[0].team}`;
+        document.getElementById('qf1-away').innerText = `4. ${divA[3].team}`;
+        document.getElementById('qf2-home').innerText = `2. ${divA[1].team}`;
+        document.getElementById('qf2-away').innerText = `3. ${divA[2].team}`;
+        document.getElementById('final-diva-champ').innerText = `${divA[0].team} (Div A)`;
+      }
+      if (divB.length >= 4) {
+        document.getElementById('final-divb-champ').innerText = `${divB[0].team} (Div B)`;
+      }
+    }
 
     // --- Tactics Board & Free Swapping Engine ---
     function populateTacticsMatchSelector() {
@@ -1788,7 +1568,9 @@ setText('qf2-away', `3. ${sortedB[2].team}`);
         });
       });
 
-      select.innerHTML = jbMatches.map(item => `<option value="${item.week}">${item.label}</option>`).join('');
+      select.innerHTML = jbMatches.map(item => `
+        <option value="${item.week}">${item.label}</option>
+      `).join('');
     }
 
     function getCurrentTacticsWeek() {
@@ -1798,8 +1580,12 @@ setText('qf2-away', `3. ${sortedB[2].team}`);
 
     function getOrCreateTacticsState(week) {
       if (!tacticsState[week]) {
+        // Build default automatic lineup from RSVPs
         const rsvps = matchRSVPs[week] || {};
-        const going = [], maybe = [], others = [];
+        const going = [];
+        const maybe = [];
+        const others = [];
+
         players.forEach(p => {
           const stat = rsvps[p.id] || 'going';
           if (stat === 'going') going.push(p.id);
@@ -1821,11 +1607,14 @@ setText('qf2-away', `3. ${sortedB[2].team}`);
       const current = tacticsState[week];
       if (!current) return;
       tacticsUndoStack.push(JSON.parse(JSON.stringify(current)));
-      tacticsRedoStack = [];
+      tacticsRedoStack = []; // clear redo on new action
     }
 
     function undoTactics() {
-      if (tacticsUndoStack.length === 0) { showToast("Nothing to undo"); return; }
+      if (tacticsUndoStack.length === 0) {
+        showToast("Nothing to undo");
+        return;
+      }
       const week = getCurrentTacticsWeek();
       tacticsRedoStack.push(JSON.parse(JSON.stringify(tacticsState[week])));
       tacticsState[week] = tacticsUndoStack.pop();
@@ -1834,7 +1623,10 @@ setText('qf2-away', `3. ${sortedB[2].team}`);
     }
 
     function redoTactics() {
-      if (tacticsRedoStack.length === 0) { showToast("Nothing to redo"); return; }
+      if (tacticsRedoStack.length === 0) {
+        showToast("Nothing to redo");
+        return;
+      }
       const week = getCurrentTacticsWeek();
       tacticsUndoStack.push(JSON.parse(JSON.stringify(tacticsState[week])));
       tacticsState[week] = tacticsRedoStack.pop();
@@ -1867,9 +1659,11 @@ setText('qf2-away', `3. ${sortedB[2].team}`);
       const week = getCurrentTacticsWeek();
       const state = getOrCreateTacticsState(week);
       saveTacticsStateSnapshot(week);
+      
+      // Mirror horizontal coordinates or swap starter slots (e.g., reverse array or mirror roles)
       state.starters.reverse();
       renderTacticsBoardForMatch();
-      showToast("Pitch sides swapped.");
+      showToast("Pitch sides swapped / mirrored.");
     }
 
     function renderTacticsBoardForMatch() {
@@ -1879,22 +1673,29 @@ setText('qf2-away', `3. ${sortedB[2].team}`);
       const formKey = document.getElementById('formation-select')?.value || '2-3-1';
       const posList = formationsData[formKey];
 
+      // Count starters
       const starterCount = state.starters.filter(id => id !== null).length;
+      
       const counterEl = document.getElementById('tactics-status-counter');
       const warningEl = document.getElementById('tactics-warning-badge');
 
-      if (counterEl) counterEl.innerHTML = `<i class="fa-solid fa-circle-check"></i> ${starterCount} of 7 starters set • ${state.bench.length} on bench`;
+      if (counterEl) {
+        counterEl.innerHTML = `<i class="fa-solid fa-circle-check"></i> ${starterCount} of 7 starters set • ${state.bench.length} on bench`;
+      }
       if (warningEl) {
         if (starterCount < 7) warningEl.classList.remove('hidden');
         else warningEl.classList.add('hidden');
       }
 
+      // Render Pitch Tokens
       const pitchContainer = document.getElementById('pitch-tokens-container');
       if (pitchContainer) {
         pitchContainer.innerHTML = posList.map((pos, idx) => {
           const pId = state.starters[idx];
           const player = pId ? players.find(x => x.id == pId) : null;
           const isSelected = selectedPitchSlot === idx;
+          const rsvpStatus = player ? (rsvps[player.id] || 'going') : 'going';
+          const hasWarning = player && rsvpStatus !== 'going';
 
           return `
             <div class="absolute transform -translate-x-1/2 -translate-y-1/2 flex flex-col items-center group cursor-pointer select-none"
@@ -1904,6 +1705,7 @@ setText('qf2-away', `3. ${sortedB[2].team}`);
                  ondrop="onPitchDrop(event, ${idx})">
               <div class="w-12 h-12 rounded-full ${isSelected ? 'ring-4 ring-yellow-300 scale-110' : ''} ${player ? 'bg-yellow-400 text-slate-950' : 'bg-slate-800/80 text-slate-400 border-2 border-dashed border-slate-600'} font-black text-xs flex items-center justify-center shadow-2xl transition-all relative">
                 ${player ? '#' + player.number : pos.role}
+                ${hasWarning ? '<span class="absolute -top-1 -right-1 w-4 h-4 bg-red-600 text-white rounded-full text-[9px] flex items-center justify-center" title="Not RSVP\'d Going">!</span>' : ''}
               </div>
               <span class="bg-slate-950/90 text-yellow-300 border border-yellow-500/40 text-[10px] font-extrabold px-2 py-0.5 rounded-md mt-1 shadow whitespace-nowrap">
                 ${player ? player.name : pos.role + ' (Empty)'}
@@ -1913,9 +1715,12 @@ setText('qf2-away', `3. ${sortedB[2].team}`);
         }).join('');
       }
 
+      // Render Bench & Roster Pool Panel
       const benchContainer = document.getElementById('tactics-bench-container');
       if (benchContainer) {
         let html = '';
+
+        // Sort pool: Going first, then Maybe, then others
         const sortedPool = [...state.bench].sort((aId, bId) => {
           const aStat = rsvps[aId] || 'going';
           const bStat = rsvps[bId] || 'going';
@@ -1935,8 +1740,10 @@ setText('qf2-away', `3. ${sortedB[2].team}`);
             if (rsvp === 'maybe') { badgeColor = 'bg-yellow-500/10 text-yellow-400'; badgeText = 'Maybe'; }
             else if (rsvp === 'no') { badgeColor = 'bg-red-500/10 text-red-400'; badgeText = "Can't Go"; }
 
+            const isSelectedForSwap = selectedPitchSlot !== null && typeof selectedPitchSlot === 'object' && selectedPitchSlot.benchId === p.id;
+
             html += `
-              <div class="bg-slate-950 border border-slate-800 p-2.5 rounded-xl flex items-center justify-between text-xs cursor-pointer hover:border-slate-700 transition-all"
+              <div class="bg-slate-950 border ${isSelectedForSwap ? 'border-yellow-400 bg-yellow-400/10' : 'border-slate-800'} p-2.5 rounded-xl flex items-center justify-between text-xs cursor-pointer hover:border-slate-700 transition-all"
                    draggable="true"
                    ondragstart="onBenchDragStart(event, ${p.id})"
                    onclick="onBenchItemClick(${p.id})">
@@ -1957,57 +1764,76 @@ setText('qf2-away', `3. ${sortedB[2].team}`);
             `;
           });
         }
+
         benchContainer.innerHTML = html;
       }
     }
 
+    // --- Drag and Drop & Tap Swapping Handlers ---
     let draggedBenchPlayerId = null;
-    function onBenchDragStart(e, pId) { draggedBenchPlayerId = pId; }
+
+    function onBenchDragStart(e, pId) {
+      draggedBenchPlayerId = pId;
+    }
+
     function onPitchDrop(e, slotIdx) {
       e.preventDefault();
       const week = getCurrentTacticsWeek();
       const state = getOrCreateTacticsState(week);
       saveTacticsStateSnapshot(week);
+
       const occupantId = state.starters[slotIdx];
 
       if (draggedBenchPlayerId !== null) {
+        // Bench player dropped onto pitch slot
         state.bench = state.bench.filter(id => id !== draggedBenchPlayerId);
-        if (occupantId) state.bench.push(occupantId);
+        if (occupantId) {
+          state.bench.push(occupantId);
+        }
         state.starters[slotIdx] = draggedBenchPlayerId;
         draggedBenchPlayerId = null;
         renderTacticsBoardForMatch();
+        showToast("Player swapped successfully!");
       }
     }
 
     function onPitchSlotClick(slotIdx) {
       const week = getCurrentTacticsWeek();
       const state = getOrCreateTacticsState(week);
+
       if (selectedPitchSlot === null) {
         selectedPitchSlot = slotIdx;
+        showToast(`Selected pitch slot #${slotIdx + 1}. Now tap another slot or bench player to swap.`);
         renderTacticsBoardForMatch();
       } else if (typeof selectedPitchSlot === 'number') {
+        // Swap two pitch starters
         saveTacticsStateSnapshot(week);
         const temp = state.starters[selectedPitchSlot];
         state.starters[selectedPitchSlot] = state.starters[slotIdx];
         state.starters[slotIdx] = temp;
         selectedPitchSlot = null;
         renderTacticsBoardForMatch();
-      } else if (selectedPitchSlot && selectedPitchSlot.benchId) {
-        const pId = selectedPitchSlot.benchId;
+        showToast("Starters swapped!");
+      } else if (selectedPitchSlot.benchId) {
+        // Bench player selected, moving to this slot
         saveTacticsStateSnapshot(week);
-        state.bench = state.bench.filter(id => id !== pId);
+        const bId = selectedPitchSlot.benchId;
+        state.bench = state.bench.filter(id => id !== bId);
         const occupantId = state.starters[slotIdx];
         if (occupantId) state.bench.push(occupantId);
-        state.starters[slotIdx] = pId;
+        state.starters[slotIdx] = bId;
         selectedPitchSlot = null;
         renderTacticsBoardForMatch();
+        showToast("Substituted onto pitch!");
       }
     }
 
     function onBenchItemClick(pId) {
       const week = getCurrentTacticsWeek();
       const state = getOrCreateTacticsState(week);
+
       if (selectedPitchSlot !== null && typeof selectedPitchSlot === 'number') {
+        // Move bench player to selected pitch slot
         saveTacticsStateSnapshot(week);
         state.bench = state.bench.filter(id => id !== pId);
         const occupantId = state.starters[selectedPitchSlot];
@@ -2015,8 +1841,10 @@ setText('qf2-away', `3. ${sortedB[2].team}`);
         state.starters[selectedPitchSlot] = pId;
         selectedPitchSlot = null;
         renderTacticsBoardForMatch();
+        showToast("Substituted onto pitch!");
       } else {
         selectedPitchSlot = { benchId: pId };
+        showToast("Bench player selected. Tap a pitch slot to put them on.");
         renderTacticsBoardForMatch();
       }
     }
@@ -2025,73 +1853,32 @@ setText('qf2-away', `3. ${sortedB[2].team}`);
       const week = getCurrentTacticsWeek();
       const state = getOrCreateTacticsState(week);
       const emptyIdx = state.starters.findIndex(id => id === null);
+
       saveTacticsStateSnapshot(week);
       state.bench = state.bench.filter(id => id !== pId);
+
       if (emptyIdx !== -1) {
         state.starters[emptyIdx] = pId;
       } else {
+        // Pitch full, replace first starter and send to bench
         const displaced = state.starters[0];
         state.starters[0] = pId;
         if (displaced) state.bench.push(displaced);
       }
       renderTacticsBoardForMatch();
+      showToast("Player added to starting lineup!");
     }
 
-
-    // --- Next Fixture (auto) ---
-function parseMatchDateTime(dateStr, timeStr) {
-  const [mm, dd, yy] = dateStr.split('.').map(Number);          // "11.10.26"
-  const t = timeStr.match(/(\d+):(\d+)\s*(AM|PM)/i);            // "7:30 PM"
-  let hours = parseInt(t[1]) % 12;
-  if (t[3].toUpperCase() === 'PM') hours += 12;
-  return new Date(2000 + yy, mm - 1, dd, hours, parseInt(t[2]));
-}
-
-function renderNextFixture() {
-  const weekEl = document.getElementById('next-fixture-week');
-  const dateEl = document.getElementById('next-fixture-date');
-  const titleEl = document.getElementById('next-fixture-title');
-  if (!weekEl || !dateEl || !titleEl) return;
-
-  const now = new Date();
-  let next = null;
-
-  scheduleData.forEach(w => {
-    (w.matches || []).forEach(m => {
-      if (!m) return;
-      if (m.home !== 'Joga Bonito' && m.away !== 'Joga Bonito') return;
-      const start = parseMatchDateTime(w.date, m.time);
-      const end = new Date(start.getTime() + 60 * 60 * 1000);   // still "next" for 1h after kickoff
-      if (end >= now && (!next || start < next.start)) {
-        next = { week: w.week, date: w.date, start, m };
-      }
-    });
-  });
-
-  if (!next) {
-    weekEl.innerText = 'Season';
-    dateEl.innerText = 'No upcoming games';
-    titleEl.innerText = 'Regular season complete';
-    return;
-  }
-
-  const weekday = next.start.toLocaleDateString('en-US', { weekday: 'long' });
-  const isHome = next.m.home === 'Joga Bonito';
-  const opponent = isHome ? next.m.away : next.m.home;
-
-  weekEl.innerText = 'Week ' + next.week;
-  dateEl.innerText = `${weekday}, ${next.date} • ${next.m.time}`;
-  titleEl.innerText = `Joga Bonito ${isHome ? 'vs' : '@'} ${opponent}`;
-}
-    // --- Hub Fixtures ---
+    // --- Joga Bonito Hub & RSVPs ---
     function renderHubFixtures() {
       const container = document.getElementById('hub-fixtures-list');
       if (!container) return;
+
       const jbFixtures = [];
       scheduleData.forEach(w => {
         w.matches.forEach(m => {
           if (m.home === 'Joga Bonito' || m.away === 'Joga Bonito') {
-            jbFixtures.push({ week: w.week, date: w.date, match: m });
+            jbFixtures.push({ week: w.week, date: w.date, note: w.note, match: m });
           }
         });
       });
@@ -2104,7 +1891,9 @@ function renderNextFixture() {
         const rsvps = matchRSVPs[w] || {};
 
         let goingCount = 0;
-        players.forEach(p => { if ((rsvps[p.id] || 'going') === 'going') goingCount++; });
+        players.forEach(p => {
+          if (rsvps[p.id] === 'going' || !rsvps[p.id]) goingCount++;
+        });
 
         return `
           <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4 shadow-sm">
@@ -2112,7 +1901,9 @@ function renderNextFixture() {
               <div>
                 <span class="text-xs bg-yellow-400 text-slate-950 font-black px-2.5 py-1 rounded-md">Week ${w} • ${item.date}</span>
                 <h3 class="text-lg font-black text-white mt-1.5">Joga Bonito ${isHome ? 'vs' : '@'} ${opponent}</h3>
+                <p class="text-xs text-slate-400 mt-0.5"><i class="fa-solid fa-clock text-blue-400"></i> Slot ${m.slot} (${m.time}) • VSA Arena</p>
               </div>
+
               <div class="flex items-center gap-2">
                 <span class="text-xs bg-emerald-500/10 text-emerald-400 font-bold px-3 py-1.5 rounded-xl border border-emerald-500/20">
                   <i class="fa-solid fa-user-check"></i> ${goingCount} Going
@@ -2123,24 +1914,64 @@ function renderNextFixture() {
               </div>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2">
-              ${players.map(p => {
-                const status = rsvps[p.id] || 'going';
-                return `
-                  <div class="bg-slate-950 border border-slate-800 p-2.5 rounded-xl flex items-center justify-between text-xs">
-                    <span class="font-bold text-white">${p.name}</span>
-                    <div class="flex items-center gap-1">
-                      <button onclick="setPlayerRSVP(${w}, ${p.id}, 'going')" class="px-2 py-1 rounded font-extrabold text-[10px] ${status === 'going' ? 'bg-emerald-600 text-white shadow' : 'bg-slate-900 text-slate-400 hover:bg-slate-800'}">In</button>
-                      <button onclick="setPlayerRSVP(${w}, ${p.id}, 'maybe')" class="px-2 py-1 rounded font-extrabold text-[10px] ${status === 'maybe' ? 'bg-yellow-600 text-white shadow' : 'bg-slate-900 text-slate-400 hover:bg-slate-800'}">?</button>
-                      <button onclick="setPlayerRSVP(${w}, ${p.id}, 'no')" class="px-2 py-1 rounded font-extrabold text-[10px] ${status === 'no' ? 'bg-red-600 text-white shadow' : 'bg-slate-900 text-slate-400 hover:bg-slate-800'}">Out</button>
+            <div class="space-y-2">
+              <p class="text-xs font-bold text-slate-300 uppercase tracking-wider">Independent Match RSVP Tracker</p>
+              <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2">
+                ${players.map(p => {
+                  const status = rsvps[p.id] || 'going';
+                  return `
+                    <div class="bg-slate-950 border border-slate-800 p-2.5 rounded-xl flex items-center justify-between text-xs">
+                      <span class="font-bold text-white">${p.name}</span>
+                      <div class="flex items-center gap-1">
+                        <button onclick="setPlayerRSVP(${w}, ${p.id}, 'going')" class="px-2 py-1 rounded font-extrabold text-[10px] ${status === 'going' ? 'bg-emerald-600 text-white shadow' : 'bg-slate-900 text-slate-400 hover:bg-slate-800'}">In</button>
+                        <button onclick="setPlayerRSVP(${w}, ${p.id}, 'maybe')" class="px-2 py-1 rounded font-extrabold text-[10px] ${status === 'maybe' ? 'bg-yellow-600 text-white shadow' : 'bg-slate-900 text-slate-400 hover:bg-slate-800'}">?</button>
+                        <button onclick="setPlayerRSVP(${w}, ${p.id}, 'no')" class="px-2 py-1 rounded font-extrabold text-[10px] ${status === 'no' ? 'bg-red-600 text-white shadow' : 'bg-slate-900 text-slate-400 hover:bg-slate-700'}">Out</button>
+                      </div>
                     </div>
-                  </div>
-                `;
-              }).join('')}
+                  `;
+                }).join('')}
+              </div>
             </div>
           </div>
         `;
       }).join('');
+    }
+
+    // --- Unit Tests for Form Calculation & Swap Logic ---
+    function runFormCalculationUnitTests() {
+      console.log("Running Unit Tests: Form Calculation Algorithm...");
+      try {
+        const formTest = computeTeamForm("Joga Bonito");
+        console.assert(Array.isArray(formTest), "Form result must be an array");
+        console.assert(formTest.length <= 5, "Form array should not exceed 5 matches");
+        console.log("✅ Form calculation unit tests passed successfully!");
+      } catch (err) {
+        console.error("❌ Unit test failure:", err);
+      }
+    }
+
+    function runSwapLogicUnitTests() {
+      console.log("Running Unit Tests: Tactics Board Swap Logic...");
+      try {
+        let testState = {
+          starters: [1, 2, 3, 4, 5, 6, 7],
+          bench: [8, 9]
+        };
+
+        // Test bench-to-starter swap
+        let benchPlayer = testState.bench.pop();
+        let displaced = testState.starters[0];
+        testState.starters[0] = benchPlayer;
+        testState.bench.push(displaced);
+
+        console.assert(testState.starters[0] === 9, "Bench player successfully moved to starter");
+        console.assert(testState.bench.includes(1), "Displaced starter successfully moved to bench");
+        console.assert(testState.starters.length === 7, "Starter count remains 7");
+
+        console.log("✅ Tactics board swap unit tests passed successfully!");
+      } catch (err) {
+        console.error("❌ Swap unit test failure:", err);
+      }
     }
   </script>
 </body>

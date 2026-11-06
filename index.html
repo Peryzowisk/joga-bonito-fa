@@ -202,13 +202,13 @@
             <h3 class="font-bold text-lg text-white flex items-center gap-2">
               <i class="fa-solid fa-calendar-star text-yellow-400"></i> Next Joga Bonito FA Fixture
             </h3>
-            <span class="text-xs bg-slate-800 text-slate-300 font-bold px-2.5 py-1 rounded-md border border-slate-700">Week 1</span>
+            <span id="next-fixture-week" class="text-xs bg-slate-800 text-slate-300 font-bold px-2.5 py-1 rounded-md border border-slate-700">Week -</span>
           </div>
 
           <div class="bg-slate-950 border border-slate-800 rounded-xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
             <div>
-              <p class="text-xs font-bold text-yellow-400 uppercase tracking-wider">Monday, 11.03.26 • 9:30 PM</p>
-              <h4 class="text-xl font-black text-white mt-1">Joga Bonito vs Left Bench FC</h4>
+              <p id="next-fixture-date" class="text-xs font-bold text-yellow-400 uppercase tracking-wider">Loading...</p>
+              <h4 id="next-fixture-title" class="text-xl font-black text-white mt-1">Joga Bonito</h4>
               <p class="text-xs text-slate-400 flex items-center gap-3 mt-1">
                 <span><i class="fa-solid fa-location-dot text-red-400"></i> VSA Arena</span>
                 <span><i class="fa-solid fa-clock text-blue-400"></i> Arrive 20 min prior</span>
@@ -721,9 +721,9 @@
     import { getDatabase, ref, set, update, onValue } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
     import { getAuth, signInWithEmailAndPassword, signInAnonymously, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-    const COACH_UID = "PASTE_COACH_UID_HERE";
+    const COACH_UID = "YLwmcJsGGTU766nGzLJTztJaZZT2";
 
-    cconst firebaseConfig = {
+    const firebaseConfig = {
     apiKey: "AIzaSyBJNt-6CNVJiViCsUR3U52U2JEm3myg8r8",
     authDomain: "joga-bonito-fa-2dc72.firebaseapp.com",
     databaseURL: "https://joga-bonito-fa-2dc72-default-rtdb.firebaseio.com",
@@ -804,7 +804,7 @@
       15: { 1: 'going', 2: 'going', 3: 'going', 4: 'going', 5: 'going', 6: 'going', 7: 'going' }
     };
 
-    const scheduleData = [
+    let scheduleData = [
       {
         week: 1, date: "11.03.26", note: "Regular Season",
         matches: [
@@ -1040,6 +1040,7 @@
         const val = snapshot.val();
         if (val) {
           scheduleData = val;
+          renderNextFixture(); 
           renderSchedule();
           computeStandings();
           renderDashboardRSVPTracker();
@@ -1052,6 +1053,8 @@
           players = val;
           recalculatePlayerOverallTotals();
         }
+      });
+
       window.firebaseOnValue(window.firebaseRef(window.dbRef, 'jogaBonitoFA/playerClaims'), (snapshot) => {
       playerClaims = snapshot.val() || {};
       claimsLoaded = true;
@@ -1135,6 +1138,7 @@ async function verifyPinCode() {
     // --- Initialization on Load ---
     window.onload = function() {
       recalculatePlayerOverallTotals();
+      renderNextFixture(); 
       renderDashboardRSVPTracker();
       populateTacticsMatchSelector();
       renderTacticsBoardForMatch();
@@ -1166,7 +1170,7 @@ async function verifyPinCode() {
       if (tabId === 'standings') computeStandings();
       if (tabId === 'schedule') renderSchedule();
       if (tabId === 'hub') renderHubFixtures();
-      if (tabId === 'dashboard') renderDashboardRSVPTracker();
+      if (tabId === 'dashboard') { renderDashboardRSVPTracker(); renderNextFixture(); }
       if (tabId === 'tactics') {
         populateTacticsMatchSelector();
         renderTacticsBoardForMatch();
@@ -1218,6 +1222,13 @@ async function verifyPinCode() {
     
     function canEditRSVP(playerId) {
       return isAdminAuthenticated || String(myPlayerId()) === String(playerId);
+    }
+
+    function maybeShowClaimModal() {
+      if (!claimsLoaded || claimPromptShown || isAdminAuthenticated || !window.currentUid) return;
+      if (myPlayerId() !== null) return;
+      claimPromptShown = true;
+      openClaimModal();
     }
     
     function updateIdentityUI() {
@@ -1316,7 +1327,9 @@ async function releasePlayerClaim(playerId) {
       });
 
       Object.values(matchPlayerStats).forEach(weekStats => {
+        if (!weekStats) return;
         Object.entries(weekStats).forEach(([pId, stat]) => {
+          if (!stat) return;
           const player = players.find(p => p.id == pId);
           if (player) {
             player.goals += stat.goals || 0;
@@ -1380,6 +1393,9 @@ async function releasePlayerClaim(playerId) {
               </button>
             </div>
       ` : ''}
+        </div>
+      `).join('');
+    }
 
     function editPlayer(id) {
       verifyAdminAction(() => {
@@ -1971,6 +1987,15 @@ setText('qf2-away', `3. ${sortedB[2].team}`);
         state.starters[slotIdx] = temp;
         selectedPitchSlot = null;
         renderTacticsBoardForMatch();
+      } else if (selectedPitchSlot && selectedPitchSlot.benchId) {
+        const pId = selectedPitchSlot.benchId;
+        saveTacticsStateSnapshot(week);
+        state.bench = state.bench.filter(id => id !== pId);
+        const occupantId = state.starters[slotIdx];
+        if (occupantId) state.bench.push(occupantId);
+        state.starters[slotIdx] = pId;
+        selectedPitchSlot = null;
+        renderTacticsBoardForMatch();
       }
     }
 
@@ -2007,6 +2032,52 @@ setText('qf2-away', `3. ${sortedB[2].team}`);
       renderTacticsBoardForMatch();
     }
 
+
+    // --- Next Fixture (auto) ---
+function parseMatchDateTime(dateStr, timeStr) {
+  const [mm, dd, yy] = dateStr.split('.').map(Number);          // "11.10.26"
+  const t = timeStr.match(/(\d+):(\d+)\s*(AM|PM)/i);            // "7:30 PM"
+  let hours = parseInt(t[1]) % 12;
+  if (t[3].toUpperCase() === 'PM') hours += 12;
+  return new Date(2000 + yy, mm - 1, dd, hours, parseInt(t[2]));
+}
+
+function renderNextFixture() {
+  const weekEl = document.getElementById('next-fixture-week');
+  const dateEl = document.getElementById('next-fixture-date');
+  const titleEl = document.getElementById('next-fixture-title');
+  if (!weekEl || !dateEl || !titleEl) return;
+
+  const now = new Date();
+  let next = null;
+
+  scheduleData.forEach(w => {
+    (w.matches || []).forEach(m => {
+      if (!m) return;
+      if (m.home !== 'Joga Bonito' && m.away !== 'Joga Bonito') return;
+      const start = parseMatchDateTime(w.date, m.time);
+      const end = new Date(start.getTime() + 60 * 60 * 1000);   // still "next" for 1h after kickoff
+      if (end >= now && (!next || start < next.start)) {
+        next = { week: w.week, date: w.date, start, m };
+      }
+    });
+  });
+
+  if (!next) {
+    weekEl.innerText = 'Season';
+    dateEl.innerText = 'No upcoming games';
+    titleEl.innerText = 'Regular season complete';
+    return;
+  }
+
+  const weekday = next.start.toLocaleDateString('en-US', { weekday: 'long' });
+  const isHome = next.m.home === 'Joga Bonito';
+  const opponent = isHome ? next.m.away : next.m.home;
+
+  weekEl.innerText = 'Week ' + next.week;
+  dateEl.innerText = `${weekday}, ${next.date} • ${next.m.time}`;
+  titleEl.innerText = `Joga Bonito ${isHome ? 'vs' : '@'} ${opponent}`;
+}
     // --- Hub Fixtures ---
     function renderHubFixtures() {
       const container = document.getElementById('hub-fixtures-list');

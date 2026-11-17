@@ -110,7 +110,7 @@
           </span>
           <h2 class="text-2xl sm:text-3xl font-black text-white tracking-tight">Joga Bonito FA Campaign</h2>
           <p class="text-sm text-slate-300 max-w-2xl leading-relaxed">
-            Manage your 7v7 squad with Samba flair, track individual match performance, monitor live division standings with automated top-4 playoff qualifiers, and review upcoming fixtures.
+            Manage your 7v7 squad with Samba flair, track individual match performance, follow the live league table, and review upcoming fixtures.
           </p>
           <div class="flex flex-wrap items-center gap-3 pt-2">
             <button onclick="switchTab('hub')" class="bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-extrabold text-xs px-4 py-2.5 rounded-xl transition-all shadow flex items-center gap-2">
@@ -166,10 +166,10 @@
 
         <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 flex items-center justify-between shadow-sm">
           <div>
-            <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">Division B Rank</p>
+            <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">League Rank</p>
             <p id="dash-divb-rank" class="text-2xl font-black text-white mt-1">#1</p>
             <span class="text-xs font-semibold text-yellow-400 flex items-center gap-1 mt-1">
-              <i class="fa-solid fa-crown text-[10px]"></i> Top 4 Qualify
+              <i class="fa-solid fa-crown text-[10px]"></i> League Race
             </span>
           </div>
           <div class="w-10 h-10 rounded-xl bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 flex items-center justify-center">
@@ -248,14 +248,13 @@
           <h2 class="text-xl font-black text-white flex items-center gap-2">
             <i class="fa-solid fa-calendar-days text-yellow-400"></i> Winter League Schedule & Scorebook
           </h2>
-          <p class="text-xs text-slate-400 mt-1">Full 15-week league fixtures, bye weeks, cross-divisional games, and editable match scores.</p>
+          <p class="text-xs text-slate-400 mt-1">Full 15-week league schedule (one 12-team league), bye weeks, and editable match scores.</p>
         </div>
         
         <div class="flex items-center gap-2 w-full sm:w-auto">
           <select id="schedule-filter" onchange="renderSchedule()" class="bg-slate-950 border border-slate-700 text-xs text-white font-bold rounded-xl px-3 py-2 w-full sm:w-48">
             <option value="all">All Weeks & Teams</option>
             <option value="jb" selected>Joga Bonito Matches Only</option>
-            <option value="cross">Cross-Division Matches Only (*)</option>
           </select>
         </div>
       </div>
@@ -274,20 +273,20 @@
           <h2 class="text-xl font-black text-white flex items-center gap-2">
             <i class="fa-solid fa-trophy text-yellow-400"></i> Division Standings & Tiebreakers
           </h2>
-          <p class="text-xs text-slate-400 mt-1">Automatically computed from entered results (Win = 3pts, Tie = 1pt, Loss = 0pts). Top 4 in each division qualify for playoffs.</p>
+          <p class="text-xs text-slate-400 mt-1">Automatically computed from entered results (Win = 3pts, Tie = 1pt, Loss = 0pts). All 12 teams are in one table.</p>
         </div>
         <span class="text-xs bg-yellow-400/10 text-yellow-400 font-bold px-3 py-1.5 rounded-lg border border-yellow-400/20">
           <i class="fa-solid fa-circle-info"></i> Updated within 2 days of match night
         </span>
       </div>
-
-      <!-- DIVISION B (OUR DIVISION) -->
+      
+            <!-- LEAGUE TABLE -->
       <div class="space-y-3">
         <div class="flex items-center justify-between">
           <h3 class="text-lg font-black text-white flex items-center gap-2">
-            <i class="fa-solid fa-shield-halved text-emerald-400"></i> Division B (Joga Bonito Division)
+            <i class="fa-solid fa-shield-halved text-emerald-400"></i> League Table (all 12 teams)
           </h3>
-          <span class="text-xs text-slate-400 font-semibold">Top 4 Advance to Quarterfinals</span>
+          <span class="text-xs text-slate-400 font-semibold">Playoff spots highlighted</span>
         </div>
         <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-x-auto shadow-sm">
           <table class="w-full text-left border-collapse min-w-[750px]">
@@ -306,126 +305,25 @@
                 <th class="p-3.5 text-center">Form (Last 5)</th>
               </tr>
             </thead>
-            <tbody id="divb-standings-body" class="divide-y divide-slate-800/60 text-xs">
+            <tbody id="league-standings-body" class="divide-y divide-slate-800/60 text-xs">
               <!-- Rendered dynamically -->
             </tbody>
           </table>
         </div>
-        <!-- Legend -->
         <div class="flex items-center gap-4 text-[11px] text-slate-400 px-2">
           <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-emerald-600 inline-block text-[9px] font-bold text-white text-center leading-3">W</span> Win</span>
           <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-amber-500 inline-block text-[9px] font-bold text-slate-950 text-center leading-3">D</span> Draw</span>
           <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-rose-600 inline-block text-[9px] font-bold text-white text-center leading-3">L</span> Loss</span>
         </div>
       </div>
-
-      <!-- DIVISION A -->
-      <div class="space-y-3">
-        <div class="flex items-center justify-between">
-          <h3 class="text-lg font-black text-white flex items-center gap-2">
-            <i class="fa-solid fa-shield text-blue-400"></i> Division A Standings
-          </h3>
-          <span class="text-xs text-slate-400 font-semibold">Top 4 Advance to Quarterfinals</span>
-        </div>
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-x-auto shadow-sm">
-          <table class="w-full text-left border-collapse min-w-[750px]">
-            <thead>
-              <tr class="bg-slate-950/80 border-b border-slate-800 text-[11px] uppercase tracking-wider text-slate-400 font-extrabold">
-                <th class="p-3.5 text-center w-12">Rank</th>
-                <th class="p-3.5">Team</th>
-                <th class="p-3.5 text-center">GP</th>
-                <th class="p-3.5 text-center">W</th>
-                <th class="p-3.5 text-center">D</th>
-                <th class="p-3.5 text-center">L</th>
-                <th class="p-3.5 text-center">GF</th>
-                <th class="p-3.5 text-center">GA</th>
-                <th class="p-3.5 text-center">GD</th>
-                <th class="p-3.5 text-center">Pts</th>
-                <th class="p-3.5 text-center">Form (Last 5)</th>
-              </tr>
-            </thead>
-            <tbody id="diva-standings-body" class="divide-y divide-slate-800/60 text-xs">
-              <!-- Rendered dynamically -->
-            </tbody>
-          </table>
-        </div>
-        <!-- Legend -->
-        <div class="flex items-center gap-4 text-[11px] text-slate-400 px-2">
-          <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-emerald-600 inline-block text-[9px] font-bold text-white text-center leading-3">W</span> Win</span>
-          <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-amber-500 inline-block text-[9px] font-bold text-slate-950 text-center leading-3">D</span> Draw</span>
-          <span class="flex items-center gap-1.5"><span class="w-3 h-3 rounded bg-rose-600 inline-block text-[9px] font-bold text-white text-center leading-3">L</span> Loss</span>
-        </div>
-      </div>
-
-      <!-- PLAYOFF BRACKET SECTION -->
-      <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-6 shadow-sm">
-        <div class="flex items-center justify-between border-b border-slate-800 pb-4">
-          <div>
-            <h3 class="text-lg font-black text-white flex items-center gap-2">
-              <i class="fa-solid fa-sitemap text-yellow-400"></i> Championship Playoff Bracket
-            </h3>
-            <p class="text-xs text-slate-400 mt-0.5">Quarterfinals (03.02.27) • Semifinals & Grand Final (03.09.27)</p>
-          </div>
-          <span class="text-xs bg-emerald-500/10 text-emerald-400 font-bold px-3 py-1 rounded-md border border-emerald-500/20">Auto-Calculated from Seedings</span>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <!-- Quarterfinals -->
-          <div class="space-y-3">
-            <h4 class="text-xs font-black text-slate-400 uppercase tracking-wider text-center">Quarterfinals (03.02.27)</h4>
-            <div class="bg-slate-950 border border-slate-800 p-3 rounded-xl space-y-2">
-              <p class="text-[10px] font-bold text-yellow-400">Div B QF 1</p>
-              <div class="flex justify-between items-center text-xs font-bold text-white py-1 border-b border-slate-900">
-                <span id="qf1-home">1st Place Div B</span>
-                <span class="text-slate-500">vs</span>
-                <span id="qf1-away">4th Place Div B</span>
-              </div>
-            </div>
-            <div class="bg-slate-950 border border-slate-800 p-3 rounded-xl space-y-2">
-              <p class="text-[10px] font-bold text-yellow-400">Div B QF 2</p>
-              <div class="flex justify-between items-center text-xs font-bold text-white py-1 border-b border-slate-900">
-                <span id="qf2-home">2nd Place Div B</span>
-                <span class="text-slate-500">vs</span>
-                <span id="qf2-away">3rd Place Div B</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Semifinals -->
-          <div class="space-y-3">
-            <h4 class="text-xs font-black text-slate-400 uppercase tracking-wider text-center">Semifinals (03.09.27)</h4>
-            <div class="bg-slate-950 border border-slate-800 p-3 rounded-xl space-y-2">
-              <p class="text-[10px] font-bold text-blue-400">Div B Semifinal</p>
-              <div class="flex justify-between items-center text-xs font-bold text-white py-1 border-b border-slate-900">
-                <span>Winner QF 1</span>
-                <span class="text-slate-500">vs</span>
-                <span>Winner QF 2</span>
-              </div>
-            </div>
-            <div class="bg-slate-950 border border-slate-800 p-3 rounded-xl space-y-2">
-              <p class="text-[10px] font-bold text-blue-400">Div A Semifinal</p>
-              <div class="flex justify-between items-center text-xs font-bold text-white py-1 border-b border-slate-900">
-                <span>Div A Winner 1</span>
-                <span class="text-slate-500">vs</span>
-                <span>Div A Winner 2</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Final -->
-          <div class="space-y-3">
-            <h4 class="text-xs font-black text-slate-400 uppercase tracking-wider text-center">Grand Final (03.09.27)</h4>
-            <div class="bg-gradient-to-br from-yellow-500/20 to-emerald-500/20 border border-yellow-500/30 p-4 rounded-xl space-y-2 shadow-md">
-              <p class="text-[10px] font-black text-yellow-400 uppercase tracking-wider">Winter League Championship</p>
-              <div class="flex justify-between items-center text-xs font-black text-white py-1">
-                <span id="final-divb-champ">Div B Champion</span>
-                <span class="text-yellow-400 font-bold">VS</span>
-                <span id="final-diva-champ">Div A Champion</span>
-              </div>
-              <p class="text-[10px] text-slate-300 text-center pt-2 border-t border-yellow-500/20">�� Winner lifts the Winter League Trophy</p>
-            </div>
-          </div>
-        </div>
+      
+      <!-- PLAYOFFS -->
+      <div class="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-2 shadow-sm">
+        <h3 class="text-lg font-black text-white flex items-center gap-2">
+          <i class="fa-solid fa-sitemap text-yellow-400"></i> Playoffs
+        </h3>
+        <p class="text-xs text-slate-300">Quarterfinals: March 2, 2027 • Semifinals and Final: March 9, 2027</p>
+        <p class="text-xs text-slate-400">Qualification and bracket format: to be confirmed by the league.</p>
       </div>
     </div>
 
@@ -818,99 +716,99 @@
         ],
         byes: ["JV Team", "The MonSTARS (VSA)"]
       },
-      {
-        week: 7, date: "12.15.26", note: "Regular Season",
+            {
+        week: 7, date: "12.15.26", note: "Regular Season • Holiday break after this week: no games Dec 22 or Dec 29",
         matches: [
-          { slot: 1, time: "5:30 PM", home: "Dangerous Noodlez", away: "The MonSTARS (VSA)", homeScore: 2, awayScore: 0, isCross: false },
-          { slot: 2, time: "6:30 PM", home: "Poskin Jets", away: "Wrexham A.F.C.", homeScore: 2, awayScore: 1, isCross: false },
-          { slot: 3, time: "7:30 PM", home: "JV Team", away: "RLCF B", homeScore: 3, awayScore: 1, isCross: false },
-          { slot: 4, time: "8:30 PM", home: "Rice Lake CF", away: "Sharknado", homeScore: 2, awayScore: 2, isCross: false },
-          { slot: 5, time: "9:30 PM", home: "Joga Bonito", away: "Left Bench FC", homeScore: 5, awayScore: 0, isCross: false }
+          { slot: 1, time: "5:30 PM", home: "Sharknado", away: "Dangerous Noodlez", isCross: false },
+          { slot: 2, time: "6:30 PM", home: "Beercelona", away: "The MonSTARS (VSA)", isCross: false },
+          { slot: 3, time: "7:30 PM", home: "Poskin Jets", away: "JV Team", isCross: false },
+          { slot: 4, time: "8:30 PM", home: "Guardians U18B", away: "RLCF B", isCross: false },
+          { slot: 5, time: "9:30 PM", home: "Rice Lake CF", away: "Joga Bonito", isCross: false }
         ],
-        byes: ["Beercelona", "Guardians U18B"]
+        byes: ["Wrexham A.F.C.", "Left Bench FC"]
       },
       {
-        week: 8, date: "01.05.27", note: "Holiday break • Second Half Start",
+        week: 8, date: "01.05.27", note: "Second Half Start",
         matches: [
-          { slot: 1, time: "5:30 PM", home: "Beercelona", away: "Guardians U18B", homeScore: 3, awayScore: 0, isCross: false },
-          { slot: 2, time: "6:30 PM", home: "Wrexham A.F.C.", away: "Rice Lake CF", homeScore: 2, awayScore: 1, isCross: false },
-          { slot: 3, time: "7:30 PM", home: "RLCF B", away: "Joga Bonito", homeScore: 0, awayScore: 3, isCross: false },
-          { slot: 4, time: "8:30 PM", home: "Sharknado", away: "Poskin Jets", homeScore: 1, awayScore: 2, isCross: false },
-          { slot: 5, time: "9:30 PM", home: "Dangerous Noodlez", away: "JV Team", homeScore: 2, awayScore: 1, isCross: false }
+          { slot: 1, time: "5:30 PM", home: "Sharknado", away: "RLCF B", isCross: false },
+          { slot: 2, time: "6:30 PM", home: "Rice Lake CF", away: "Dangerous Noodlez", isCross: false },
+          { slot: 3, time: "7:30 PM", home: "Guardians U18B", away: "Left Bench FC", isCross: false },
+          { slot: 4, time: "8:30 PM", home: "Wrexham A.F.C.", away: "JV Team", isCross: false },
+          { slot: 5, time: "9:30 PM", home: "Poskin Jets", away: "Joga Bonito", isCross: false }
         ],
-        byes: ["The MonSTARS (VSA)", "Left Bench FC"]
+        byes: ["Beercelona", "The MonSTARS (VSA)"]
       },
       {
         week: 9, date: "01.12.27", note: "Regular Season",
         matches: [
-          { slot: 1, time: "5:30 PM", home: "Guardians U18B", away: "Sharknado", homeScore: 1, awayScore: 3, isCross: false },
-          { slot: 2, time: "6:30 PM", home: "RLCF B", away: "The MonSTARS (VSA)", homeScore: 1, awayScore: 1, isCross: false },
-          { slot: 3, time: "7:30 PM", home: "Dangerous Noodlez", away: "Joga Bonito", homeScore: 1, awayScore: 1, isCross: false },
-          { slot: 4, time: "8:30 PM", home: "Left Bench FC", away: "JV Team", homeScore: 0, awayScore: 2, isCross: false },
-          { slot: 5, time: "9:30 PM", home: "Beercelona", away: "Wrexham A.F.C.", homeScore: 2, awayScore: 1, isCross: false }
+          { slot: 1, time: "5:30 PM", home: "Guardians U18B", away: "The MonSTARS (VSA)", isCross: false },
+          { slot: 2, time: "6:30 PM", home: "Beercelona", away: "Wrexham A.F.C.", isCross: false },
+          { slot: 3, time: "7:30 PM", home: "Poskin Jets", away: "Left Bench FC", isCross: false },
+          { slot: 4, time: "8:30 PM", home: "JV Team", away: "Joga Bonito", isCross: false },
+          { slot: 5, time: "9:30 PM", home: "Rice Lake CF", away: "RLCF B", isCross: false }
         ],
-        byes: ["Rice Lake CF", "Poskin Jets"]
+        byes: ["Sharknado", "Dangerous Noodlez"]
       },
       {
         week: 10, date: "01.19.27", note: "Regular Season",
         matches: [
-          { slot: 1, time: "5:30 PM", home: "Wrexham A.F.C.", away: "Guardians U18B", homeScore: 3, awayScore: 0, isCross: false },
-          { slot: 2, time: "6:30 PM", home: "The MonSTARS (VSA)", away: "JV Team", homeScore: 1, awayScore: 3, isCross: false },
-          { slot: 3, time: "7:30 PM", home: "Beercelona", away: "Sharknado", homeScore: 4, awayScore: 1, isCross: false },
-          { slot: 4, time: "8:30 PM", home: "Left Bench FC", away: "RLCF B", homeScore: 2, awayScore: 2, isCross: false },
-          { slot: 5, time: "9:30 PM", home: "Rice Lake CF", away: "Poskin Jets", homeScore: 1, awayScore: 1, isCross: false }
+          { slot: 1, time: "5:30 PM", home: "Sharknado", away: "The MonSTARS (VSA)", isCross: false },
+          { slot: 2, time: "6:30 PM", home: "Rice Lake CF", away: "Poskin Jets", isCross: false },
+          { slot: 3, time: "7:30 PM", home: "Guardians U18B", away: "RLCF B", isCross: false },
+          { slot: 4, time: "8:30 PM", home: "Wrexham A.F.C.", away: "Dangerous Noodlez", isCross: false },
+          { slot: 5, time: "9:30 PM", home: "Beercelona", away: "Left Bench FC", isCross: false }
         ],
-        byes: ["Dangerous Noodlez", "Joga Bonito"]
+        byes: ["JV Team", "Joga Bonito"]
       },
       {
         week: 11, date: "01.26.27", note: "Regular Season",
         matches: [
-          { slot: 1, time: "5:30 PM", home: "The MonSTARS (VSA)", away: "Left Bench FC", homeScore: 2, awayScore: 1, isCross: false },
-          { slot: 2, time: "6:30 PM", home: "Dangerous Noodlez", away: "RLCF B", homeScore: 3, awayScore: 0, isCross: false },
-          { slot: 3, time: "7:30 PM", home: "Beercelona", away: "Rice Lake CF", homeScore: 2, awayScore: 2, isCross: false },
-          { slot: 4, time: "8:30 PM", home: "Poskin Jets", away: "Guardians U18B", homeScore: 4, awayScore: 1, isCross: false },
-          { slot: 5, time: "9:30 PM", home: "JV Team", away: "Joga Bonito", homeScore: 0, awayScore: 2, isCross: false }
+          { slot: 1, time: "5:30 PM", home: "Beercelona", away: "Dangerous Noodlez", isCross: false },
+          { slot: 2, time: "6:30 PM", home: "Left Bench FC", away: "The MonSTARS (VSA)", isCross: false },
+          { slot: 3, time: "7:30 PM", home: "Guardians U18B", away: "Joga Bonito", isCross: false },
+          { slot: 4, time: "8:30 PM", home: "Wrexham A.F.C.", away: "RLCF B", isCross: false },
+          { slot: 5, time: "9:30 PM", home: "Sharknado", away: "JV Team", isCross: false }
         ],
-        byes: ["Wrexham A.F.C.", "Sharknado"]
+        byes: ["Rice Lake CF", "Poskin Jets"]
       },
       {
         week: 12, date: "02.02.27", note: "Regular Season Finale",
         matches: [
-          { slot: 1, time: "5:30 PM", home: "Sharknado", away: "Wrexham A.F.C.", homeScore: 1, awayScore: 2, isCross: false },
-          { slot: 2, time: "6:30 PM", home: "Beercelona", away: "Poskin Jets", homeScore: 3, awayScore: 2, isCross: false },
-          { slot: 3, time: "7:30 PM", home: "Guardians U18B", away: "Rice Lake CF", homeScore: 1, awayScore: 3, isCross: false },
-          { slot: 4, time: "8:30 PM", home: "Joga Bonito", away: "The MonSTARS (VSA)", homeScore: 4, awayScore: 1, isCross: false },
-          { slot: 5, time: "9:30 PM", home: "Dangerous Noodlez", away: "Left Bench FC", homeScore: 3, awayScore: 0, isCross: false }
+          { slot: 1, time: "5:30 PM", home: "Beercelona", away: "Joga Bonito", isCross: false },
+          { slot: 2, time: "6:30 PM", home: "Wrexham A.F.C.", away: "Left Bench FC", isCross: false },
+          { slot: 3, time: "7:30 PM", home: "Rice Lake CF", away: "JV Team", isCross: false },
+          { slot: 4, time: "8:30 PM", home: "Poskin Jets", away: "The MonSTARS (VSA)", isCross: false },
+          { slot: 5, time: "9:30 PM", home: "Sharknado", away: "Dangerous Noodlez", isCross: false }
         ],
-        byes: ["JV Team", "RLCF B"]
+        byes: ["Guardians U18B", "RLCF B"]
       },
       {
-        week: 13, date: "02.09.27", note: "Weather Buffer • Cross-Division Matchup (*)",
+        week: 13, date: "02.09.27", note: "Weather Buffer (4 games per night)",
         matches: [
-          { slot: 1, time: "5:30 PM", home: "Guardians U18B", away: "JV Team", homeScore: 2, awayScore: 1, isCross: true },
-          { slot: 2, time: "6:30 PM", home: "Sharknado", away: "Left Bench FC", homeScore: 3, awayScore: 1, isCross: true },
-          { slot: 3, time: "7:30 PM", home: "Poskin Jets", away: "RLCF B", homeScore: 4, awayScore: 1, isCross: true },
-          { slot: 4, time: "8:30 PM", home: "Rice Lake CF", away: "The MonSTARS (VSA)", homeScore: 3, awayScore: 0, isCross: true }
+          { slot: 1, time: "5:30 PM", home: "Guardians U18B", away: "JV Team", homeScore: 2, awayScore: 1, isCross: false },
+          { slot: 2, time: "6:30 PM", home: "Sharknado", away: "Left Bench FC", homeScore: 3, awayScore: 1, isCross: false },
+          { slot: 3, time: "7:30 PM", home: "Poskin Jets", away: "RLCF B", homeScore: 4, awayScore: 1, isCross: false },
+          { slot: 4, time: "8:30 PM", home: "Rice Lake CF", away: "The MonSTARS (VSA)", homeScore: 3, awayScore: 0, isCross: false }
         ],
         byes: ["Beercelona", "Wrexham A.F.C.", "Dangerous Noodlez", "Joga Bonito"]
       },
       {
         week: 14, date: "02.16.27", note: "Weather Buffer • Cross-Division Matchup (*)",
         matches: [
-          { slot: 1, time: "5:30 PM", home: "Guardians U18B", away: "Dangerous Noodlez", homeScore: 1, awayScore: 3, isCross: true },
-          { slot: 2, time: "6:30 PM", home: "Beercelona", away: "RLCF B", homeScore: 5, awayScore: 0, isCross: true },
-          { slot: 3, time: "7:30 PM", home: "Wrexham A.F.C.", away: "The MonSTARS (VSA)", homeScore: 2, awayScore: 1, isCross: true },
-          { slot: 4, time: "8:30 PM", home: "Sharknado", away: "Joga Bonito", homeScore: 1, awayScore: 3, isCross: true }
+          { slot: 1, time: "5:30 PM", home: "Guardians U18B", away: "Dangerous Noodlez", homeScore: 1, awayScore: 3, isCross: false },
+          { slot: 2, time: "6:30 PM", home: "Beercelona", away: "RLCF B", homeScore: 5, awayScore: 0, isCross: false },
+          { slot: 3, time: "7:30 PM", home: "Wrexham A.F.C.", away: "The MonSTARS (VSA)", homeScore: 2, awayScore: 1, isCross: false },
+          { slot: 4, time: "8:30 PM", home: "Sharknado", away: "Joga Bonito", homeScore: 1, awayScore: 3, isCross: false }
         ],
         byes: ["Rice Lake CF", "Poskin Jets", "JV Team", "Left Bench FC"]
       },
       {
         week: 15, date: "02.23.27", note: "Weather Buffer • Cross-Division Matchup (*)",
         matches: [
-          { slot: 1, time: "5:30 PM", home: "Rice Lake CF", away: "Left Bench FC", homeScore: 4, awayScore: 1, isCross: true },
-          { slot: 2, time: "6:30 PM", home: "Beercelona", away: "JV Team", homeScore: 3, awayScore: 1, isCross: true },
-          { slot: 3, time: "7:30 PM", home: "Wrexham A.F.C.", away: "Joga Bonito", homeScore: 2, awayScore: 2, isCross: true },
-          { slot: 4, time: "8:30 PM", home: "Poskin Jets", away: "Dangerous Noodlez", homeScore: 1, awayScore: 2, isCross: true }
+          { slot: 1, time: "5:30 PM", home: "Rice Lake CF", away: "Left Bench FC", homeScore: 4, awayScore: 1, isCross: false },
+          { slot: 2, time: "6:30 PM", home: "Beercelona", away: "JV Team", homeScore: 3, awayScore: 1, isCross: false },
+          { slot: 3, time: "7:30 PM", home: "Wrexham A.F.C.", away: "Joga Bonito", homeScore: 2, awayScore: 2, isCross: false },
+          { slot: 4, time: "8:30 PM", home: "Poskin Jets", away: "Dangerous Noodlez", homeScore: 1, awayScore: 2, isCross: false }
         ],
         byes: ["Guardians U18B", "Sharknado", "RLCF B", "The MonSTARS (VSA)"]
       }
@@ -1554,54 +1452,39 @@ function computeTeamForm(teamName) {
     }
 
     function computeStandings() {
-      const divisionAteams = ["Beercelona", "Wrexham A.F.C.", "Rice Lake CF", "Poskin Jets", "Guardians U18B", "Sharknado"];
-      const divisionBteams = ["Dangerous Noodlez", "JV Team", "Joga Bonito", "Left Bench FC", "RLCF B", "The MonSTARS (VSA)"];
+      const LEAGUE_TEAMS = ["Beercelona", "Wrexham A.F.C.", "Rice Lake CF", "Poskin Jets", "Guardians U18B", "Sharknado",
+                      "Dangerous Noodlez", "JV Team", "Joga Bonito", "Left Bench FC", "RLCF B", "The MonSTARS (VSA)"];
+const PLAYOFF_SPOTS = 8;   // ASSUMPTION: change to the number of teams that qualify once the league confirms it
 
-      const statsMap = {};
-      [...divisionAteams, ...divisionBteams].forEach(t => {
-        statsMap[t] = { team: t, gp: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0, form: [] };
-      });
+function computeStandings() {
+  const statsMap = {};
+  LEAGUE_TEAMS.forEach(t => {
+    statsMap[t] = { team: t, gp: 0, w: 0, d: 0, l: 0, gf: 0, ga: 0, gd: 0, pts: 0, form: [] };
+  });
 
-      scheduleData.forEach(w => {
-        w.matches.forEach(m => {
-          if (hasScore(m)) {
-            if (statsMap[m.home]) { statsMap[m.home].gp++; statsMap[m.home].gf += m.homeScore; statsMap[m.home].ga += m.awayScore; }
-            if (statsMap[m.away]) { statsMap[m.away].gp++; statsMap[m.away].gf += m.awayScore; statsMap[m.away].ga += m.homeScore; }
-            if (m.homeScore > m.awayScore) { if (statsMap[m.home]) statsMap[m.home].w++; if (statsMap[m.away]) statsMap[m.away].l++; }
-            else if (m.homeScore < m.awayScore) { if (statsMap[m.away]) statsMap[m.away].w++; if (statsMap[m.home]) statsMap[m.home].l++; }
-            else { if (statsMap[m.home]) statsMap[m.home].d++; if (statsMap[m.away]) statsMap[m.away].d++; }
-          }
-        });
-      });
+  scheduleData.forEach(w => {
+    (w.matches || []).forEach(m => {
+      if (!m || !hasScore(m)) return;
+      if (statsMap[m.home]) { statsMap[m.home].gp++; statsMap[m.home].gf += m.homeScore; statsMap[m.home].ga += m.awayScore; }
+      if (statsMap[m.away]) { statsMap[m.away].gp++; statsMap[m.away].gf += m.awayScore; statsMap[m.away].ga += m.homeScore; }
+      if (m.homeScore > m.awayScore) { if (statsMap[m.home]) statsMap[m.home].w++; if (statsMap[m.away]) statsMap[m.away].l++; }
+      else if (m.homeScore < m.awayScore) { if (statsMap[m.away]) statsMap[m.away].w++; if (statsMap[m.home]) statsMap[m.home].l++; }
+      else { if (statsMap[m.home]) statsMap[m.home].d++; if (statsMap[m.away]) statsMap[m.away].d++; }
+    });
+  });
 
-      Object.values(statsMap).forEach(s => {
-        s.gd = s.gf - s.ga;
-        s.pts = (s.w * 3) + (s.d * 1);
-        s.form = computeTeamForm(s.team);
-      });
+  Object.values(statsMap).forEach(s => {
+    s.gd = s.gf - s.ga;
+    s.pts = (s.w * 3) + s.d;
+    s.form = computeTeamForm(s.team);
+  });
 
-      const sortTeams = (list) => list
-  .map(t => statsMap[t])
-  .sort((a, b) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf);
+  const table = LEAGUE_TEAMS.map(t => statsMap[t]).sort((a, b) => b.pts - a.pts || b.gd - a.gd || b.gf - a.gf);
+  renderStandingsTable('league-standings-body', table);
 
-const sortedA = sortTeams(divisionAteams);
-const sortedB = sortTeams(divisionBteams);
-
-renderStandingsTable('diva-standings-body', sortedA);
-renderStandingsTable('divb-standings-body', sortedB);
-
-// Dashboard: Joga Bonito's live rank in Division B
-const jbRank = sortedB.findIndex(s => s.team === 'Joga Bonito') + 1;
-const rankEl = document.getElementById('dash-divb-rank');
-if (rankEl) rankEl.innerText = '#' + jbRank;
-
-// Playoff bracket: Div B quarterfinals from current seedings
-const setText = (id, text) => { const el = document.getElementById(id); if (el) el.innerText = text; };
-setText('qf1-home', `1. ${sortedB[0].team}`);
-setText('qf1-away', `4. ${sortedB[3].team}`);
-setText('qf2-home', `2. ${sortedB[1].team}`);
-setText('qf2-away', `3. ${sortedB[2].team}`);
-    }
+  const rankEl = document.getElementById('dash-divb-rank');
+  if (rankEl) rankEl.innerText = '#' + (table.findIndex(s => s.team === 'Joga Bonito') + 1);
+}
 
     function renderStandingsTable(tbodyId, sortedList) {
   const tbody = document.getElementById(tbodyId);
@@ -1615,7 +1498,7 @@ setText('qf2-away', `3. ${sortedB[2].team}`);
 
   tbody.innerHTML = sortedList.map((s, idx) => {
     const rank = idx + 1;
-    const isTop4 = rank <= 4;
+    const isTop4 = rank <= PLAYOFF_SPOTS;
     const isJB = s.team === 'Joga Bonito';
 
     const formHtml = s.form.length
